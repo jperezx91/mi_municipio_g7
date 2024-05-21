@@ -30,8 +30,8 @@ function TabLayout() {
 
         name="(reclamos)"
         listeners={{tabPress: e=>{
-                //e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
                 setShowAlert(true)
+                e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
             }}}
         options={{
 
@@ -46,8 +46,8 @@ function TabLayout() {
         <Tabs.Screen
             name="(denuncias)"
             listeners={{tabPress: e=>{
-                    //e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
                     setShowAlert(true)
+                    e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
                 }}}
             options={{
                 title: 'Denuncias',

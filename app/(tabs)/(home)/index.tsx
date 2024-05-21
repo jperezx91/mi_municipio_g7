@@ -1,4 +1,4 @@
-import {View, Text, Alert, StatusBar} from 'react-native';
+import {View, Text, Alert, StatusBar, SafeAreaView} from 'react-native';
 import {useEffect} from "react";
 
 import {router} from "expo-router";
@@ -37,11 +37,11 @@ const Home = () => {
         }
     }, [showAlert]);
     return (
-        <View style={{ marginTop: StatusBar.currentHeight || 0 }}>
+        <SafeAreaView style={{flex: 1, width: "93%", margin: 'auto'}}>
             <Text onPress={goToExtra}>
-                Click aqui para ejemplo de cambio de pantalla
+                Click aqui para ejemplo de cambio de pantalla. Esto es un texto largo para probar el ancho.
             </Text>
-        </View>
+        </SafeAreaView>
     );
 }
 
