@@ -1,33 +1,29 @@
-import React from 'react';
-import {Dimensions, StyleSheet} from "react-native";
+import {Platform, StatusBar, StyleSheet} from "react-native";
+const statusBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 
-const offsetX = -33 // hardcodeado, parece dar un bug el contenedor del header. No permite poner el width en 100%
 const StyleHeaderComponent = StyleSheet.create({
     headerViewContainer: {
-        flex: 1,
+        paddingTop: statusBarHeight,
+        width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        width: Dimensions.get('window').width + offsetX,
-
+        paddingHorizontal: 15,
+        height: 64 + (statusBarHeight ? statusBarHeight - 3  : 0),
+        backgroundColor: '#fff', // Añadido para que sea visible el fondo
+        borderBottomWidth: 1,
+        borderBottomColor: '#D8D8D8'
     },
-    headerViewItem:
-    {
-        flex: 0,
+    headerViewItemLeft: {
         flexDirection: 'row',
-        height: 40,
         alignItems: 'center',
+        gap: 7,
+    },
+    headerViewItemRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 7,
+    },
+});
 
-        minWidth: 120,
-        gap: 7
-
-    }
-})
-
-const StylePublicacionItem = StyleSheet.create({
-    boxContainer: {
-        width: 20,
-        height: 20
-    }
-})
-export { StyleHeaderComponent, StylePublicacionItem };
+export { StyleHeaderComponent };
