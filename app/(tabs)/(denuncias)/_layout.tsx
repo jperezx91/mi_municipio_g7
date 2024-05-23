@@ -1,10 +1,10 @@
 import {Stack} from 'expo-router'
 
-const StackLayout = () => {
+const StackLayoutDenuncias = () => {
     return(
         <Stack>
-            <Stack.Screen name="index" options={{title: 'Denuncias', headerShown: false}} />
+            <Stack.Screen name="denuncias" options={{title: 'Denuncias', headerShown: false}} />
         </Stack>
     )
 }
-export default StackLayout
+export default StackLayoutDenuncias

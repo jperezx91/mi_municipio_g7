@@ -14,7 +14,7 @@ function TabLayout() {
     <Tabs
         initialRouteName={"(home)"}
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors['light'].tint,
         headerShown: false,
       }}>
         <Tabs.Screen

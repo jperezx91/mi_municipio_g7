@@ -3,7 +3,7 @@ import {Stack} from 'expo-router'
 const StackLayout = () => {
     return(
         <Stack>
-            <Stack.Screen name="index" options={{title: 'Reclamos', headerShown: true}} />
+            <Stack.Screen name="reclamos" options={{title: 'Reclamos', headerShown: true}} />
         </Stack>
     )
 }
