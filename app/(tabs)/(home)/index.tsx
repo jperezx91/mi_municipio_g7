@@ -10,10 +10,7 @@ import PublicacionComponente from "@/app/components/PublicacionComponente";
 const Home = () => {
     const { showAlert, setShowAlert } = useAlert();
 
-    const goToExtra = (e: any) =>
-    {
-        router.push("extra")
-    }
+
     const mockup_data_publicacion =
         [
             {
@@ -52,7 +49,10 @@ const Home = () => {
         ]
     // @ts-ignore
     const renderItemPublicaion = ({item}) => (
-        <PublicacionComponente title={item.title} desc={item.desc} />
+        <PublicacionComponente title={item.title} desc={item.desc} goToPublicacion={(itemx: any) => {
+            const idItem = item.id
+            router.push(`publicacion/${idItem}`)
+        }} />
     )
     useEffect(() => {
         if (showAlert) {

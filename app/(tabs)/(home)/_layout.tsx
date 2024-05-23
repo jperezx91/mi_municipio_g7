@@ -13,7 +13,7 @@ const StackLayout = () => {
                     header: (props) => <HeaderComponent />
                 }}
             />
-            <Stack.Screen name="extra" options={{title: 'Extra', headerShown: true}} />
+            <Stack.Screen name="publicacion/[id]" options={{title: 'Publicacion', headerShown: true}} />
         </Stack>
     )
 }

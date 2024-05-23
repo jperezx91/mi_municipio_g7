@@ -1,19 +1,22 @@
 import React from 'react';
 import {View, Text} from "react-native";
-import {router} from "expo-router";
+import {router, useGlobalSearchParams} from "expo-router";
+import { ExpoRoot } from 'expo-router';
 
-const Extra = () => {
+
+const Id = () => {
     const irAtras = () =>
     {
         router.back()
     }
+    const { id } = useGlobalSearchParams()
     return (
         <View>
             <Text onPress={irAtras}>
-                atras
+                {id}
             </Text>
         </View>
     );
 };
 
-export default Extra;
+export default Id;
