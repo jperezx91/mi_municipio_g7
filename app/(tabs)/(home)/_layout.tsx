@@ -14,6 +14,7 @@ const StackLayout = () => {
                 }}
             />
             <Stack.Screen name="publicacion/[id]" options={{title: 'Publicacion', headerShown: true}} />
+            <Stack.Screen name="login" options={{title: 'Login', headerShown: true}} />
         </Stack>
     )
 }

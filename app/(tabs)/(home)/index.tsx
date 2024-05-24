@@ -1,16 +1,15 @@
-import {View, Text, Alert, StatusBar, SafeAreaView, FlatList} from 'react-native';
+import { Alert, SafeAreaView, FlatList} from 'react-native';
 import {useEffect} from "react";
 
 import {router} from "expo-router";
 import {useAlert} from "@/app/alertProvider";
 import {PrincipalStyle} from "@/app/styles";
 import PublicacionComponente from "@/app/components/PublicacionComponente";
+import StyleHome from "@/app/(tabs)/(home)/styles";
 
 
 const Home = () => {
     const { showAlert, setShowAlert } = useAlert();
-
-
     const mockup_data_publicacion =
         [
             {
@@ -28,29 +27,29 @@ const Home = () => {
             },
             {
                 id: "3",
-                title: 'Box 3',
+                title: 'Negocio A',
                 imgUrl: 'lxd',
-                desc: 'Esto es una descripcion C'
+                desc: 'Esto es una descripcion A'
             },
             {
                 id: "4",
-                title: 'Box 4',
+                title: 'Negocio B',
                 imgUrl: 'lxd',
-                desc: 'Esto es una descripcion D'
+                desc: 'Esto es una descripcion B'
             },
 
             {
                 id: "5",
-                title: 'Box 5',
+                title: 'Negocio C',
                 imgUrl: 'lxd',
-                desc: 'Esto es una descripcion E'
+                desc: 'Esto es una descripcion C'
             }
 
         ]
     // @ts-ignore
     const renderItemPublicaion = ({item}) => (
-        <PublicacionComponente title={item.title} desc={item.desc} goToPublicacion={(itemx: any) => {
-            const idItem = item.id
+        <PublicacionComponente title={item.title} desc={item.desc} goToPublicacion={() => {
+            const idItem : string = item.id
             router.push(`publicacion/${idItem}`)
         }} />
     )
@@ -62,6 +61,7 @@ const Home = () => {
                         text: 'Aceptar',
                         onPress: () => {
                             // Lógica para aceptar la acción
+                            router.push("login")
                         }
                     },
                         {
@@ -79,23 +79,15 @@ const Home = () => {
         }
     }, [showAlert]);
     return (
-        <SafeAreaView style={{flex: 1, width: "93%", margin: 'auto', justifyContent: 'center', alignItems: 'center'}}>
+        <SafeAreaView style={PrincipalStyle.principalContainer}>{/* <SafeAreaView style={{flex: 1, width: "93%", margin: 'auto', justifyContent: 'center', alignItems: 'center'}}> */}
                 <FlatList
                     numColumns={2}
-                    style={{flex: 1, flexDirection: 'column', width: "100%", marginTop: 10}}
+                    style={StyleHome.flatListContainer}
                     data={mockup_data_publicacion}
                     renderItem={renderItemPublicaion}
                     keyExtractor={item => item.id}
-                    columnWrapperStyle={{justifyContent: 'space-between'}}
-
-
-                >
+                    columnWrapperStyle={{justifyContent: 'space-between'}}>
                 </FlatList>
-            {/*
-                <Text onPress={goToExtra}>
-                    Click aqui para ejemplo de cambio de pantalla. Esto es un texto largo para probar el ancho.
-                </Text>
-            */}
         </SafeAreaView>
     );
 }

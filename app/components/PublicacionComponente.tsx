@@ -1,7 +1,7 @@
 import {Image, View, Text, Pressable} from "react-native";
 import {router} from "expo-router";
 
-const PublicacionComponente = ({ title, desc, goToPublicacion }: { title: string; desc: string, goToPublicacion: (item: {}) => void }) => {
+const PublicacionComponente = ({ title, desc, goToPublicacion }: { title: string; desc: string, goToPublicacion: any}) => {
     return (
         <Pressable onPress={goToPublicacion} style={{ margin: 4, borderWidth: 1, borderColor: '#DDE1E6', marginTop: 8}}>
             <Image style={{height: 190, width: 170}} source={require('../../assets/images/publicacion_place_holder.png')} />

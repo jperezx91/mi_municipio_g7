@@ -58,6 +58,10 @@ function TabLayout() {
         />
         <Tabs.Screen
             name="(profile)"
+            listeners={{tabPress: e=>{
+                    setShowAlert(true)
+                    e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
+            }}}
             options={{
                 title: 'Perfil',
                 tabBarIcon: ({ color, focused }) => (

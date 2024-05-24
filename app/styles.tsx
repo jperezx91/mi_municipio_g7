@@ -7,7 +7,6 @@ const PrincipalStyle = StyleSheet.create(
             flex: 1,
             width: '93%',
             margin: 'auto', // o usar justify-content: center y usar otro view extra?
-
         }
 
     }
