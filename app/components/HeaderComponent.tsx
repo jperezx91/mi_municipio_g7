@@ -3,23 +3,30 @@ import {View, Text, Pressable, StyleSheet, StatusBar, SafeAreaView} from "react-
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { StyleHeaderComponent } from "@/app/components/styles";
 
-function HeaderComponent() {
+interface HeaderComponentProps {
+    pressLogin: () => void;  // Definir el tipo de la función pressLogin
+}
+
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin }) => {
     useEffect(() => {
+        // Efecto secundario vacío
     }, []);
 
     return (
         <SafeAreaView>
-
             <View style={StyleHeaderComponent.headerViewContainer}>
                 <View style={StyleHeaderComponent.headerViewItemLeft}>
                     <FontAwesome5 name="building" size={24} color="black" />
                     <Text>Mi municipio</Text>
                 </View>
                 <View style={StyleHeaderComponent.headerViewItemRight}>
-                    <Pressable>
+                    <Pressable
+                        onPress={pressLogin}
+                        style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}
+                    >
                         <Text>Ingresar</Text>
+                        <FontAwesome5 name="user-circle" size={24} color="black" />
                     </Pressable>
-                    <FontAwesome5 name="user-circle" size={24} color="black" />
                 </View>
             </View>
         </SafeAreaView>

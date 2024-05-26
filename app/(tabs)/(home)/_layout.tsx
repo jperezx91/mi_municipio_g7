@@ -1,4 +1,4 @@
-import {Stack} from 'expo-router'
+import {router, Stack} from 'expo-router'
 import HeaderComponent from "@/app/components/HeaderComponent";
 import {Dimensions} from "react-native";
 const StackLayout = () => {
@@ -10,10 +10,10 @@ const StackLayout = () => {
                 name="index"
                 options={{
                     title: 'Home',
-                    header: (props) => <HeaderComponent />
+                    header: (props) => <HeaderComponent pressLogin={() => { router.push("login")}} />
                 }}
             />
-            <Stack.Screen name="publicacion/[id]" options={{title: 'Publicacion', headerShown: true}} />
+            <Stack.Screen name="publicacion/[id]" options={{title: 'Publicación', headerShown: true}} />
             <Stack.Screen name="login" options={{title: 'Login', headerShown: true}} />
         </Stack>
     )
