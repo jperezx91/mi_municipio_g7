@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView, FlatList} from 'react-native';
+import {Alert, SafeAreaView, FlatList, View} from 'react-native';
 import {useEffect} from "react";
 
 import {router} from "expo-router";
@@ -6,6 +6,7 @@ import {useAlert} from "@/app/alertProvider";
 import {PrincipalStyle} from "@/app/styles";
 import PublicacionComponente from "@/app/components/PublicacionComponente";
 import StyleHome from "@/app/(tabs)/(home)/styles";
+import FormButton from "@/app/components/FormButton";
 
 
 const Home = () => {
@@ -82,12 +83,16 @@ const Home = () => {
         <SafeAreaView style={PrincipalStyle.principalContainer}>{/* <SafeAreaView style={{flex: 1, width: "93%", margin: 'auto', justifyContent: 'center', alignItems: 'center'}}> */}
                 <FlatList
                     numColumns={2}
+                    ListFooterComponent={<View style={{height: 150}}></View>}
                     style={StyleHome.flatListContainer}
                     data={mockup_data_publicacion}
                     renderItem={renderItemPublicaion}
                     keyExtractor={item => item.id}
                     columnWrapperStyle={{justifyContent: 'space-between'}}>
                 </FlatList>
+                <View style={{  display: 'none', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}>{/* cambiar none por flex para ver el boton cargar publicacion */}
+                    <FormButton title={'Cargar publicación'} />
+                </View>
         </SafeAreaView>
     );
 }
