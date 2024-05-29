@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {View, Text, Pressable, StyleSheet, StatusBar, SafeAreaView} from "react-native";
+import {View, Text, Pressable, StyleSheet, StatusBar, SafeAreaView, Image} from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { StyleHeaderComponent } from "@/app/components/styles";
 
@@ -16,7 +16,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin }) => {
         <SafeAreaView>
             <View style={StyleHeaderComponent.headerViewContainer}>
                 <View style={StyleHeaderComponent.headerViewItemLeft}>
-                    <FontAwesome5 name="building" size={24} color="black" />
+                    <Image style={{width: 30, height: 30, objectFit: 'cover'}} source={require('@/assets/images/logo.png')} />
                     <Text>Mi municipio</Text>
                 </View>
                 <View style={StyleHeaderComponent.headerViewItemRight}>

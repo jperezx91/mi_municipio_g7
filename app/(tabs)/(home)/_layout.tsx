@@ -13,7 +13,7 @@ const StackLayout = () => {
                     header: (props) => <HeaderComponent pressLogin={() => { router.push("login")}} />
                 }}
             />
-            <Stack.Screen name="publicacion/[id]" options={{title: 'Publicación', headerShown: true}} />
+            <Stack.Screen name="publicacion/[id]" options={{title: 'Publicación', headerShown: true, headerTitleAlign: 'center',  headerStyle: {backgroundColor: '#C7DCFF'}}} />
         </Stack>
     )
 }

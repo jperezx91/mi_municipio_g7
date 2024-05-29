@@ -10,19 +10,22 @@ import {useAlert, AlertProvider} from "@/app/alertProvider";
 function TabLayout() {
   const colorScheme = useColorScheme();
     const { setShowAlert } = useAlert();
+    const colorIcons = "#21272A"
     return (
     <Tabs
         initialRouteName={"(home)"}
-      screenOptions={{
-        tabBarActiveTintColor: Colors['light'].tint,
-        headerShown: false,
+        screenOptions={{
+            tabBarActiveTintColor: "#0F62FE",
+            tabBarInactiveTintColor: '#001D6C',
+            tabBarStyle: { backgroundColor: '#C7DCFF'},
+            headerShown: false,
       }}>
         <Tabs.Screen
             name="(home)"
             options={{
                 title: 'Home',
                 tabBarIcon: ({ color, focused }) => (
-                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={focused ? color : colorIcons} />
                 ),
             }}
         />
@@ -38,7 +41,7 @@ function TabLayout() {
             title: 'Reclamos',
             tabBarIcon: ({ color, focused }) => (
                 /*<TabBarIcon name={focused ? 'document-text' : 'document-text-outline'} color={color} />*/
-                <Ionicons name={focused ? 'documents' : 'documents-outline'} size={24} color={color} />
+                <Ionicons name={focused ? 'documents' : 'documents-outline'} size={24} color={focused ? color : colorIcons} />
             ),
         }}
 
@@ -52,7 +55,7 @@ function TabLayout() {
             options={{
                 title: 'Denuncias',
                 tabBarIcon: ({ color, focused }) => (
-                    <Ionicons name={focused ? 'alert-circle' : 'alert-circle-outline'} size={24} color={color} />
+                    <Ionicons name={focused ? 'alert-circle' : 'alert-circle-outline'} size={24} color={focused ? color : colorIcons} />
                 ),
             }}
         />
@@ -65,7 +68,7 @@ function TabLayout() {
             options={{
                 title: 'Perfil',
                 tabBarIcon: ({ color, focused }) => (
-                    <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={color} />
+                    <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={focused ? color : colorIcons} />
                 ),
             }}
         />

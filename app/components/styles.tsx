@@ -10,9 +10,10 @@ const StyleHeaderComponent = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 15,
         height: 64 + (statusBarHeight ? statusBarHeight - 3  : 0),
-        backgroundColor: '#fff', // Añadido para que sea visible el fondo
+        backgroundColor: '#C7DCFF', // Añadido para que sea visible el fondo
         borderBottomWidth: 1,
-        borderBottomColor: '#D8D8D8'
+        borderBottomColor: '#D8D8D8',
+
     },
     headerViewItemLeft: {
         flexDirection: 'row',
