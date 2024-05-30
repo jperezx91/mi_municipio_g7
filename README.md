@@ -48,3 +48,13 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Backend
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install Flask Flask-SQLAlchemy Flask-Cors
+python3 scripts/initialize_db.py
+```
+
