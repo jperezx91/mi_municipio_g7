@@ -5,15 +5,68 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import FormButton from "@/app/components/FormButton";
 import LoginFormInput from "@/components/LoginFormInput";
-
+import {loginVecino} from "@/app/networking/api";
+import {setToken} from "@/app/networking/auth_utils"
 
 const LoginScreen = () => {
 
 
     const [showPassword, setShowPassword] = useState(false);
+    const [errorMSG, setErrorMSG] = useState<string>("");
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
+    const [usuario, setUsuario] = useState('');
+    const [loading, setLoading] = useState(false);
+    const handleLogin = () =>
+    {
+        const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        const regexNum = /^[0-9]{4,10}$/;
 
+        if(usuario.length > 0)
+        {
+            setLoading(true)
+            if(regexMail.test(usuario))
+                loginVecino(usuario, password).then((r) =>{
+                    const token : string = r.data.token
+                    setErrorMSG("")
+                    setToken(token).then((r) =>
+                    {
+                        setUsuario("")
+                        setPassword("")
+                        router.navigate("(home)")
+                    })
+
+                })
+                .catch((error) =>
+                {
+                    switch(error.response.status)
+                    {
+                        case 404:
+                        {
+                            setErrorMSG(error.response.data.msg)
+                            break
+                        }
+                        case 403:
+                        {
+                            setErrorMSG(error.response.data.msg)
+                            break
+                        }
+                        default:
+                        {
+                            setErrorMSG("Desconocido")
+                            break
+                        }
+                    }
+                })
+                .finally(() => {
+                    setLoading(false)
+                });
+            else {
+                setErrorMSG("Ingrese un e-mail o legajo válido.")
+                setLoading(false)
+            }
+        }
+
+    }
     return (
             <SafeAreaView style={[PrincipalStyle.principalContainer, { width: '80%' }]}>
                 {/* Logo */}
@@ -29,8 +82,8 @@ const LoginScreen = () => {
                         title={"E-mail o legajo"}
                         placeholder={"Ingrese su E-mail o legajo"}
                         tipo={'mail'}
-                        valor={email}
-                        setValor={setEmail}
+                        valor={usuario}
+                        setValor={setUsuario}
                     />
                     <LoginFormInput
                         valor={password}
@@ -40,16 +93,17 @@ const LoginScreen = () => {
                         tipo={'password'}
                         showPass={[showPassword, setShowPassword]}
                     />
+                    {errorMSG && <Text style={{color: 'red'}}>{errorMSG}</Text>}
                     <Pressable onPress={()=>{router.push("recupero")}} style={{ display: 'flex', justifyContent: 'flex-end', flexDirection: 'row', marginBottom: 10, marginTop: 10 }}>
                         <Text style={{ color: '#0F62FE' }}>¿Olvidaste tu contraseña?</Text>
                     </Pressable>
-                    <FormButton title={"Ingresar"} />
+                    <FormButton  disabeled={loading} action={handleLogin} title={"Ingresar"} />
                     <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#525252', height: 20 }}></View>
                     <View style={{ display: 'flex', marginTop: 10 }}>
                         <Pressable onPress={() => {router.push("registro")}}>
                             <Text style={{ color: '#0F62FE', textAlign: 'center', marginBottom: 40 }}>¿Aún no tienes cuenta? Solicitar aquí</Text>
                         </Pressable>
-                        <FormButton title={"Soy un invitado"} invertStyle={true} action={() => { router.back() }} />
+                        <FormButton title={"Soy un invitado"} invertStyle={true} action={() => { router.navigate("(home)") }} />
                     </View>
                 </View>
             </SafeAreaView>

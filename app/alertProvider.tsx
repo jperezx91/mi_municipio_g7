@@ -9,7 +9,6 @@ const AlertContext = createContext<AlertContextType | undefined>(undefined);
 
 export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [showAlert, setShowAlert] = useState(false);
-
     return (
         <AlertContext.Provider value={{ showAlert, setShowAlert }}>
             {children}

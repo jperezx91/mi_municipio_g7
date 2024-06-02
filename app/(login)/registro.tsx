@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
-import {Pressable, SafeAreaView, Text, TextInput, View, KeyboardAvoidingView, Platform, Image} from "react-native";
+import {
+    Pressable,
+    SafeAreaView,
+    Text,
+    TextInput,
+    View,
+    KeyboardAvoidingView,
+    Platform,
+    Image,
+    Alert
+} from "react-native";
 import { PrincipalStyle } from "@/app/styles";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import FormButton from "@/app/components/FormButton";
 import LoginFormInput from "@/components/LoginFormInput";
+import {registroVecino} from "@/app/networking/api";
 
 
 const RegistroScreen = () => {
@@ -14,7 +25,34 @@ const RegistroScreen = () => {
 
     const [email, setEmail] = useState('');
     const [dni, setDni] = useState('');
+    const handleRegistro = () =>
+    {
+        const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if(email.length > 0)
+        {
+            if(regexMail.test(email))
+            {
+                registroVecino(email, dni)
+                .then((r) =>
+                {
+                    Alert.alert("Se envió correctamente su solicitud de registro", "El municipio le informará el resultado de su solicitud.")
+                    router.replace("(home)")
 
+                })
+                .catch((err)=>
+                {
+                        switch(err.response.status)
+                        {
+                            case 404:
+                                Alert.alert("No existe el DNI.", "Por favor ingrese un DNI de un vecino existente")
+                                break
+                            default:
+                                Alert.alert("Error desconocido.")
+                        }
+                })
+            }
+        }
+    }
     return (
             <SafeAreaView style={[PrincipalStyle.principalContainer, { width: '80%' }]}>
                 {/* Logo */}
@@ -40,7 +78,7 @@ const RegistroScreen = () => {
                         placeholder={"Ingrese su DNI"}
                         tipo={'numero'}
                     />
-                    <FormButton title={"Solicitar registro"} />
+                    <FormButton action={handleRegistro} title={"Solicitar registro"} />
                     <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#525252', height: 20 }}></View>
                     <View style={{ display: 'flex', marginTop: 10 }}>
                         <Pressable onPress={()=>{router.navigate("login")}}>

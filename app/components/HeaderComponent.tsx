@@ -2,12 +2,15 @@ import React, { useEffect } from 'react';
 import {View, Text, Pressable, StyleSheet, StatusBar, SafeAreaView, Image} from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { StyleHeaderComponent } from "@/app/components/styles";
+import * as SecureStore from 'expo-secure-store';
+import {router} from "expo-router";
 
 interface HeaderComponentProps {
-    pressLogin: () => void;  // Definir el tipo de la función pressLogin
+    pressLogin: () => void;
+    dataUser: string// Definir el tipo de la función pressLogin
 }
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin }) => {
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin, dataUser }) => {
     useEffect(() => {
         // Efecto secundario vacío
     }, []);
@@ -20,13 +23,29 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin }) => {
                     <Text>Mi municipio</Text>
                 </View>
                 <View style={StyleHeaderComponent.headerViewItemRight}>
-                    <Pressable
-                        onPress={pressLogin}
-                        style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}
-                    >
-                        <Text>Ingresar</Text>
-                        <FontAwesome5 name="user-circle" size={24} color="black" />
-                    </Pressable>
+                    {dataUser == "" ?
+                        <>
+                            <Pressable
+                            onPress={pressLogin}
+                            style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                                <Text>Ingresar</Text>
+                                <FontAwesome5 name="user-circle" size={24} color="black" />
+                            </Pressable>
+                        </>:
+                        <>
+                            <Pressable style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', position: 'relative' }} onPress={() => {router.navigate("profile")}}>
+
+                                <FontAwesome5 style={{marginRight: 10}} name="bell" size={24} color="darkblue" />
+                                <View style={{position: 'absolute', bottom: 10, left: 10}}>
+                                    <View style={{backgroundColor: 'red', width: 23, height: 23, borderRadius: 100, display: 'flex', justifyContent: 'center', alignItems: 'center'}}><Text style={{color: 'white'}}>5</Text></View>
+                                </View>
+                                <Text style={{fontWeight: 'bold', color: 'darkblue'}}>{dataUser}</Text>
+                                <FontAwesome5 name="user-circle" size={24} color="black" />
+                            </Pressable>
+                        </>
+                    }
+
+
                 </View>
             </View>
         </SafeAreaView>

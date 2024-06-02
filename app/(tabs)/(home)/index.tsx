@@ -55,8 +55,9 @@ const Home = () => {
         }} />
     )
     useEffect(() => {
+
         if (showAlert) {
-            Alert.alert('Sesión', "Inicia sesión para ver esta sección",
+            Alert.alert('Sesión', "Inicia sesión para ver esta sección !",
                     [
                     {
                         text: 'Aceptar',

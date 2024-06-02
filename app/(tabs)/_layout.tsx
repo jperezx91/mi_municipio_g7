@@ -1,16 +1,28 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import {Tabs, useFocusEffect} from 'expo-router';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {useAlert, AlertProvider} from "@/app/alertProvider";
-
+import * as SecureStore from "expo-secure-store";
 function TabLayout() {
   const colorScheme = useColorScheme();
     const { setShowAlert } = useAlert();
+    const [userLogged, setUserLogged] = useState(false);
+
     const colorIcons = "#21272A"
+
+    useFocusEffect(useCallback(()=> {
+        const btoken = SecureStore.getItem("bearerToken")
+        if(btoken)
+        {
+            setUserLogged(true)
+        }else{
+            setUserLogged(false)
+        }
+    },[]))
     return (
     <Tabs
         initialRouteName={"(home)"}
@@ -33,8 +45,10 @@ function TabLayout() {
 
         name="(reclamos)"
         listeners={{tabPress: e=>{
-                setShowAlert(true)
-                e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
+                if(!userLogged) {
+                    setShowAlert(true)
+                    e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
+                }
             }}}
         options={{
 
@@ -49,8 +63,10 @@ function TabLayout() {
         <Tabs.Screen
             name="(denuncias)"
             listeners={{tabPress: e=>{
-                    setShowAlert(true)
-                    e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
+                    if(!userLogged) {
+                        setShowAlert(true)
+                        e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
+                    }
                 }}}
             options={{
                 title: 'Denuncias',
@@ -62,8 +78,10 @@ function TabLayout() {
         <Tabs.Screen
             name="(profile)"
             listeners={{tabPress: e=>{
-                    setShowAlert(true)
-                    e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
+                    if(!userLogged) {
+                        setShowAlert(true)
+                        e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
+                    }
             }}}
             options={{
                 title: 'Perfil',
