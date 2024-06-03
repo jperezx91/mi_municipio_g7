@@ -25,6 +25,7 @@ class UserController:
         return None
     def signin(self, datos_usuario):
         user_entity = Usuario.JSONToUsuario(datos_usuario)
+        print(user_entity.documento, "documento?")
         existe_usuario = UsuarioRepo.existe_usuario(user_entity.documento)
         if existe_usuario:
             return [False, 409]
@@ -34,3 +35,15 @@ class UserController:
             return [True, 200]
         else:
             return [False, 404]
+
+    def solicitar_cambio_pass(self, email, dni):
+        # chequeo que exista el usuario
+        existe_usuario = UsuarioRepo.existe_usuario_con_mail(email, dni)
+        return existe_usuario
+
+    def agregar_recupero(self, dni):
+        UsuarioRepo.agregar_recupero(dni)
+
+    def get_usuario_by_codigo(self, codigo):
+        u = UsuarioRepo.get_usuario_by_codigo(codigo)
+        return u

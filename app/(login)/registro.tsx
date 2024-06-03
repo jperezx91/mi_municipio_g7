@@ -25,37 +25,51 @@ const RegistroScreen = () => {
 
     const [email, setEmail] = useState('');
     const [dni, setDni] = useState('');
+    const [errorMSGEmail, setErrorMSGEmail] = useState("");
+    const [errorMSGDNI, setErrorMSGDNI] = useState("");
     const handleRegistro = () =>
     {
         const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if(email.length > 0)
-        {
-            if(regexMail.test(email))
-            {
-                registroVecino(email, dni)
-                .then((r) =>
-                {
-                    Alert.alert("Se envió correctamente su solicitud de registro", "El municipio le informará el resultado de su solicitud.")
-                    router.replace("(home)")
+        const regexDNI = /^[a-zA-Z0-9._-]{4,12}$/;
+        let error = false
+        setErrorMSGEmail("")
+        setErrorMSGDNI("")
 
-                })
-                .catch((err)=>
-                {
-                        switch(err.response.status)
-                        {
-                            case 404:
-                                Alert.alert("No existe el DNI.", "Por favor ingrese un DNI de un vecino existente")
-                                break
-                            case 409:
-                                Alert.alert("Usuario ya registrado", "Ya existe un usuario registrado con ese DNI.")
-                                break
-                            default:
-                                Alert.alert("Error desconocido.")
-                                break
-                        }
-                })
-            }
+        if(!regexMail.test(email)){
+            setErrorMSGEmail("Ingrese un e-mail válido por favor.");
+            error = true
         }
+
+        if(!regexDNI.test(dni))
+        {
+            setErrorMSGDNI("Ingrese un DNI válido por favor.")
+            error = true
+        }
+        if(error) // ocurrió un error en los datos, no seguimos
+            return
+
+        registroVecino(email, dni)
+        .then((r) =>
+        {
+            Alert.alert("Se envió correctamente su solicitud de registro", "El municipio le informará el resultado de su solicitud.")
+            router.replace("(home)")
+
+        })
+        .catch((err)=>
+        {
+                switch(err.response.status)
+                {
+                    case 404:
+                        Alert.alert("No existe el DNI.", "Por favor ingrese un DNI de un vecino existente")
+                        break
+                    case 409:
+                        Alert.alert("Usuario ya registrado", "Ya existe un usuario registrado con ese DNI.")
+                        break
+                    default:
+                        Alert.alert("Error desconocido.")
+                        break
+                }
+        })
     }
     return (
             <SafeAreaView style={[PrincipalStyle.principalContainer, { width: '80%' }]}>
@@ -74,6 +88,7 @@ const RegistroScreen = () => {
                         tipo={'mail'}
                         valor={email}
                         setValor={setEmail}
+                        errorMSG={errorMSGEmail}
                     />
                     <LoginFormInput
                         valor={dni}
@@ -81,6 +96,7 @@ const RegistroScreen = () => {
                         title={"DNI"}
                         placeholder={"Ingrese su DNI"}
                         tipo={'numero'}
+                        errorMSG={errorMSGDNI}
                     />
                     <FormButton action={handleRegistro} title={"Solicitar registro"} />
                     <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#525252', height: 20 }}></View>

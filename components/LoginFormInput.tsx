@@ -9,6 +9,7 @@ interface LoginFormInputProps {
     valor?: string;
     setValor?: (s: string) => void;
     showPass?: [boolean, (f: boolean) => void];
+    errorMSG?: string;
 }
 
 const LoginFormInput: React.FC<LoginFormInputProps> = ({
@@ -17,6 +18,7 @@ const LoginFormInput: React.FC<LoginFormInputProps> = ({
                                                            tipo = "mail",
                                                            valor = "",
                                                            setValor = (s: string) => { },
+                                                           errorMSG="",
                                                            showPass = [true, (f: boolean) => { }]
                                                        }) => {
     const [showPassword, setShowPassword] = showPass;
@@ -30,7 +32,7 @@ const LoginFormInput: React.FC<LoginFormInputProps> = ({
     return (
         <View style={{ width: "95%" }}>
             <Text style={{ paddingBottom: 10 }}>{title}</Text>
-            <View style={{ display: 'flex', flexDirection: 'row', borderBottomWidth: 0.5, borderColor: '#525252', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={{ display: 'flex', flexDirection: 'row', borderBottomWidth: !errorMSG ? 0.5 : 1, borderColor: !errorMSG ? '#525252' : 'red', justifyContent: 'space-between', alignItems: 'center', borderWidth: !errorMSG ? 0 : 1}}>
                 <TextInput
                     onChangeText={setValor}
                     value={valor}
@@ -38,14 +40,16 @@ const LoginFormInput: React.FC<LoginFormInputProps> = ({
                     secureTextEntry={tipo === "password" && !showPassword}
                     keyboardType={valoresTipo[tipo]}
                     placeholder={placeholder}
-                    style={{ paddingHorizontal: 15, paddingBottom: 10, flex: 1 }}
+                    style={{ paddingHorizontal: 15, paddingBottom: 10, paddingTop: 10, flex: 1 }}
                 />
                 {(tipo === "password" && valor.length > 0) && (
                     <Pressable style={{ paddingHorizontal: 10 }} onPress={() => setShowPassword(!showPassword)}>
                         <FontAwesome5 name={!showPassword ? "eye" : "eye-slash"} size={16} color="#171717" />
                     </Pressable>
                 )}
+
             </View>
+            {errorMSG && <Text style={{color: 'red'}}>{errorMSG}</Text>}
         </View>
     );
 };

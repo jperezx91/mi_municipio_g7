@@ -34,6 +34,15 @@ class UsuarioRepo:
             conexion.close()
             return r is not None
     @staticmethod
+    def existe_usuario_con_mail(email, documento):
+        conexion = DbManager.obtener_conexion()
+        with conexion.cursor() as cursor:
+            cursor.execute("SELECT idUsuario FROM usuarios WHERE email=%s AND documento=%s", (email, documento))
+            r = cursor.fetchone()
+            cursor.close()
+            conexion.close()
+            return r is not None
+    @staticmethod
     def registrar_solicitud(usuarioInp: Usuario):
         conexion = DbManager.obtener_conexion()
         with conexion.cursor() as cursor:
@@ -65,6 +74,39 @@ class UsuarioRepo:
                 r = {"status": StatusCode.DATOS_INVALIDOS, "usuario": None}
             conexion.close()
             return r
+    @staticmethod
+    def agregar_recupero(documento):
+        conexion = DbManager.obtener_conexion()
+        with conexion.cursor() as cursor:
+            codigo = str(random.randint(1000, 9999))
+            cursor.execute("INSERT INTO recupero (documento, codigo, status) VALUES (%s, %s, 1)", (documento, codigo))
+            conexion.commit()
+            cursor.close()
+            conexion.close()
 
+    @staticmethod
+    def get_usuario_by_codigo(codigo):
+        conexion = DbManager.obtener_conexion()
+        with conexion.cursor() as cursor:
+            cursor.execute("SELECT us.idUsuario, us.email, us.password, us.documento as documento, vc.nombre AS nombre "
+                           "FROM recupero rc "
+                           "LEFT JOIN vecinos vc ON vc.documento = rc.documento "
+                           "LEFT JOIN usuarios us ON rc.documento = us.documento "
+                           "WHERE codigo = %s AND status = 1", (codigo, ))
+            r = cursor.fetchone()
+
+            if r is None:
+                return None
+            cursor.execute("UPDATE recupero SET status = 0 WHERE codigo = %s", (codigo, ))
+            conexion.commit()
+            cursor.close()
+            conexion.close()
+            usuario = Usuario()
+            usuario.idUsuario = r[0]
+            usuario.email = r[1]
+            usuario.password = r[2]
+            usuario.documento = r[3]
+            usuario.nombre = r[4]
+            return usuario
     def validar_municipal(usuarioInp: Usuario):
         return True

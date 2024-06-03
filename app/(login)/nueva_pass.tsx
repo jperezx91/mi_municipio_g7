@@ -25,6 +25,8 @@ const RecoveryValidateScreen = () => {
     const [codigo, setCodigo] = useState('');
     const [password, setPassword] = useState('');
     const [repassword, setRePassword] = useState('');
+    const [showErrorMSGPassword, setShowErrorMSGPassword] = useState("");
+    const [showErrorMSGRePassword, setShowErrorMSGRePassword] = useState("");
 
     const [showPassword, setShowPassword] = useState(false);
     const [showRePassword, setShowRePassword] = useState(false);
@@ -35,6 +37,27 @@ const RecoveryValidateScreen = () => {
     const handleChangePassword = async () =>
     {
         const token =  SecureStore.getItem("bearerToken")
+        setShowErrorMSGPassword("")
+        setShowErrorMSGRePassword("")
+        const regexPass = /^.{4,16}$/;
+        let error = false;
+        if(!regexPass.test(password)){
+            setShowErrorMSGPassword("Contraseña inválida. Debe tener mínimo 4 caracteres.")
+            error = true
+        }
+        if(!regexPass.test(repassword)){
+            setShowErrorMSGRePassword("Contraseña inválida. Debe tener mínimo 4 caracteres.")
+            error = true
+        }
+
+        if(password != repassword && !error)
+        {
+            setShowErrorMSGRePassword("No coinciden las contraseñas")
+            error = true
+        }
+        if(error)
+            return; // no se continua porque hay un error.
+
         if(token)
         {
             const payload: Payload = jwtDecode(token)
@@ -60,8 +83,8 @@ const RecoveryValidateScreen = () => {
                 {/* Fin logo */}
                 <View style={{display: 'flex', gap: 20, marginTop: 20}}>
                     <Text style={{fontSize: 16}}>Hemos validado tu código correctamente. Por favor genera una nueva contraseña:</Text>
-                    <LoginFormInput showPass={[showPassword, setShowPassword]} valor={password} setValor={setPassword} tipo={"password"} title={"Contraseña"} placeholder={"Ingrese su nueva contraseña"} />
-                    <LoginFormInput showPass={[showRePassword, setShowRePassword]} valor={repassword} setValor={setRePassword} tipo={"password"} title={"Confirmar contraseña"} placeholder={"Ingrese su nueva contraseña"} />
+                    <LoginFormInput errorMSG={showErrorMSGPassword} showPass={[showPassword, setShowPassword]} valor={password} setValor={setPassword} tipo={"password"} title={"Contraseña"} placeholder={"Ingrese su nueva contraseña"} />
+                    <LoginFormInput errorMSG={showErrorMSGRePassword} showPass={[showRePassword, setShowRePassword]} valor={repassword} setValor={setRePassword} tipo={"password"} title={"Confirmar contraseña"} placeholder={"Ingrese su nueva contraseña"} />
                 </View>
                 <View style={{height: 45}}></View>
                 <FormButton action={handleChangePassword} title={"Confirmar"} />

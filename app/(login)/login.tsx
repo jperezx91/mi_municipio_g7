@@ -18,7 +18,7 @@ const LoginScreen = () => {
     const [loading, setLoading] = useState(false);
     const handleLogin = () =>
     {
-        const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/; // TODO: ubicar en una función todos los regex
         const regexNum = /^[0-9]{4,10}$/;
 
         if(usuario.length > 0)

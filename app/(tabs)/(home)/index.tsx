@@ -1,16 +1,18 @@
 import {Alert, SafeAreaView, FlatList, View} from 'react-native';
-import {useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 
-import {router} from "expo-router";
+import {router, useFocusEffect} from "expo-router";
 import {useAlert} from "@/app/alertProvider";
 import {PrincipalStyle} from "@/app/styles";
 import PublicacionComponente from "@/app/components/PublicacionComponente";
 import StyleHome from "@/app/(tabs)/(home)/styles";
 import FormButton from "@/app/components/FormButton";
-
+import * as SecureStore from 'expo-secure-store';
 
 const Home = () => {
     const { showAlert, setShowAlert } = useAlert();
+    const [isLogged, setIsLogged] = useState(false);
+    const [esVecino, setEsVecino] = useState<boolean>(true);
     const mockup_data_publicacion =
         [
             {
@@ -55,7 +57,6 @@ const Home = () => {
         }} />
     )
     useEffect(() => {
-
         if (showAlert) {
             Alert.alert('Sesión', "Inicia sesión para ver esta sección !",
                     [
@@ -80,6 +81,16 @@ const Home = () => {
             setShowAlert(false);
         }
     }, [showAlert]);
+
+    useFocusEffect(useCallback(()=>{
+        const token = SecureStore.getItem("bearerToken")
+        if(token)
+        {
+            setIsLogged(true)
+        }else{
+            setIsLogged(false)
+        }
+    }, []))
     return (
         <SafeAreaView style={PrincipalStyle.principalContainer}>{/* <SafeAreaView style={{flex: 1, width: "93%", margin: 'auto', justifyContent: 'center', alignItems: 'center'}}> */}
                 <FlatList
@@ -91,9 +102,9 @@ const Home = () => {
                     keyExtractor={item => item.id}
                     columnWrapperStyle={{justifyContent: 'space-between'}}>
                 </FlatList>
-                <View style={{  display: 'none', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}>{/* cambiar none por flex para ver el boton cargar publicacion */}
+            {isLogged && esVecino && <View style={{  display: 'flex', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}>{/* cambiar none por flex para ver el boton cargar publicacion */}
                     <FormButton title={'Cargar publicación'} />
-                </View>
+                </View>}
         </SafeAreaView>
     );
 }

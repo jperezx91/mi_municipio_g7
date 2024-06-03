@@ -20,5 +20,3 @@ def change_password():
 def ver_perfil():
     #TODO: Completar aca
     id_user = get_jwt_identity() # Esto es el ID del usuario en la base de datos
-
-    pass
