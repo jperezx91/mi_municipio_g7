@@ -46,8 +46,12 @@ const RegistroScreen = () => {
                             case 404:
                                 Alert.alert("No existe el DNI.", "Por favor ingrese un DNI de un vecino existente")
                                 break
+                            case 409:
+                                Alert.alert("Usuario ya registrado", "Ya existe un usuario registrado con ese DNI.")
+                                break
                             default:
                                 Alert.alert("Error desconocido.")
+                                break
                         }
                 })
             }

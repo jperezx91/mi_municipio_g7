@@ -12,10 +12,10 @@ def login():
     resultado = ucontroller.login(datos)
     print("resultado es", resultado)
     if resultado["status"] == StatusCode.CORRECTO:
-        access_token = create_access_token(identity=1,
+        access_token = create_access_token(identity=resultado["usuario"].idUsuario,
                                            additional_claims={'rol': resultado["usuario"].rol,
                                                               "nombre": resultado["usuario"].nombre})
-        return {"logged": True, "token": access_token}, 200
+        return {"logged": True, "token": access_token, "ftime": resultado["usuario"].ftime}, 200
     elif resultado["status"] is StatusCode.NO_ENCONTRADO:
         return {"logged": False, "msg": "No existe el usuario en nuestro registro."}, 404
     elif resultado["status"] is StatusCode.DATOS_INVALIDOS:
@@ -25,8 +25,12 @@ def signin():
     datos = request.json
     ucontroller = UserController()
     resultado = ucontroller.signin(datos)
-    if resultado:
+    if resultado[0]:
         return {"status" : "ok"}
-    else:
+    elif resultado[1] == 404:
         return {"error": True, "msg": "No existe el DNI"}, 404
+    else:
+        return {"error": True, "msg": "Ya hay un usuario registrado con ese DNI"}, 409
+
+
 

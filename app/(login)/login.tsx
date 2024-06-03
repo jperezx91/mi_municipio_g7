@@ -27,12 +27,19 @@ const LoginScreen = () => {
             if(regexMail.test(usuario))
                 loginVecino(usuario, password).then((r) =>{
                     const token : string = r.data.token
+                    const ftime : boolean = r.data.ftime
+
                     setErrorMSG("")
                     setToken(token).then((r) =>
                     {
                         setUsuario("")
                         setPassword("")
-                        router.navigate("(home)")
+                        if(!ftime)
+                        {
+                            router.navigate("(home)")
+                        }else{
+                            router.replace("nueva_pass")
+                        }
                     })
 
                 })

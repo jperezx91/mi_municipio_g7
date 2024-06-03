@@ -13,6 +13,7 @@ const StackLayout = () => {
         if(bearerToken)
         {
             const payload = jwtDecode(bearerToken)
+            // @ts-ignore
             setDataUser(payload["nombre"])
         }else{
             setDataUser("")

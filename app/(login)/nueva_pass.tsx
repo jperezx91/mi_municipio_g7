@@ -16,6 +16,11 @@ import { router } from "expo-router";
 import FormButton from "@/app/components/FormButton";
 import LoginFormInput from "@/components/LoginFormInput";
 // Generado con IA hacer de nuevo, no está bien
+import * as SecureStore from "expo-secure-store";
+import {jwtDecode} from "jwt-decode";
+import internal from "node:stream";
+import {changePassword} from "@/app/networking/api";
+
 const RecoveryValidateScreen = () => {
     const [codigo, setCodigo] = useState('');
     const [password, setPassword] = useState('');
@@ -23,6 +28,27 @@ const RecoveryValidateScreen = () => {
 
     const [showPassword, setShowPassword] = useState(false);
     const [showRePassword, setShowRePassword] = useState(false);
+    interface Payload
+    {
+        sub: string
+    }
+    const handleChangePassword = async () =>
+    {
+        const token =  SecureStore.getItem("bearerToken")
+        if(token)
+        {
+            const payload: Payload = jwtDecode(token)
+            changePassword(password)
+            .then((r) => {
+                router.replace("(home)")
+            })
+            .catch((e) =>
+            {
+                console.log(e)
+            })
+        }
+
+    }
     return (
             <SafeAreaView style={[PrincipalStyle.principalContainer, { width: '80%' }]}>
                 {/* Logo */}
@@ -38,7 +64,7 @@ const RecoveryValidateScreen = () => {
                     <LoginFormInput showPass={[showRePassword, setShowRePassword]} valor={repassword} setValor={setRePassword} tipo={"password"} title={"Confirmar contraseña"} placeholder={"Ingrese su nueva contraseña"} />
                 </View>
                 <View style={{height: 45}}></View>
-                <FormButton title={"Confirmar"} />
+                <FormButton action={handleChangePassword} title={"Confirmar"} />
             </SafeAreaView>
 
     );
