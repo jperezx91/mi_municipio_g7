@@ -51,10 +51,28 @@ Join our community of developers creating universal apps.
 
 ## Backend
 
+Crear entorno virtual:
+
 ```bash
 python3 -m venv venv
-source venv/bin/activate
-pip install Flask Flask-SQLAlchemy Flask-Cors
-python3 scripts/initialize_db.py
 ```
+
+Acivar entorno virtual:
+
+```bash
+source venv/bin/activate
+```
+
+Instalar dependencias:
+
+```bash
+pip install flask_jwt_extended pymysql bcrypt
+```
+
+Ejecutar el backend
+
+```bash
+flask --app backend_prov/app.py run --debug
+```
+
 
