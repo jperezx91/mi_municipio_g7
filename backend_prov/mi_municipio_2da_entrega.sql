@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-06-2024 a las 21:59:32
+-- Tiempo de generación: 06-06-2024 a las 00:28:16
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -110,6 +110,19 @@ CREATE TABLE `reclamos` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `recupero`
+--
+
+CREATE TABLE `recupero` (
+  `idRecupero` int(11) NOT NULL,
+  `codigo` text NOT NULL,
+  `documento` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `rubros`
 --
 
@@ -162,6 +175,7 @@ CREATE TABLE `solicitudes` (
 CREATE TABLE `usuarios` (
   `idUsuario` int(11) NOT NULL,
   `email` varchar(200) NOT NULL,
+  `legajo` int(11) NOT NULL,
   `password` text NOT NULL,
   `documento` int(11) NOT NULL,
   `fechaIngreso` date NOT NULL,
@@ -229,6 +243,12 @@ ALTER TABLE `reclamos`
   ADD KEY `idSitio` (`idSitio`),
   ADD KEY `idDesperfecto` (`idDesperfecto`),
   ADD KEY `legajo` (`legajo`);
+
+--
+-- Indices de la tabla `recupero`
+--
+ALTER TABLE `recupero`
+  ADD PRIMARY KEY (`idRecupero`);
 
 --
 -- Indices de la tabla `rubros`
@@ -301,6 +321,12 @@ ALTER TABLE `personal`
 --
 ALTER TABLE `reclamos`
   MODIFY `idReclamo` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `recupero`
+--
+ALTER TABLE `recupero`
+  MODIFY `idRecupero` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `rubros`

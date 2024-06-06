@@ -9,7 +9,6 @@ const StackLayout = () => {
 
     useFocusEffect(useCallback(()=> {
         const bearerToken =  SecureStore.getItem('bearerToken')
-        console.log(bearerToken, "actual");
         if(bearerToken)
         {
             const payload = jwtDecode(bearerToken)
@@ -30,6 +29,7 @@ const StackLayout = () => {
                 }}
             />
             <Stack.Screen name="publicacion/[id]" options={{title: 'Publicación', headerShown: true, headerTitleAlign: 'center',  headerStyle: {backgroundColor: '#C7DCFF'}}} />
+            <Stack.Screen name="publicacion/nueva_publicacion" options={{title: 'Publicación', headerShown: true, headerTitleAlign: 'center',  headerStyle: {backgroundColor: '#C7DCFF'}}} />
         </Stack>
     )
 }

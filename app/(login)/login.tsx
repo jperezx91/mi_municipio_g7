@@ -5,7 +5,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import FormButton from "@/app/components/FormButton";
 import LoginFormInput from "@/components/LoginFormInput";
-import {loginVecino} from "@/app/networking/api";
+import {loginMunicipal, loginVecino} from "@/app/networking/api";
 import {setToken} from "@/app/networking/auth_utils"
 
 const LoginScreen = () => {
@@ -24,7 +24,21 @@ const LoginScreen = () => {
         if(usuario.length > 0)
         {
             setLoading(true)
-            if(regexMail.test(usuario))
+            let error = false
+            let esVecino = true
+            if(!regexMail.test(usuario))
+            {
+                error = true
+                esVecino = false
+            }
+            if(!regexNum.test(usuario) && error) //si no es email y tampoco número
+            {
+                setErrorMSG("Ingrese un e-mail o legajo válido")
+                setLoading(false)
+                return
+            }
+            if(esVecino)
+            {
                 loginVecino(usuario, password).then((r) =>{
                     const token : string = r.data.token
                     const ftime : boolean = r.data.ftime
@@ -43,34 +57,71 @@ const LoginScreen = () => {
                     })
 
                 })
-                .catch((error) =>
-                {
-                    switch(error.response.status)
+                    .catch((error) =>
                     {
-                        case 404:
+                        switch(error.response.status)
                         {
-                            setErrorMSG(error.response.data.msg)
-                            break
+                            case 404:
+                            {
+                                setErrorMSG(error.response.data.msg)
+                                break
+                            }
+                            case 403:
+                            {
+                                setErrorMSG(error.response.data.msg)
+                                break
+                            }
+                            default:
+                            {
+                                setErrorMSG("Desconocido")
+                                break
+                            }
                         }
-                        case 403:
-                        {
-                            setErrorMSG(error.response.data.msg)
-                            break
-                        }
-                        default:
-                        {
-                            setErrorMSG("Desconocido")
-                            break
-                        }
-                    }
+                    })
+                    .finally(() => {
+                        setLoading(false)
+                    });
+            }else{
+                loginMunicipal(usuario, password).then((r) =>{
+                    const token : string = r.data.token
+                    const ftime : boolean = r.data.ftime
+
+                    setErrorMSG("")
+                    setToken(token).then((r) =>
+                    {
+                        setUsuario("")
+                        setPassword("")
+                        router.navigate("(home)")
+                    })
+
                 })
-                .finally(() => {
-                    setLoading(false)
-                });
-            else {
-                setErrorMSG("Ingrese un e-mail o legajo válido.")
-                setLoading(false)
+                    .catch((error) =>
+                    {
+                        switch(error.response.status)
+                        {
+                            case 404:
+                            {
+                                setErrorMSG(error.response.data.msg)
+                                break
+                            }
+                            case 403:
+                            {
+                                setErrorMSG(error.response.data.msg)
+                                break
+                            }
+                            default:
+                            {
+                                setErrorMSG("Desconocido")
+                                break
+                            }
+                        }
+                    })
+                    .finally(() => {
+                        setLoading(false)
+                    });
             }
+
+
         }
 
     }

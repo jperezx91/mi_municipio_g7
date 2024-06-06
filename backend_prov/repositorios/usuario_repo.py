@@ -34,6 +34,19 @@ class UsuarioRepo:
             conexion.close()
             return r is not None
     @staticmethod
+    def validar_usuario(id_usuario, password):
+        conexion = DbManager.obtener_conexion()
+        with conexion.cursor() as cursor:
+            cursor.execute("SELECT idUsuario, password FROM usuarios WHERE idUsuario = %s", (id_usuario, ))
+            r = cursor.fetchone()
+            cursor.close()
+            conexion.close()
+            if r is None:
+                return None
+            if r[1] != password:
+                return None
+            return r
+    @staticmethod
     def existe_usuario_con_mail(email, documento):
         conexion = DbManager.obtener_conexion()
         with conexion.cursor() as cursor:
@@ -74,6 +87,29 @@ class UsuarioRepo:
                 r = {"status": StatusCode.DATOS_INVALIDOS, "usuario": None}
             conexion.close()
             return r
+    def validar_municipal(usuarioInp: Usuario):
+        conexion = DbManager.obtener_conexion()
+        with conexion.cursor() as cursor:
+            cursor.execute(
+                "SELECT idUsuario, us.password as password, ps.nombre as nombre FROM usuarios us LEFT JOIN personal ps ON ps.legajo = us.legajo WHERE us.legajo = %s",
+                usuarioInp.legajo)
+            usuario = cursor.fetchone()
+            if usuario is None:
+                conexion.close()
+                return {"status": StatusCode.NO_ENCONTRADO, "usuario": None}
+            # valido = bcrypt.checkpw(usuario['password'], usuarioInp.password)
+            valido = usuario[1] == usuarioInp.password
+            if valido:
+                u = Usuario()
+                u.idUsuario = usuario[0]
+                u.nombre = usuario[2]
+                u.rol = 'municipal'
+                u.ftime = False
+                r = {"status": StatusCode.CORRECTO, "usuario": u}
+            else:
+                r = {"status": StatusCode.DATOS_INVALIDOS, "usuario": None}
+            conexion.close()
+            return r
     @staticmethod
     def agregar_recupero(documento):
         conexion = DbManager.obtener_conexion()
@@ -85,7 +121,7 @@ class UsuarioRepo:
             conexion.close()
 
     @staticmethod
-    def get_usuario_by_codigo(codigo):
+    def get_usuario_by_codigo(codigo, rol=""):
         conexion = DbManager.obtener_conexion()
         with conexion.cursor() as cursor:
             cursor.execute("SELECT us.idUsuario, us.email, us.password, us.documento as documento, vc.nombre AS nombre "
@@ -108,5 +144,36 @@ class UsuarioRepo:
             usuario.documento = r[3]
             usuario.nombre = r[4]
             return usuario
-    def validar_municipal(usuarioInp: Usuario):
-        return True
+    @staticmethod
+    def get_usuario_by_id(id_user, rol="vecino"):
+        conexion = DbManager.obtener_conexion()
+        with conexion.cursor() as cursor:
+            if rol == "vecino":
+                cursor.execute("SELECT dd.nombre, dd.apellido, us.email, dd.documento, dd.direccion, br.nombre "
+                               " FROM usuarios us "
+                               "LEFT JOIN vecinos as dd "
+                               "ON dd.documento = us.documento "
+                               "LEFT JOIN barrios as br "
+                               "ON br.idBarrio = dd.codigoBarrio "
+                               " WHERE idUsuario = %s", (id_user,))
+            else:
+                cursor.execute("SELECT dd.nombre, dd.apellido, us.legajo, dd.documento, '' as direccion, '' as barrio "
+                               " FROM usuarios us "
+                               "LEFT JOIN personal as dd "
+                               "ON dd.legajo = us.legajo "
+                               " WHERE idUsuario = %s", (id_user,))
+
+            r = cursor.fetchone()
+            if r is None:
+                return None
+            cursor.close()
+            conexion.close()
+            usuario = Usuario()
+            usuario.nombre = r[0]
+            usuario.apellido = r[1]
+            usuario.email = r[2]
+            usuario.documento = r[3]
+            usuario.direccion = r[4]
+            usuario.barrio = r[5]
+            return usuario
+

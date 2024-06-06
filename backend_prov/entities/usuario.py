@@ -1,12 +1,15 @@
 class Usuario:
     idUsuario = 0
     nombre = ""
+    apellido = ""
     email = ""
     legajo = ""
     password = ""
     rol = ""
     ftime = True
     documento = 1
+    direccion = ""
+    barrio = ""
     def getEmail(self):
         return self.email
     def getLegajo(self):

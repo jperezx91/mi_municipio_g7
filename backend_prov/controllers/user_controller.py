@@ -16,11 +16,9 @@ class UserController:
             return v
         # Municipal
         elif user_entity.legajo != "":
-            if UsuarioRepo.validar_municipal(user_entity):
-                user_entity.rol = "municipal"
-                return user_entity
-            else:
-                return None
+            v = UsuarioRepo.validar_municipal(user_entity)
+            user_entity.rol = "municipal"
+            return v
 
         return None
     def signin(self, datos_usuario):
@@ -35,7 +33,9 @@ class UserController:
             return [True, 200]
         else:
             return [False, 404]
-
+    def validar_usuario(self, id_usuario, password):
+        usuario = UsuarioRepo.validar_usuario(id_usuario, password)
+        return usuario
     def solicitar_cambio_pass(self, email, dni):
         # chequeo que exista el usuario
         existe_usuario = UsuarioRepo.existe_usuario_con_mail(email, dni)
@@ -46,4 +46,7 @@ class UserController:
 
     def get_usuario_by_codigo(self, codigo):
         u = UsuarioRepo.get_usuario_by_codigo(codigo)
+        return u
+    def get_usuario_by_id(self, id_usuario, rol="vecino"):
+        u = UsuarioRepo.get_usuario_by_id(id_usuario, rol)
         return u

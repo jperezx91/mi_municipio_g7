@@ -8,6 +8,7 @@ import PublicacionComponente from "@/app/components/PublicacionComponente";
 import StyleHome from "@/app/(tabs)/(home)/styles";
 import FormButton from "@/app/components/FormButton";
 import * as SecureStore from 'expo-secure-store';
+import {jwtDecode} from "jwt-decode";
 
 const Home = () => {
     const { showAlert, setShowAlert } = useAlert();
@@ -58,13 +59,14 @@ const Home = () => {
     )
     useEffect(() => {
         if (showAlert) {
-            Alert.alert('Sesión', "Inicia sesión para ver esta sección !",
+            Alert.alert('Sesión', "Inicia sesión como vecino para ver esta sección.",
                     [
                     {
                         text: 'Aceptar',
                         onPress: () => {
                             // Lógica para aceptar la acción
-                            router.push("login")
+                            if(esVecino) // si fuese un vecino...
+                                router.push("login")
                         }
                     },
                         {
@@ -86,6 +88,10 @@ const Home = () => {
         const token = SecureStore.getItem("bearerToken")
         if(token)
         {
+            const payload = jwtDecode(token)
+            // @ts-ignore
+            const rol = payload["rol"]
+            setEsVecino(rol == "vecino")
             setIsLogged(true)
         }else{
             setIsLogged(false)
@@ -103,7 +109,7 @@ const Home = () => {
                     columnWrapperStyle={{justifyContent: 'space-between'}}>
                 </FlatList>
             {isLogged && esVecino && <View style={{  display: 'flex', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}>{/* cambiar none por flex para ver el boton cargar publicacion */}
-                    <FormButton title={'Cargar publicación'} />
+                    <FormButton action={()=> {router.push("publicacion/nueva_publicacion")}} title={'Cargar publicación'} />
                 </View>}
         </SafeAreaView>
     );

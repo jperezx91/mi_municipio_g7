@@ -73,7 +73,7 @@ const RecoveryValidateScreen = () => {
 
     }
     return (
-            <SafeAreaView style={[PrincipalStyle.principalContainer, { width: '80%' }]}>
+            <KeyboardAvoidingView behavior={'height'} style={[PrincipalStyle.principalContainer, { width: '80%' }]}>
                 {/* Logo */}
                 <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 25, gap: 15 }}>
                     <Image source={require('@/assets/images/logo.png')} />
@@ -88,7 +88,7 @@ const RecoveryValidateScreen = () => {
                 </View>
                 <View style={{height: 45}}></View>
                 <FormButton action={handleChangePassword} title={"Confirmar"} />
-            </SafeAreaView>
+            </KeyboardAvoidingView>
 
     );
 };

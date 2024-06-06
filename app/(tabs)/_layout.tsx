@@ -7,15 +7,22 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {useAlert, AlertProvider} from "@/app/alertProvider";
 import * as SecureStore from "expo-secure-store";
+import {jwtDecode} from "jwt-decode";
 function TabLayout() {
   const colorScheme = useColorScheme();
     const { setShowAlert } = useAlert();
     const [userLogged, setUserLogged] = useState(false);
-
+    const [userRol, setUserRol] = useState("");
     const colorIcons = "#21272A"
 
     useFocusEffect(useCallback(()=> {
         const btoken = SecureStore.getItem("bearerToken")
+        if(btoken)
+        {
+            const payload = jwtDecode(btoken)
+            // @ts-ignore
+            setUserRol(payload["rol"])
+        }
         if(btoken)
         {
             setUserLogged(true)
@@ -63,7 +70,7 @@ function TabLayout() {
         <Tabs.Screen
             name="(denuncias)"
             listeners={{tabPress: e=>{
-                    if(!userLogged) {
+                    if(!userLogged || userRol == "municipal") {
                         setShowAlert(true)
                         e.preventDefault() //descomentar para que no se pueda acceder a esta sección.
                     }

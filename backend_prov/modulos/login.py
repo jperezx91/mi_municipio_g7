@@ -14,7 +14,7 @@ def login():
     if resultado["status"] == StatusCode.CORRECTO:
         access_token = create_access_token(identity=resultado["usuario"].idUsuario,
                                            additional_claims={'rol': resultado["usuario"].rol,
-                                                              "nombre": resultado["usuario"].nombre})
+                                                              "nombre": resultado["usuario"].nombre}, expires_delta=False)
         return {"logged": True, "token": access_token, "ftime": resultado["usuario"].ftime}, 200
     elif resultado["status"] is StatusCode.NO_ENCONTRADO:
         return {"logged": False, "msg": "No existe el usuario en nuestro registro."}, 404
@@ -57,7 +57,7 @@ def pedir_cambio_pass():
         if usuario:
             access_token = create_access_token(identity=usuario.idUsuario,
                                                additional_claims={'rol': "vecino",
-                                                                  "nombre": usuario.nombre})
+                                                                  "nombre": usuario.nombre}, expires_delta=False)
             return {"token": access_token}, 200
         else:
             return {"error": True, "msg": "No existe el código correspondientes."}, 404
