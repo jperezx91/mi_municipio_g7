@@ -20,7 +20,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin, dataUser 
             <View style={StyleHeaderComponent.headerViewContainer}>
                 <View style={StyleHeaderComponent.headerViewItemLeft}>
                     <Image style={{width: 30, height: 30, objectFit: 'cover'}} source={require('@/assets/images/logo.png')} />
-                    <Text>Mi municipio</Text>
+                    <Text style={{fontFamily:'outfit', fontSize:20}}>Mi municipio</Text>
                 </View>
                 <View style={StyleHeaderComponent.headerViewItemRight}>
                     {dataUser == "" ?
@@ -28,7 +28,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin, dataUser 
                             <Pressable
                             onPress={pressLogin}
                             style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-                                <Text>Ingresar</Text>
+                                <Text style={{fontFamily:'outfit', fontSize:20}}>Ingresar</Text>
                                 <FontAwesome5 name="user-circle" size={24} color="black" />
                             </Pressable>
                         </>:

@@ -99,6 +99,7 @@ const Home = () => {
                     style={StyleHome.flatListContainer}
                     data={mockup_data_publicacion}
                     renderItem={renderItemPublicaion}
+                    showsVerticalScrollIndicator={false}
                     keyExtractor={item => item.id}
                     columnWrapperStyle={{justifyContent: 'space-between'}}>
                 </FlatList>
