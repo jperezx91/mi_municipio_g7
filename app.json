@@ -30,16 +30,8 @@
       "expo-router",
       "expo-secure-store",
       "expo-image-picker",
-        {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
-        },
-        "expo-document-picker",
-        {
-          "iCloudContainerEnvironment": "Production"
-        }
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
+        "expo-document-picker"
+    ]
+
   }
 }
