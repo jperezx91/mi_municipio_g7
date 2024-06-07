@@ -17,6 +17,12 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
+  useFonts({
+    'outfit':require('./../assets/fonts/Outfit-Regular.ttf'),
+    'outfit-medium':require('./../assets/fonts/Outfit-Medium.ttf'),
+    'outfit-bold':require('./../assets/fonts/Outfit-Bold.ttf')
+  })
+
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
