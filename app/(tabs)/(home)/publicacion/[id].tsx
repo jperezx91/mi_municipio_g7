@@ -4,7 +4,6 @@ import {router, useGlobalSearchParams} from "expo-router";
 import { ExpoRoot } from 'expo-router';
 import {PrincipalStyle} from "@/app/styles";
 import {string} from "prop-types";
-import Carousel from 'react-native-snap-carousel';
 import SlideItem from './SlideItem';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
