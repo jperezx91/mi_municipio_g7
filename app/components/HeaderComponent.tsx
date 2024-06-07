@@ -20,7 +20,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin, dataUser 
             <View style={StyleHeaderComponent.headerViewContainer}>
                 <View style={StyleHeaderComponent.headerViewItemLeft}>
                     <Image style={{width: 30, height: 30, objectFit: 'cover'}} source={require('@/assets/images/logo.png')} />
-                    <Text>Mi municipio</Text>
+                    <Text style={{fontFamily:'outfit', fontSize:20, color:"white"}}>Mi municipio</Text>
                 </View>
                 <View style={StyleHeaderComponent.headerViewItemRight}>
                     {dataUser == "" ?
@@ -28,19 +28,19 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin, dataUser 
                             <Pressable
                             onPress={pressLogin}
                             style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-                                <Text>Ingresar</Text>
-                                <FontAwesome5 name="user-circle" size={24} color="black" />
+                                <Text style={{fontFamily:'outfit', fontSize:20}}>Ingresar</Text>
+                                <FontAwesome5 name="user-circle" size={24} color="white" />
                             </Pressable>
                         </>:
                         <>
                             <Pressable style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', position: 'relative' }} onPress={() => {router.navigate("profile")}}>
 
-                                <FontAwesome5 style={{marginRight: 10}} name="bell" size={24} color="darkblue" />
+                                <FontAwesome5 style={{marginRight: 10}} name="bell" size={24} color="white" />
                                 <View style={{position: 'absolute', bottom: 10, left: 10}}>
                                     <View style={{backgroundColor: 'red', width: 23, height: 23, borderRadius: 100, display: 'flex', justifyContent: 'center', alignItems: 'center'}}><Text style={{color: 'white'}}>5</Text></View>
                                 </View>
-                                <Text style={{fontWeight: 'bold', color: 'darkblue'}}>{dataUser}</Text>
-                                <FontAwesome5 name="user-circle" size={24} color="black" />
+                                <Text style={{fontFamily:'outfit-bold', fontSize:18, color: 'white'}}>{dataUser}</Text>
+                                <FontAwesome5 name="user-circle" size={24} color="white" />
                             </Pressable>
                         </>
                     }
