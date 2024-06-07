@@ -66,7 +66,7 @@ const mockUpData: Record<string, any> =
             descpromo: 'Solo por hoy 2x1 en cerverzas.'
         }
     }
- 
+
 
 
 
@@ -110,7 +110,7 @@ const Id = () => {
             icon:"user-circle",
             url:'tel:'+mockUpData?.phone
         }
-    ] 
+    ]
     const OnPressHandle=(item: { btn?: number; name: any; icon?: any; url: any; })=>{
         if (item.name=='share'){
             return;
@@ -121,7 +121,7 @@ const Id = () => {
         {sd:1, image:require('../../../../assets/images/porcion.jpg')},
         {sd:2, image:require('../../../../assets/images/horno.jpg')},
         {sd:3, image:require('../../../../assets/images/mediapizza.jpg')}
-    ]  
+    ]
 
     const _renderItem = (item: { sd?: number; image?: any;}) => {
         return (
@@ -137,61 +137,63 @@ const Id = () => {
     *  */
     return (
         <SafeAreaView>
-            <ScrollView>
-            { /* Carrousel*/}
+            <FlatList ListHeaderComponent={<View>
+                { /* Carrousel*/}
 
-            {/*<Carousel 
-                data={mockupImages2} 
+                {/*<Carousel
+                data={mockupImages2}
                 renderItem={_renderItem}
                 sliderWidth={Dimensions.get('window').width}
                 itemWidth={Dimensions.get('window').width}
             >
 
             </Carousel>*/}
-            <View style={{backgroundColor:'white'}}>
-                <FlatList data={mockupImages} horizontal renderItem={({item,index})=>(
-                    <View key={index}>
-                        <Image source={item.image} style={{height: 300, width:Dimensions.get('window').width}}/>
+                <View style={{backgroundColor:'white'}}>
+                    <FlatList data={mockupImages} horizontal renderItem={({item,index})=>(
+                        <View key={index}>
+                            <Image source={item.image} style={{height: 300, width:Dimensions.get('window').width}}/>
+                        </View>
+                    )}>
+
+                    </FlatList>
+                </View>
+
+                { /* Datos seccion*/}
+
+                <View style={{padding:20, marginTop:-20, backgroundColor:'white', borderTopLeftRadius:25, borderTopRightRadius:25}}>
+                    <View>
+                        <Text style={{fontFamily:'outfit-bold', fontSize: 26}}>{mockUpData[index].title}</Text>
                     </View>
-                )}>
-
-                </FlatList>
-            </View>
-
-            { /* Datos seccion*/}
-
-            <View style={{padding:20, marginTop:-20, backgroundColor:'white', borderTopLeftRadius:25, borderTopRightRadius:25}}>
-                <View>
-                <Text style={{fontFamily:'outfit-bold', fontSize: 26}}>{mockUpData[index].title}</Text>
+                    <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
+                        <Text style={{fontFamily:'outfit'}}>Dirección: </Text><Text>{mockUpData[index].location}</Text>
+                    </View>
+                    <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
+                        <Text style={{fontFamily:'outfit'}}>Horario: </Text><Text>{mockUpData[index].location}</Text>
+                    </View>
+                    <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
+                        <Text style={{fontFamily:'outfit'}}>Teléfono: </Text><Text>{mockUpData[index].phone}</Text>
+                    </View>
                 </View>
-                <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
-                    <Text style={{fontFamily:'outfit'}}>Dirección: </Text><Text>{mockUpData[index].location}</Text>
-                </View>
-                <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
-                    <Text style={{fontFamily:'outfit'}}>Horario: </Text><Text>{mockUpData[index].location}</Text>
-                </View>
-                <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
-                    <Text style={{fontFamily:'outfit'}}>Teléfono: </Text><Text>{mockUpData[index].phone}</Text>
-                </View>
-            </View>
-            <View style={{backgroundColor:'white', paddingLeft:20, paddingRight:20}}>
-                <FlatList data={actionBtns} numColumns={4} columnWrapperStyle={{justifyContent:'space-between'}} renderItem={({item,index})=>(
-                    <TouchableOpacity key={index} onPress={()=>OnPressHandle(item)} style={{display: 'flex', alignSelf:'center'}}>
-                        {/*<Image source={item.icon} style={{width:50, height:50}}/>*/}
-                        <FontAwesome5 name={item.icon} size={50} color="black" />
-                        <Text style={{fontFamily:'outfit', textAlign:'center', marginTop:3}}>
-                            {item.name}
-                        </Text>
-                    </TouchableOpacity>
-                )}>
+                <View style={{backgroundColor:'white', paddingLeft:20, paddingRight:20}}>
+                    <FlatList data={actionBtns} numColumns={4} columnWrapperStyle={{justifyContent:'space-between'}} renderItem={({item,index})=>(
+                        <TouchableOpacity key={index} onPress={()=>OnPressHandle(item)} style={{display: 'flex', alignSelf:'center'}}>
+                            {/*<Image source={item.icon} style={{width:50, height:50}}/>*/}
+                            <FontAwesome5 name={item.icon} size={50} color="black" />
+                            <Text style={{fontFamily:'outfit', textAlign:'center', marginTop:3}}>
+                                {item.name}
+                            </Text>
+                        </TouchableOpacity>
+                    )}>
 
-                </FlatList>
-            </View>
-            <View style={{backgroundColor:'white', padding:20, height:'100%'}}>
-                <Text style={{fontFamily:'outfit-bold', fontSize:20, textAlign:'center'}}>{mockUpData[index].titulopromo}</Text>
-                <Text style={{fontFamily:'outfit', lineHeight:25, minHeight:200}}>{mockUpData[index].descpromo}</Text>
-            </View>
-            </ScrollView>
+                    </FlatList>
+                </View>
+                <View style={{backgroundColor:'white', padding:20, height:'100%'}}>
+                    <Text style={{fontFamily:'outfit-bold', fontSize:20, textAlign:'center'}}>{mockUpData[index].titulopromo}</Text>
+                    <Text style={{fontFamily:'outfit', lineHeight:25, minHeight:200}}>{mockUpData[index].descpromo}</Text>
+                </View>
+            </View>}  data={[]} renderItem={()=> (<></>)} >
+            </FlatList>
+
         </SafeAreaView>
     );
 };
