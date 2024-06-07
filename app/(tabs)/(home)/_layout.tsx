@@ -4,7 +4,7 @@ import {Dimensions} from "react-native";
 import {useCallback, useEffect, useState} from "react";
 import * as SecureStore from "expo-secure-store";
 import {jwtDecode} from "jwt-decode";
-const StackLayout = () => {
+const StackLayoutHome = () => {
     const [dataUser, setDataUser] = useState("");
 
     useFocusEffect(useCallback(()=> {
@@ -33,4 +33,4 @@ const StackLayout = () => {
         </Stack>
     )
 }
-export default StackLayout
+export default StackLayoutHome

@@ -78,7 +78,7 @@ const NuevaPassPerfil = () => {
     return (
 
                 <KeyboardAvoidingView behavior={'height'} style={[PrincipalStyle.principalContainer, { width: '80%' }]}>
-                    <ScrollView>
+                    <ScrollView showsVerticalScrollIndicator={false}>
                         {/* Logo */}
                         <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 25, gap: 15 }}>
                             <Image source={require('@/assets/images/logo.png')} />

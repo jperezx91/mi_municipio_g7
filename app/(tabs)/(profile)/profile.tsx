@@ -30,6 +30,8 @@ export default function HomeScreen() {
     {
         SecureStore.deleteItemAsync("bearerToken")
             .then((r)=>{
+                if(router.canDismiss())
+                    router.dismissAll()
                 router.replace("login")
             })
     }

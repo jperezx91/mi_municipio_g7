@@ -48,13 +48,13 @@ function NuevaPublicacion() {
     }
 
     return (
-        <ScrollView style={[PrincipalStyle.principalContainer, {backgroundColor: "#F2F4F8"}]}>
+        <ScrollView showsVerticalScrollIndicator={false} style={[PrincipalStyle.principalContainer, {backgroundColor: "#F2F4F8"}]}>
             <View style={{marginTop: 15, padding: 20, paddingTop: 0}}>
-                <Text style={{fontFamily:'outfit-bold', fontSize:20}}> 
+                <Text style={{fontFamily:'outfit-bold', fontSize:20}}>
                     Crea una nueva publicación
                 </Text>
-                <Text style={{fontFamily:'outfit', fontSize:15, color:'gray', marginBottom:15}}> 
-                    Completa los campos necesarios para crear una nueva publicación. 
+                <Text style={{fontFamily:'outfit', fontSize:15, color:'gray', marginBottom:15}}>
+                    Completa los campos necesarios para crear una nueva publicación.
                 </Text>
                 <FormPublicacionTextInput tipoKeyboard={"numeric"} titulo={"Comercio"} placeholder={"Ingrese el nombre de su comercio"} />
                 <FormPublicacionTextInput titulo={"Dirección"} placeholder={"Ingrese la dirección de su comercio"} />
@@ -64,11 +64,11 @@ function NuevaPublicacion() {
                 <FormPublicacionTextInput titulo={"Descripción"} placeholder={"Ingrese la descripción de su publicación"} />
                 <Text style={{                            fontFamily:'outfit',
                             fontSize:15}}>Imágenes</Text>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={{margin:20}}
                     onPress={()=>onImage()}
                 >
-                    <Image 
+                    <Image
                     source={require('../../../../assets/images/publicacion_place_holder.png')}
                     style={{width:20,height:20}}
                     />
