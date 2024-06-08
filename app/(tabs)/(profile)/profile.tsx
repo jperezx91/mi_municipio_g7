@@ -76,7 +76,7 @@ export default function HomeScreen() {
                 </View>
                 { /* Fin Caja de datos de perfil */}
                 {/* Botón Mis publicaciones */}
-                <Pressable style={{backgroundColor: '#C1C7CD', padding: 14, marginTop: 25, borderRadius:5, borderColor:'#747375',borderWidth:1}} onPress={()=> {router.push("publicacion/nueva_publicacion")}}>
+                <Pressable style={{backgroundColor: '#C1C7CD', padding: 14, marginTop: 25, borderRadius:5, borderColor:'#747375',borderWidth:1}} onPress={()=> {router.push("misPublicaciones")}}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                         <Text style={{fontFamily:'outfit', fontSize:15}}>Mis publicaciones</Text>
                         <Image source={require('@/assets/images/arrow.png')} />
