@@ -4,6 +4,7 @@ import {PrincipalStyle} from "@/app/styles";
 import FormButton from "@/app/components/FormButton";
 const { height } = Dimensions.get('window');
 import * as ImagePicker from 'expo-image-picker';
+import { AntDesign } from '@expo/vector-icons';
 
 
 interface FormPublicacionTextInputProps {
@@ -62,16 +63,14 @@ function NuevaPublicacion() {
                 <FormPublicacionTextInput tipoKeyboard={'numeric'} titulo={"Teléfono"} placeholder={"Ingrese el teléfono de su comercio"} />
                 <FormPublicacionTextInput titulo={"Título"} placeholder={"Ingrese el título de su publicación"} />
                 <FormPublicacionTextInput titulo={"Descripción"} placeholder={"Ingrese la descripción de su publicación"} />
-                <Text style={{                            fontFamily:'outfit',
-                            fontSize:15}}>Imágenes</Text>
                 <TouchableOpacity
-                    style={{margin:20}}
                     onPress={()=>onImage()}
                 >
-                    <Image
-                    source={require('../../../../assets/images/publicacion_place_holder.png')}
-                    style={{width:20,height:20}}
-                    />
+                    <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop:10}}>
+                        <Text style={{fontFamily:'outfit', fontSize:15}}>Subir Imágenes</Text>
+                        <AntDesign name="pluscircleo" size={24} color="black" />
+                    </View>
+                    
                 </TouchableOpacity>
             </View>
             <View style={{width: "70%", margin: 'auto', marginVertical: 10}}><FormButton title={"Cargar publicación"}/></View>

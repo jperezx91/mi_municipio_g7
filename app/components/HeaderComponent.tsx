@@ -28,7 +28,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin, dataUser 
                             <Pressable
                             onPress={pressLogin}
                             style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-                                <Text style={{fontFamily:'outfit', fontSize:20}}>Ingresar</Text>
+                                <Text style={{fontFamily:'outfit-bold', fontSize:20, color:"white"}}>Ingresar</Text>
                                 <FontAwesome5 name="user-circle" size={24} color="white" />
                             </Pressable>
                         </>:

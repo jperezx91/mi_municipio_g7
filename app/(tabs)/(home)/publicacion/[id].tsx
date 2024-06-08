@@ -137,7 +137,7 @@ const Id = () => {
     *  */
     return (
         <SafeAreaView>
-            <FlatList ListHeaderComponent={<View>
+            <FlatList showsVerticalScrollIndicator={false} ListHeaderComponent={<View>
                 { /* Carrousel*/}
 
                 {/*<Carousel

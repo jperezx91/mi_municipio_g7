@@ -8,9 +8,9 @@ const FormButton = ({disabeled=false, title="", invertStyle=false, action=(()=> 
             paddingVertical: 15,
             borderRadius:15,
             borderWidth: (invertStyle ? 1 : 0),
-            borderColor: invertStyle ? '#0F62FE' : ''
+            borderColor: invertStyle ? '#0d3f6e' : ''
         }} onPress={action}><Text
-            style={{color: !invertStyle ? 'white' : '#0F62FE', textAlign: 'center', fontFamily:'outfit-bold'}}>{title}</Text></Pressable>
+            style={{color: !invertStyle ? 'white' : '#0d3f6e', textAlign: 'center', fontFamily:'outfit-bold'}}>{title}</Text></Pressable>
     )
 }
 export default FormButton

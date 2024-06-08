@@ -28,8 +28,8 @@ const StackLayoutHome = () => {
                     header: (props) => <HeaderComponent dataUser={dataUser} pressLogin={() => { router.push("login")}} />
                 }}
             />
-            <Stack.Screen name="publicacion/[id]" options={{title: 'Publicación', headerShown: true, headerTitleAlign: 'center',  headerStyle: {backgroundColor: '#C7DCFF'}}} />
-            <Stack.Screen name="publicacion/nueva_publicacion" options={{title: 'Nueva publicación', headerShown: true, headerTitleAlign: 'center',  headerStyle: {backgroundColor: '#C7DCFF'}}} />
+            <Stack.Screen name="publicacion/[id]" options={{title: 'Publicación', headerShown: true, headerTitleAlign: 'center',  headerStyle: {backgroundColor: '#4891c7'}, headerTintColor:'white', headerTitleStyle:{fontFamily:'outfit', fontSize:20}}} />
+            <Stack.Screen name="publicacion/nueva_publicacion" options={{title: 'Nueva publicación', headerShown: true, headerTitleAlign: 'center',  headerStyle: {backgroundColor: '#4891c7'}, headerTintColor:'white', headerTitleStyle:{fontFamily:'outfit', fontSize:20}}} />
         </Stack>
     )
 }
