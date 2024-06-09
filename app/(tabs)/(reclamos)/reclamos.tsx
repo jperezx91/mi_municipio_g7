@@ -15,40 +15,40 @@ export default function HomeScreen() {
     [
         {
             id: "1",
-            title: 'Pizzería Los hornos',
-            imgUrl: 'lxd',
-            desc: '¡Promo imperdible!'
+            numero: '445566',
+            categoria: 'Parques',
+            estado: 'En revisión'
 
         },
         {
             id: "2",
-            title: 'Escribanía Flores Hnos.',
-            imgUrl: 'lxd',
-            desc: 'Servicios de escribanía de la mejor calidad.'
+            numero: '449966',
+            categoria: 'Iluminación',
+            estado: 'Unificado'
         },
         {
             id: "3",
-            title: 'Negocio A',
-            imgUrl: 'lxd',
-            desc: 'Esto es una descripcion A'
+            numero: '445677',
+            categoria: 'Parques',
+            estado: 'Cerrado'
         },
         {
             id: "4",
-            title: 'Negocio B',
-            imgUrl: 'lxd',
-            desc: 'Esto es una descripcion B'
+            numero: '447896',
+            categoria: 'Parques',
+            estado: 'Unificado'
         },
 
         {
             id: "5",
-            title: 'Negocio C',
-            imgUrl: 'lxd',
-            desc: 'Esto es una descripcion C'
+            numero: '446677',
+            categoria: 'Escuelas',
+            estado: 'En revisión'
         }
 
     ]
     const renderItemPublicaion = ({item}) => (
-        <ReclamoComponente title={item.title} desc={item.imgUrl} goToPublicacion={() => {
+        <ReclamoComponente numero={item.numero} categoria={item.categoria} estado={item.estado} goToPublicacion={() => {
             const idItem : string = item.id
             router.push(`reclamo/${idItem}`)
         }} />
@@ -66,6 +66,13 @@ export default function HomeScreen() {
                 </View>
             </Pressable>
             
+            <View style={{
+                                display:'flex',
+                                flexDirection:'row',
+                                gap:10,
+                                alignItems:'center',
+                                alignContent:'space-between'
+            }}>
             {/* searchbar */}
             <View style={{
                 display:'flex',
@@ -78,7 +85,8 @@ export default function HomeScreen() {
                 marginTop:15, 
                 borderRadius:10,
                 borderWidth:1,
-                borderColor:'#747375'
+                borderColor:'#747375',
+                width:'88%'
             }}>
                 <AntDesign name="search1" size={20} color="black" />
                 <TextInput 
@@ -87,6 +95,8 @@ export default function HomeScreen() {
                     clearButtonMode='always'
                 >                    
                 </TextInput>
+            </View>
+            <AntDesign name="filter" size={25} color="black"/>
             </View>
 
             {/* lista reclamos */}

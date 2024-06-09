@@ -20,49 +20,49 @@ const mockUpData: Record<string, any> =
         },
         "1":
         {
-            title: 'Pizzeria los hornos',
-            location: 'Calle 123',
-            horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas. Solo por hoy 2x1 en cerverzas. Solo por hoy 2x1 en cerverzas. Solo por hoy 2x1 en cerverzas.'
+            title: 'Pizzería Los hornos',
+            location: 'Av. Cabildo 4455',
+            horario: 'Lunes a Viernes, de 18 a 01 hs',
+            phone: '4412-34567',
+            titulopromo:'¡Promo imperdible!',
+            descpromo: 'Todos los martes 2x1 en cervezas artesanales.\nMira todas nuestras promos vigentes:\n2 pizzas grandes de mozzarella + 1 docena de empanas por $30000.\n2 docenas de empanas + 1 gaseosa de 1.5L por $18000. '
         },
         "2":
         {
-            title: 'Escribanía Flores Hnos',
-            location: 'Calle 456',
+            title: 'Escribanía Flores Hnos.',
+            location: 'Av. Cabildo 4455',
             horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas.'
+            phone: '4412-34567',
+            titulopromo:'Servicios de escribanía de la mejor calidad.',
+            descpromo: 'Servicios de escribanía de la mejor calidad. No dude en consultarnos! Llame a nuestro numero de contacto.'
         },
         "3":
         {
-            title: 'Negocio A',
-            location: 'Calle 555',
+            title: 'Ferretería Juanse',
+            location: 'Av. Cabildo 4455',
             horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas.'
+            phone: '4412-34567',
+            titulopromo:'¡Esta semana 10% de descuento!',
+            descpromo: 'Esta semana tenes 10% de descuento pagando en efectivo tus compras. Veni a nuestro local sobre la calle Cabildo al 4455'
         },
         "4":
         {
-            title: 'Negocio B',
-            location: 'Calle 222',
+            title: 'Kary Nails',
+            location: 'Av. Cabildo 4455',
             horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas.'
+            phone: '4412-34567',
+            titulopromo:'No te pierdas esta promo!!',
+            descpromo: 'Esta semana tenemos turnos disponibles.\nServicio de Kapping a solo $15000 !!\nManicura semi-permanente $6000'
         }
         ,
         "5":
         {
-            title: 'Negocio C',
-            location: 'Calle 1234',
+            title: 'Servicios de Plomería',
+            location: 'Av. Cabildo 4455',
             horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas.'
+            phone: '4412-34567',
+            titulopromo:'Arreglos en el día',
+            descpromo: '30 años de experiencia! No dude en llamarnos ante cualquier inconveniente'
         }
     }
 
@@ -87,26 +87,26 @@ const Id = () => {
     const actionBtns=[
         {
             btn:1,
-            name:'Llama',
-            icon:"user-circle",
+            name:'Llamar',
+            icon:"phone-alt",
             url:'tel:'+mockUpData?.phone
         },
         {
             btn:2,
             name:'Mapa',
-            icon:"user-circle",
+            icon:"map-marked-alt",
             url:'tel:'+mockUpData?.phone
         },
         {
             btn:3,
             name:'Web',
-            icon:"user-circle",
+            icon:"globe",
             url:'tel:'+mockUpData?.phone
         },
         {
             btn:4,
-            name:'Comparti',
-            icon:"user-circle",
+            name:'Compartir',
+            icon:"share-alt",
             url:'tel:'+mockUpData?.phone
         }
     ]
@@ -164,21 +164,22 @@ const Id = () => {
                         <Text style={{fontFamily:'outfit-bold', fontSize: 26}}>{mockUpData[index].title}</Text>
                     </View>
                     <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
-                        <Text style={{fontFamily:'outfit'}}>Dirección: </Text><Text>{mockUpData[index].location}</Text>
+                        <Text style={{fontFamily:'outfit', textDecorationLine:'underline'}}>Dirección:</Text><Text> {mockUpData[index].location}</Text>
                     </View>
                     <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
-                        <Text style={{fontFamily:'outfit'}}>Horario: </Text><Text>{mockUpData[index].location}</Text>
+                        <Text style={{fontFamily:'outfit', textDecorationLine:'underline'}}>Horario:</Text><Text> {mockUpData[index].horario}</Text>
                     </View>
                     <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
-                        <Text style={{fontFamily:'outfit'}}>Teléfono: </Text><Text>{mockUpData[index].phone}</Text>
+                        <Text style={{fontFamily:'outfit', textDecorationLine:'underline'}}>Teléfono:</Text><Text> {mockUpData[index].phone}</Text>
                     </View>
                 </View>
                 <View style={{backgroundColor:'white', paddingLeft:20, paddingRight:20}}>
                     <FlatList data={actionBtns} numColumns={4} columnWrapperStyle={{justifyContent:'space-between'}} renderItem={({item,index})=>(
-                        <TouchableOpacity key={index} onPress={()=>OnPressHandle(item)} style={{display: 'flex', alignSelf:'center'}}>
+                        <TouchableOpacity key={index} onPress={()=>OnPressHandle(item)} style={{display: 'flex', alignSelf:'center', alignItems:'center'}}>
                             {/*<Image source={item.icon} style={{width:50, height:50}}/>*/}
-                            <FontAwesome5 name={item.icon} size={50} color="black" />
-                            <Text style={{fontFamily:'outfit', textAlign:'center', marginTop:3}}>
+                            <View style={{padding:10, borderWidth:2, borderColor:'#50a1c5', borderRadius:50}}>
+                            <FontAwesome5 name={item.icon} size={30} color='#50a1c5'/></View>
+                            <Text style={{fontFamily:'outfit-bold', textAlign:'center', marginTop:5, color:'#50a1c5'}}>
                                 {item.name}
                             </Text>
                         </TouchableOpacity>

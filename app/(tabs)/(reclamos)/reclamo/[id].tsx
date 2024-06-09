@@ -22,50 +22,48 @@ const mockUpData: Record<string, any> =
         },
         "1":
         {
-            title: 'Pizzeria los hornos',
-            location: 'Calle 123',
-            horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas. Solo por hoy 2x1 en cerverzas. Solo por hoy 2x1 en cerverzas. Solo por hoy 2x1 en cerverzas.'
+            categoria: 'Parques',
+            numero: '445566',
+            desc: 'Hay un árbol caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún. ',
+            ubicacion: 'Av Congreso 2223',
+            estado: 'En revisión'
         },
         "2":
         {
-            title: 'Escribanía Flores Hnos',
-            location: 'Calle 456',
-            horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas.'
+            categoria: 'Iluminación',
+            numero: '449966',
+
+            desc: 'Hay un poste caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún.',
+            ubicacion: 'Av Congreso 2223',
+            estado: 'Unificado'
         },
         "3":
         {
-            title: 'Negocio A',
-            location: 'Calle 555',
-            horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas.'
+            categoria: 'Parques',
+            numero: '445677',
+
+            desc: 'Hay un árbol caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún. ',
+            ubicacion: 'Av Congreso 2223',
+            estado: 'Cerrado'
         },
         "4":
         {
-            title: 'Negocio B',
-            location: 'Calle 222',
-            horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas.'
-        }
-        ,
+            categoria: 'Parques',
+            numero: '447896',
+
+            desc: 'Hay un árbol caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún. ',
+            ubicacion: 'Av Congreso 2223',
+            estado: 'Unificado'
+        },
         "5":
         {
-            title: 'Negocio C',
-            location: 'Calle 1234',
-            horario: 'Lunes a Viernes, de 18 a 00 hs',
-            phone: '441234567',
-            titulopromo:'Promo imperdible!',
-            descpromo: 'Solo por hoy 2x1 en cerverzas.'
-        }
+            categoria: 'Escuelas',
+            numero: '446677',
+
+            desc: 'Hay un árbol caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún. ',
+            ubicacion: 'Av Congreso 2223',
+            estado: 'En revisión'
+        },
     }
 
 
@@ -119,9 +117,9 @@ const Id = () => {
         Linking.openURL(item.url);
     }
     const mockupImages = [
-        {sd:1, image:require('../../../../assets/images/porcion.jpg')},
-        {sd:2, image:require('../../../../assets/images/horno.jpg')},
-        {sd:3, image:require('../../../../assets/images/mediapizza.jpg')}
+        {sd:1, image:require('../../../../assets/images/arbol1.jpg')},
+        {sd:2, image:require('../../../../assets/images/arbol2.jpg')},
+        {sd:3, image:require('../../../../assets/images/arbol3.jpg')}
 
     ]
 
@@ -142,7 +140,7 @@ const Id = () => {
                     {/*Por alguna razon no funciona esto para scrollear */}
                     <FlatList showsVerticalScrollIndicator={false} ListHeaderComponent={
                 <View style={{marginTop: 15, padding: 20, paddingTop: 0, backgroundColor: '#F2F4F8', height: Dimensions.get('window').height * 0.80}}>
-                    <Text style={{fontSize: 22, fontFamily:'outfit-bold', textAlign: 'center', marginTop: 10}}>Reclamo #{mockUpData[index].title}</Text>
+                    <Text style={{fontSize: 22, fontFamily:'outfit-bold', textAlign: 'center', marginTop: 10}}>Reclamo #{mockUpData[index].numero}</Text>
                     
                     { /* Caja de datos de perfil */}
                     <View style={{marginTop: 10}}>
@@ -157,7 +155,7 @@ const Id = () => {
                             fontFamily:'outfit',
                             fontSize:14,
                             marginTop:5
-                           }}>{mockUpData[index].location}</Text>
+                           }}>{mockUpData[index].categoria}</Text>
                     </View>
                     <View>
                         <Text style={{marginTop: 20, fontFamily:'outfit', fontSize:17}}>Descripcion desperfecto:</Text>
@@ -170,7 +168,7 @@ const Id = () => {
                             fontFamily:'outfit',
                             fontSize:14,
                             marginTop:5
-                           }}>{mockUpData[index].location}</Text>
+                           }}>{mockUpData[index].desc}</Text>
                     </View>
                     <View>
                         <Text style={{marginTop: 20, fontFamily:'outfit', fontSize:17}}>Ubicacion del reclamo:</Text>
@@ -183,7 +181,7 @@ const Id = () => {
                             fontFamily:'outfit',
                             fontSize:14,
                             marginTop:5
-                           }}>{mockUpData[index].location}</Text>
+                           }}>{mockUpData[index].ubicacion}</Text>
                     </View>
                     <View>
                     <Text style={{marginTop: 20, fontFamily:'outfit', fontSize:17}}>Imagenes del reclamo:</Text>
@@ -210,7 +208,7 @@ const Id = () => {
                             fontFamily:'outfit',
                             fontSize:14,
                             marginTop:5
-                           }}>{mockUpData[index].location}</Text>
+                           }}>{mockUpData[index].estado}</Text>
                         <Pressable style={{padding: 5}} onPress={()=> {router.push("reclamo/seguimiento")}}>
                             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                                 <Text style={{fontFamily:'outfit', fontSize:15, paddingLeft:5}}>Ver seguimiento</Text>

@@ -19,40 +19,40 @@ const Home = () => {
             {
                 id: "1",
                 title: 'Pizzería Los hornos',
-                imgUrl: 'lxd',
+                imgUrl: require('../../../assets/images/horno.jpg'),
                 desc: '¡Promo imperdible!'
 
             },
             {
                 id: "2",
                 title: 'Escribanía Flores Hnos.',
-                imgUrl: 'lxd',
+                imgUrl: require('../../../assets/images/escribania.jpg'),
                 desc: 'Servicios de escribanía de la mejor calidad.'
             },
             {
                 id: "3",
-                title: 'Negocio A',
-                imgUrl: 'lxd',
-                desc: 'Esto es una descripcion A'
+                title: 'Ferretería Juanse',
+                imgUrl: require('../../../assets/images/ferreteria.jpg'),
+                desc: '¡Esta semana 10% de descuento!'
             },
             {
                 id: "4",
-                title: 'Negocio B',
-                imgUrl: 'lxd',
-                desc: 'Esto es una descripcion B'
+                title: 'Kary Nails',
+                imgUrl: require('../../../assets/images/manicura.jpg'),
+                desc: 'No te pierdas esta promo!!'
             },
 
             {
                 id: "5",
-                title: 'Negocio C',
-                imgUrl: 'lxd',
-                desc: 'Esto es una descripcion C'
+                title: 'Servicios de Plomería',
+                imgUrl: require('../../../assets/images/plomeria.jpg'),
+                desc: 'Arreglos en el día'
             }
 
         ]
     // @ts-ignore
     const renderItemPublicaion = ({item}) => (
-        <PublicacionComponente title={item.title} desc={item.desc} goToPublicacion={() => {
+        <PublicacionComponente title={item.title} desc={item.desc} imgUrl={item.imgUrl} goToPublicacion={() => {
             const idItem : string = item.id
             router.push(`publicacion/${idItem}`)
         }} />
