@@ -1,4 +1,4 @@
-import {View, Text, SafeAreaView, Pressable, Dimensions, Image} from 'react-native';
+import {View, Text, SafeAreaView, Pressable, Dimensions, Image, ScrollView} from 'react-native';
 import * as SecureStore from "expo-secure-store";
 import {router, useFocusEffect} from "expo-router";
 import {PrincipalStyle} from "@/app/styles";
@@ -65,7 +65,7 @@ export default function HomeScreen() {
     }, []);
     return (
         <SafeAreaView style={[PrincipalStyle.principalContainer, {backgroundColor: "#F2F4F8"}]}>
-            <View style={{marginTop: 15, padding: 20, paddingTop: 0, backgroundColor: '#F2F4F8', height: Dimensions.get('window').height * 0.80}}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{marginTop: 15, padding: 20, paddingTop: 0, backgroundColor: '#F2F4F8', height: Dimensions.get('window').height * 0.80}}>
                 <Text style={{fontSize: 32, fontFamily:'outfit-bold', textAlign: 'center', marginTop: 10}}>{profileInfo.nombre},{'\n'} ¡Bienvenido!</Text>
                 { /* Caja de datos de perfil */}
                 <View style={{marginTop: 14}}>
@@ -99,7 +99,7 @@ export default function HomeScreen() {
                             router.replace("login")
                         })
                 }}><Text>Cerrar sesion</Text></Pressable>*/}
-            </View>
+            </ScrollView>
         </SafeAreaView>
     );
 }

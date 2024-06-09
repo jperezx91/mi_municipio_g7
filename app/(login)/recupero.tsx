@@ -3,7 +3,7 @@ import {
     SafeAreaView,
     Text,
     View,
-    Image
+    Image, Alert
 } from "react-native";
 import { PrincipalStyle } from "@/app/styles";
 import { router } from "expo-router";
@@ -42,7 +42,14 @@ const PasswordRecoveryScreen = () => {
             })
             .catch((e)=>
             {
-                console.log(e)
+                switch(e.response.status)
+                {
+                    case 404:
+                        Alert.alert("Error", "El DNI o el E-mail no corresponden a una cuenta registrada.")
+                        break;
+                    default:
+                        Alert.alert("Error", "Ocurrió un error inesperado")
+                }
             })
     }
     return (

@@ -19,40 +19,40 @@ const Home = () => {
             {
                 id: "1",
                 title: 'Pizzería Los hornos',
-                imgUrl: 'lxd',
+                imgUrl: require('@/assets/images/mediapizza.jpg'),
                 desc: '¡Promo imperdible!'
 
             },
             {
                 id: "2",
                 title: 'Escribanía Flores Hnos.',
-                imgUrl: 'lxd',
+                imgUrl: require('@/assets/images/horno.jpg'),
                 desc: 'Servicios de escribanía de la mejor calidad.'
             },
             {
                 id: "3",
                 title: 'Negocio A',
-                imgUrl: 'lxd',
+                imgUrl: require('@/assets/images/porcion.jpg'),
                 desc: 'Esto es una descripcion A'
             },
             {
                 id: "4",
                 title: 'Negocio B',
-                imgUrl: 'lxd',
+                imgUrl: require('@/assets/images/mediapizza.jpg'),
                 desc: 'Esto es una descripcion B'
             },
 
             {
                 id: "5",
                 title: 'Negocio C',
-                imgUrl: 'lxd',
+                imgUrl: require('@/assets/images/porcion.jpg'),
                 desc: 'Esto es una descripcion C'
             }
 
         ]
     // @ts-ignore
     const renderItemPublicaion = ({item}) => (
-        <PublicacionComponente title={item.title} desc={item.desc} goToPublicacion={() => {
+        <PublicacionComponente imgSource={item.imgUrl} title={item.title} desc={item.desc} goToPublicacion={() => {
             const idItem : string = item.id
             router.push(`publicacion/${idItem}`)
         }} />
@@ -109,7 +109,7 @@ const Home = () => {
                     keyExtractor={item => item.id}
                     columnWrapperStyle={{justifyContent: 'space-between'}}>
                 </FlatList>
-            {isLogged && esVecino && <View style={{  display: 'flex', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}> 
+            {isLogged && esVecino && <View style={{  display: 'flex', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}>
                 {/* cambiar none por flex para ver el boton cargar publicacion */}
                     <FormButton action={()=> {router.push("publicacion/nueva_publicacion")}} title={'Cargar publicación'} />
                 </View>}
