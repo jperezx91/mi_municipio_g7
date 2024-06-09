@@ -76,12 +76,12 @@ const RegistroScreen = () => {
                 {/* Logo */}
                 <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 25, gap: 15 }}>
                     <Image source={require('@/assets/images/logo.png')} />
-                    <Text style={{ fontSize: 32, fontWeight: 'bold' }}>Mi Municipio</Text>
-                    <Text style={{ fontSize: 15 }}>Solicitud de registro</Text>
+                    <Text style={{ fontSize: 32, fontFamily:'outfit-bold' }}>Mi Municipio</Text>
+                    <Text style={{ fontSize: 15, fontFamily:'outfit', marginTop:-15 }}>Solicitud de registro</Text>
                 </View>
                 {/* Fin logo */}
                 {/* Login form */}
-                <View style={{ marginTop: 10, display: 'flex', gap: 10 }}>
+                <View style={{ marginTop: 30, display: 'flex', gap: 10 }}>
                     <LoginFormInput
                         title={"E-mail"}
                         placeholder={"Ingrese su E-mail"}
@@ -98,11 +98,12 @@ const RegistroScreen = () => {
                         tipo={'numero'}
                         errorMSG={errorMSGDNI}
                     />
+                    <Text style={{ color: '#F2F4F8',fontFamily:'outfit', fontSize:15, marginBottom: 10, marginTop: 10  }}>¿Olvidaste tu contraseña?</Text>
                     <FormButton action={handleRegistro} title={"Solicitar registro"} />
                     <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#525252', height: 20 }}></View>
                     <View style={{ display: 'flex', marginTop: 10 }}>
                         <Pressable onPress={()=>{router.navigate("login")}}>
-                            <Text style={{ color: '#0F62FE', textAlign: 'center', marginBottom: 40 }}>¿Ya tienes una cuenta? Ingresar aquí</Text>
+                            <Text style={{ color: '#4891c7', textAlign: 'center', marginBottom: 40,fontFamily:'outfit', fontSize:17 }}>¿Ya tienes una cuenta? Ingresar aquí</Text>
                         </Pressable>
                         <FormButton title={"Soy un invitado"} invertStyle={true} action={() => { router.replace("(home)") }} />
                     </View>

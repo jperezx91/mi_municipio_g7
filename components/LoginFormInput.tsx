@@ -31,7 +31,7 @@ const LoginFormInput: React.FC<LoginFormInputProps> = ({
     };
     return (
         <View style={{ width: "95%" }}>
-            <Text style={{ paddingBottom: 10 }}>{title}</Text>
+            <Text style={{ paddingBottom: 10,fontFamily:'outfit', fontSize:15 }}>{title}</Text>
             <View style={{ display: 'flex', flexDirection: 'row', borderBottomWidth: !errorMSG ? 0.5 : 1, borderColor: !errorMSG ? '#525252' : 'red', justifyContent: 'space-between', alignItems: 'center', borderWidth: !errorMSG ? 0 : 1}}>
                 <TextInput
                     onChangeText={setValor}
@@ -40,7 +40,7 @@ const LoginFormInput: React.FC<LoginFormInputProps> = ({
                     secureTextEntry={tipo === "password" && !showPassword}
                     keyboardType={valoresTipo[tipo]}
                     placeholder={placeholder}
-                    style={{ paddingHorizontal: 15, paddingBottom: 10, paddingTop: 10, flex: 1 }}
+                    style={{ paddingHorizontal: 15, paddingBottom: 10, paddingTop: 10, flex: 1,fontFamily:'outfit', fontSize:15}}
                 />
                 {(tipo === "password" && valor.length > 0) && (
                     <Pressable style={{ paddingHorizontal: 10 }} onPress={() => setShowPassword(!showPassword)}>

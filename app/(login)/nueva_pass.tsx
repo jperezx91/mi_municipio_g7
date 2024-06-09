@@ -77,12 +77,12 @@ const RecoveryValidateScreen = () => {
                 {/* Logo */}
                 <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 25, gap: 15 }}>
                     <Image source={require('@/assets/images/logo.png')} />
-                    <Text style={{ fontSize: 32, fontWeight: 'bold' }}>Mi Municipio</Text>
-                    <Text style={{ fontSize: 16 }}>Restablece tu contraseña</Text>
+                    <Text style={{ fontSize: 32, fontFamily:'outfit-bold' }}>Mi Municipio</Text>
+                    <Text style={{ fontSize: 15, fontFamily:'outfit', marginTop:-15 }}>Restablece tu contraseña</Text>
                 </View>
                 {/* Fin logo */}
                 <View style={{display: 'flex', gap: 20, marginTop: 20}}>
-                    <Text style={{fontSize: 16}}>Hemos validado tu código correctamente. Por favor genera una nueva contraseña:</Text>
+                    <Text style={{fontSize: 16, fontFamily:'outfit'}}>Hemos validado tu código correctamente. Por favor genera una nueva contraseña:</Text>
                     <LoginFormInput errorMSG={showErrorMSGPassword} showPass={[showPassword, setShowPassword]} valor={password} setValor={setPassword} tipo={"password"} title={"Contraseña"} placeholder={"Ingrese su nueva contraseña"} />
                     <LoginFormInput errorMSG={showErrorMSGRePassword} showPass={[showRePassword, setShowRePassword]} valor={repassword} setValor={setRePassword} tipo={"password"} title={"Confirmar contraseña"} placeholder={"Ingrese su nueva contraseña"} />
                 </View>

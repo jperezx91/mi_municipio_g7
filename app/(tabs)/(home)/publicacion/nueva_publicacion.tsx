@@ -19,8 +19,7 @@ const FormPublicacionTextInput: React.FC<FormPublicacionTextInputProps>  = ({tit
 {
     return (
             <View style={[{display: 'flex', gap: 8, marginBottom: 8}, style]}>
-                <Text style={{                            fontFamily:'outfit',
-                            fontSize:15}}>{obligatorio && "*"}{titulo}</Text>
+                <Text style={{fontFamily:'outfit', fontSize:15}}>{obligatorio && "*"}{titulo}</Text>
                 <TextInput keyboardType={tipoKeyboard}
                            placeholder={placeholder}
                            style={{

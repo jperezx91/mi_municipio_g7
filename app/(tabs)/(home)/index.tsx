@@ -109,8 +109,7 @@ const Home = () => {
                     keyExtractor={item => item.id}
                     columnWrapperStyle={{justifyContent: 'space-between'}}>
                 </FlatList>
-            {isLogged && esVecino && <View style={{  display: 'flex', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}> 
-                {/* cambiar none por flex para ver el boton cargar publicacion */}
+            {isLogged && esVecino && <View style={{  display: 'flex', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}>{/* cambiar none por flex para ver el boton cargar publicacion */}
                     <FormButton action={()=> {router.push("publicacion/nueva_publicacion")}} title={'Cargar publicación'} />
                 </View>}
         </SafeAreaView>

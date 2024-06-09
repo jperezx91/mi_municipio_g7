@@ -130,12 +130,12 @@ const LoginScreen = () => {
                 {/* Logo */}
                 <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 25, gap: 15 }}>
                     <Image source={require('@/assets/images/logo.png')} />
-                    <Text style={{ fontSize: 32, fontWeight: 'bold' }}>Mi Municipio</Text>
-                    <Text style={{ fontSize: 15 }}>Por favor ingrese sus datos para continuar</Text>
+                    <Text style={{ fontSize: 32, fontFamily:'outfit-bold' }}>Mi Municipio</Text>
+                    <Text style={{ fontSize: 15, fontFamily:'outfit', marginTop:-15 }}>Por favor ingrese sus datos para continuar</Text>
                 </View>
                 {/* Fin logo */}
                 {/* Login form */}
-                <View style={{ marginTop: 10, display: 'flex', gap: 10 }}>
+                <View style={{ marginTop: 30, display: 'flex', gap: 10 }}>
                     <LoginFormInput
                         title={"E-mail o legajo"}
                         placeholder={"Ingrese su E-mail o legajo"}
@@ -153,13 +153,13 @@ const LoginScreen = () => {
                     />
                     {errorMSG && <Text style={{color: 'red'}}>{errorMSG}</Text>}
                     <Pressable onPress={()=>{router.push("recupero")}} style={{ display: 'flex', justifyContent: 'flex-end', flexDirection: 'row', marginBottom: 10, marginTop: 10 }}>
-                        <Text style={{ color: '#0F62FE' }}>¿Olvidaste tu contraseña?</Text>
+                        <Text style={{ color: '#4891c7',fontFamily:'outfit', fontSize:15 }}>¿Olvidaste tu contraseña?</Text>
                     </Pressable>
                     <FormButton  disabeled={loading} action={handleLogin} title={"Ingresar"} />
                     <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#525252', height: 20 }}></View>
                     <View style={{ display: 'flex', marginTop: 10 }}>
                         <Pressable onPress={() => {router.push("registro")}}>
-                            <Text style={{ color: '#0F62FE', textAlign: 'center', marginBottom: 40 }}>¿Aún no tienes cuenta? Solicitar aquí</Text>
+                            <Text style={{ color: '#4891c7', textAlign: 'center', marginBottom: 40,fontFamily:'outfit', fontSize:17 }}>¿Aún no tienes cuenta? Solicitar aquí</Text>
                         </Pressable>
                         <FormButton title={"Soy un invitado"} invertStyle={true} action={() => { router.navigate("(home)") }} />
                     </View>
