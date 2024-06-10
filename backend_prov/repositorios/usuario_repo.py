@@ -21,6 +21,14 @@ class UsuarioRepo:
         vecino = DbManager.obtener_registro(solicitud, parametros)
         print(vecino, "resultado")
         return vecino is not None
+
+    @staticmethod
+    def existe_solicitud(usuarioInp: Usuario):
+    # Verifica si hay una solicitud existente de creación de usuario para una combinación de mail y DNI
+        solicitud = "SELECT documento, email FROM solicitudes WHERE documento = %s and email = %s"
+        parametros = (usuarioInp.documento, usuarioInp.email)
+        solicitud_existente = DbManager.obtener_registro(solicitud, parametros)
+        return solicitud_existente is not None
     
     @staticmethod
     def existe_usuario(documento):
@@ -49,7 +57,7 @@ class UsuarioRepo:
     @staticmethod
     def registrar_solicitud(usuarioInp: Usuario):
     # Crea una solicitud de creación de usuario para un vecino válido
-        codigo = codigo = str(random.randint(1000, 9999))
+        codigo = str(random.randint(1000, 9999))
         solicitud = "INSERT INTO solicitudes (documento, codigo, email, status) VALUES (%s, %s, %s, 1)"
         parametros = (str(usuarioInp.documento), codigo, usuarioInp.email)
         DbManager.actualizar_bd(solicitud, parametros)
@@ -108,7 +116,7 @@ class UsuarioRepo:
 
     @staticmethod
     def get_usuario_by_codigo(codigo, rol=""):
-    # Devuelve un usuario obtenido por código
+    # Devuelve un usuario obtenido por código de recupero de contraseña
         solicitud = """SELECT us.idUsuario, us.email, us.password, us.documento as documento, vc.nombre AS nombre 
                               FROM recupero rc 
                               LEFT JOIN vecinos vc ON vc.documento = rc.documento 
@@ -122,11 +130,11 @@ class UsuarioRepo:
             DbManager.actualizar_bd(solicitud, parametros)
             
             usuario = Usuario()
-            usuario.idUsuario = r[0]
-            usuario.email = r[1]
-            usuario.password = r[2]
-            usuario.documento = r[3]
-            usuario.nombre = r[4]
+            usuario.idUsuario = resultado[0]
+            usuario.email = resultado[1]
+            usuario.password = resultado[2]
+            usuario.documento = resultado[3]
+            usuario.nombre = resultado[4]
             resultado = usuario
         return resultado
     
