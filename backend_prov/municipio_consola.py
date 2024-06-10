@@ -45,12 +45,24 @@ def procesar_solicitudes():
     DbManager.actualizar_bd("Truncate solicitudes")
     
 def procesar_recuperos():
-    solicitud = "SELECT documento, codigo FROM recupero WHERE status = 1"
+    solicitud = """
+                SELECT recupero.documento, recupero.codigo, recupero.status
+                FROM recupero
+                JOIN(
+                    SELECT documento, MAX(idRecupero) as idUltimoRecupero
+                    FROM recupero
+                    GROUP BY documento
+                ) ultimoRecupero ON
+                    recupero.documento = ultimoRecupero.documento AND
+                    recupero.idRecupero = ultimoRecupero.idUltimoRecupero
+                WHERE status = 1
+                """
     recuperos = DbManager.obtener_registros(solicitud)
     if len(recuperos) == 0:
         print("No hay recuperos disponibles.")
     else:
         for recupero in recuperos:
             print(f"Codigo: {recupero[1]} | Documento: {recupero[0]}")
+    DbManager.actualizar_bd("Truncate recupero")
 
 menu_consola()
