@@ -175,10 +175,10 @@ CREATE TABLE `solicitudes` (
 CREATE TABLE `usuarios` (
   `idUsuario` int(11) NOT NULL,
   `email` varchar(200) NOT NULL,
-  `legajo` int(11) NOT NULL,
+  `legajo` int(11) NOT NULL DEFAULT 0,
   `password` text NOT NULL,
   `documento` int(11) NOT NULL,
-  `fechaIngreso` date NOT NULL,
+  `fechaIngreso` date NOT NULL DEFAULT CURRENT_DATE,
   `ftime` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

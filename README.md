@@ -42,7 +42,7 @@ source venv/bin/activate
 Instalar dependencias:
 
 ```bash
-pip install flask_jwt_extended pymysql bcrypt
+pip install flask_jwt_extended pymysql bcrypt cryptography
 ```
 
 Ejecutar el backend
