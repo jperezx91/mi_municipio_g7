@@ -19,40 +19,40 @@ const Home = () => {
             {
                 id: "1",
                 title: 'Pizzería Los hornos',
-                imgUrl: require('@/assets/images/mediapizza.jpg'),
+                imgUrl: require('../../../assets/images/horno.jpg'),
                 desc: '¡Promo imperdible!'
 
             },
             {
                 id: "2",
                 title: 'Escribanía Flores Hnos.',
-                imgUrl: require('@/assets/images/horno.jpg'),
+                imgUrl: require('../../../assets/images/escribania.jpg'),
                 desc: 'Servicios de escribanía de la mejor calidad.'
             },
             {
                 id: "3",
-                title: 'Negocio A',
-                imgUrl: require('@/assets/images/porcion.jpg'),
-                desc: 'Esto es una descripcion A'
+                title: 'Ferretería Juanse',
+                imgUrl: require('../../../assets/images/ferreteria.jpg'),
+                desc: '¡Esta semana 10% de descuento!'
             },
             {
                 id: "4",
-                title: 'Negocio B',
-                imgUrl: require('@/assets/images/mediapizza.jpg'),
-                desc: 'Esto es una descripcion B'
+                title: 'Kary Nails',
+                imgUrl: require('../../../assets/images/manicura.jpg'),
+                desc: 'No te pierdas esta promo!!'
             },
 
             {
                 id: "5",
-                title: 'Negocio C',
-                imgUrl: require('@/assets/images/porcion.jpg'),
-                desc: 'Esto es una descripcion C'
+                title: 'Servicios de Plomería',
+                imgUrl: require('../../../assets/images/plomeria.jpg'),
+                desc: 'Arreglos en el día'
             }
 
         ]
     // @ts-ignore
     const renderItemPublicaion = ({item}) => (
-        <PublicacionComponente imgSource={item.imgUrl} title={item.title} desc={item.desc} goToPublicacion={() => {
+        <PublicacionComponente title={item.title} desc={item.desc} imgUrl={item.imgUrl} goToPublicacion={() => {
             const idItem : string = item.id
             router.push(`publicacion/${idItem}`)
         }} />
@@ -109,8 +109,7 @@ const Home = () => {
                     keyExtractor={item => item.id}
                     columnWrapperStyle={{justifyContent: 'space-between'}}>
                 </FlatList>
-            {isLogged && esVecino && <View style={{  display: 'flex', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}>
-                {/* cambiar none por flex para ver el boton cargar publicacion */}
+            {isLogged && esVecino && <View style={{  display: 'flex', justifyContent: 'center', backgroundColor: 'none', marginBottom: 25, position: 'absolute', bottom: 0, left: '5%', width: '90%' }}>{/* cambiar none por flex para ver el boton cargar publicacion */}
                     <FormButton action={()=> {router.push("publicacion/nueva_publicacion")}} title={'Cargar publicación'} />
                 </View>}
         </SafeAreaView>

@@ -82,12 +82,12 @@ const NuevaPassPerfil = () => {
                         {/* Logo */}
                         <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 25, gap: 15 }}>
                             <Image source={require('@/assets/images/logo.png')} />
-                            <Text style={{ fontSize: 32, fontWeight: 'bold' }}>Mi Municipio</Text>
-                            <Text style={{ fontSize: 16 }}>Restablece tu contraseña</Text>
+                            <Text style={{ fontSize: 32, fontFamily:'outfit-bold' }}>Mi Municipio</Text>
+                            <Text style={{ fontSize: 15, fontFamily:'outfit', marginTop:-15 }}>Por favor escribe tu contraseña actual y luego elige tu nueva contraseña.</Text>
                         </View>
                         {/* Fin logo */}
-                        <View style={{display: 'flex', gap: 20, marginTop: 20}}>
-                            <Text style={{fontSize: 16}}>Escribe tu contraseña original y luego elige tu nueva contraseña:</Text>
+                        <View style={{display: 'flex', gap: 20, marginTop: 30}}>
+
                             <LoginFormInput errorMSG={showErrorMSGOldPassword} showPass={[showOldPassword, setShowOldPassword]} valor={oldpassword} setValor={setOldPassword} tipo={"password"} title={"Contraseña actual"} placeholder={"Ingrese su contraseña actual"} />
                             <LoginFormInput errorMSG={showErrorMSGPassword} showPass={[showPassword, setShowPassword]} valor={password} setValor={setPassword} tipo={"password"} title={"Contraseña"} placeholder={"Ingrese su nueva contraseña"} />
                             <LoginFormInput errorMSG={showErrorMSGRePassword} showPass={[showRePassword, setShowRePassword]} valor={repassword} setValor={setRePassword} tipo={"password"} title={"Confirmar contraseña"} placeholder={"Ingrese su nueva contraseña"} />

@@ -57,15 +57,16 @@ const PasswordRecoveryScreen = () => {
                 {/* Logo */}
                 <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 25, gap: 15 }}>
                     <Image source={require('@/assets/images/logo.png')} />
-                    <Text style={{ fontSize: 32, fontWeight: 'bold' }}>Mi Municipio</Text>
-                    <Text style={{ fontSize: 15 }}>¿Olvidaste tu contraseña?</Text>
+                    <Text style={{ fontSize: 32, fontFamily:'outfit-bold' }}>Mi Municipio</Text>
+                    <Text style={{ fontSize: 15, fontFamily:'outfit', marginTop:-15 }}>¿Olvidaste tu contraseña?</Text>
+
                 </View>
                 {/* Fin logo */}
-                <View style={{display: 'flex', gap: 10}}>
+                <View style={{marginTop: 30, display: 'flex', gap: 10}}>
                     <LoginFormInput errorMSG={errorMSGEmail} valor={email} setValor={setEmail} title={"E-mail"} placeholder={"Ingrese su E-mail"} />
                     <LoginFormInput errorMSG={errorMSGDni} valor={dni} setValor={setDni} tipo={"numero"} title={"DNI"} placeholder={"Ingrese su DNI"} />
                 </View>
-                <View style={{height: 75}}></View>
+                <View style={{height: 60}}></View>
                 <FormButton action={handleRecupero} title={"Solicitar código"} />
             </SafeAreaView>
 
