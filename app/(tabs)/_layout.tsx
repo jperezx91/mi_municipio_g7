@@ -33,11 +33,13 @@ function TabLayout() {
     return (
     <Tabs
         initialRouteName={"(home)"}
+
         screenOptions={{
             tabBarActiveTintColor: "#0d3f6e",
             tabBarInactiveTintColor: '#001D6C',
             tabBarStyle: { backgroundColor: 'white'},
             headerShown: false,
+            tabBarHideOnKeyboard: true
       }}>
         <Tabs.Screen
             name="(home)"
