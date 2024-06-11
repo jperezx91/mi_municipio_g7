@@ -56,10 +56,10 @@ export default function HomeScreen() {
 
     return (
         <SafeAreaView style={[PrincipalStyle.principalContainer, {backgroundColor: "#F2F4F8"}]}>
-        <View style={{marginTop: 15, padding: 20, paddingTop: 0, backgroundColor: '#F2F4F8', height: Dimensions.get('window').height * 0.80}}>
+        <View style={{backgroundColor: '#F2F4F8', height: Dimensions.get('window').height * 0.80}}>
             
             {/* Botón Mis reclamos */}
-            <Pressable style={{paddingTop: 14, paddingBottom:14}} onPress={()=> {router.push("misPublicaciones")}}>
+            <Pressable style={{padding:20}} onPress={()=> {router.push("misReclamos")}}>
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Text style={{fontFamily:'outfit', fontSize:18}}>Mis reclamos</Text>
                     <Entypo name="chevron-thin-right" size={20} color="black" />
@@ -71,7 +71,7 @@ export default function HomeScreen() {
                                 flexDirection:'row',
                                 gap:10,
                                 alignItems:'center',
-                                alignContent:'space-between'
+                                alignContent:'space-between', paddingLeft:20, paddingRight:20
             }}>
             {/* searchbar */}
             <View style={{
