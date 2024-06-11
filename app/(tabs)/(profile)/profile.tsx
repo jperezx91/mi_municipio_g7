@@ -51,7 +51,7 @@ export default function HomeScreen() {
             {
                 setProfileInfo({
                     'nombre': r.data.nombre,
-                    'documento': r.data.documento,
+                    'documento': r.data.documento != "0" ? r.data.documento: "",
                     'direccion': r.data.direccion,
                     'barrio': r.data.barrio,
                     'email': r.data.email
