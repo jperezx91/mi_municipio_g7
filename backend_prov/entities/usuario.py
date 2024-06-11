@@ -7,7 +7,7 @@ class Usuario:
     password = ""
     rol = ""
     ftime = True
-    documento = 1
+    documento = ""
     direccion = ""
     barrio = ""
     def getEmail(self):
@@ -25,7 +25,7 @@ class Usuario:
             u.legajo = jdata['legajo']
 
         if "documento" in jdata:
-            u.documento = jdata['documento']
+            u.documento = "DNI" + jdata['documento']
         if "password" in jdata:
             u.password = jdata['password']
         return u
