@@ -1,37 +1,35 @@
-import pymysql
+import sqlite3
+import os
 
 class DbManager:
     @staticmethod
     def obtener_conexion():
-        return pymysql.connect(host="localhost",
-                               user="root",
-                               password="MySQL-DA1",
-                               db="mi_municipio")
+        directorio_utils = os.path.dirname(os.path.abspath(__file__))
+        directorio_db = os.path.join(directorio_utils, '../../instance/mi_municipio.db')
+        return sqlite3.connect(directorio_db)
     
     @staticmethod
     def actualizar_bd(solicitud, parametros = None):
         conexion = DbManager.obtener_conexion()
-        with conexion.cursor() as cursor:
-            cursor.execute(solicitud, parametros)
+        with conexion:
+            cursor = conexion.cursor()
+            cursor.execute(solicitud) if parametros is None else cursor.execute(solicitud, parametros)
             conexion.commit()
-        conexion.close()
 
     @staticmethod
     def obtener_registro(solicitud, parametros = None):
         conexion = DbManager.obtener_conexion()
-        with conexion.cursor() as cursor:
-            cursor.execute(solicitud, parametros)
-            conexion.commit()
+        with conexion:
+            cursor = conexion.cursor()
+            cursor.execute(solicitud) if parametros is None else cursor.execute(solicitud, parametros)
             registro = cursor.fetchone()
-        conexion.close()
         return registro
     
     @staticmethod
     def obtener_registros(solicitud, parametros = None):
         conexion = DbManager.obtener_conexion()
-        with conexion.cursor() as cursor:
-            cursor.execute(solicitud, parametros)
-            conexion.commit()
+        with conexion:
+            cursor = conexion.cursor()
+            cursor.execute(solicitud) if parametros is None else cursor.execute(solicitud, parametros)
             registros = cursor.fetchall()
-        conexion.close()
         return registros
