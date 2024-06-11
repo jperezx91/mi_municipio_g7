@@ -1,0 +1,19 @@
+usuario_repo, DbManager
+- Cree el metodo "actualizar_bd" que toma la query y los parametros y ejecuta la transaccion en la base de datos.
+    - Reemplace codigo repetido usando este metodo en:
+        - change_password.
+        - registrar_solicitud
+        - agregar_recupero
+        - get_usuario_by_codigo
+
+- Cree el metodo "obtener_registro" que toma la query y los parametros y devuelve el resultado.
+    - Reemplace codigo repetido usando este metodo en:
+        - existe_vecino
+        - existe_usuario
+        - validar_usuario
+        - existe_usuario_con_mail
+        - validar_vecino
+        - validar_municipal
+        - get_usuario_by_codigo
+        - get_usuario_by_id
+- Cree los metodos obtener_resultado_login y crear_usuario que simplifican y reutilizan codigo repetido en validar_vecino y validar_municipal

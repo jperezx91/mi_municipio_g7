@@ -56,12 +56,12 @@ const RecoveryValidateScreen = () => {
                 {/* Logo */}
                 <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 25, gap: 15 }}>
                     <Image source={require('@/assets/images/logo.png')} />
-                    <Text style={{ fontSize: 32, fontWeight: 'bold' }}>Mi Municipio</Text>
-                    <Text style={{ fontSize: 16 }}>¿Olvidaste tu contraseña?</Text>
+                    <Text style={{ fontSize: 32, fontFamily:'outfit-bold' }}>Mi Municipio</Text>
+                    <Text style={{ fontSize: 15, fontFamily:'outfit', marginTop:-15 }}>¿Olvidaste tu contraseña?</Text>
                 </View>
                 {/* Fin logo */}
                 <View style={{display: 'flex', gap: 20, marginTop: 20}}>
-                    <Text style={{fontSize: 16}}>Hemos enviado un código a tu casilla de email registrada para la recuperación de tu contraseña. Por favor ingresa el mismo más abajo:</Text>
+                    <Text style={{fontSize: 16, fontFamily:'outfit'}}>Hemos enviado un código a tu casilla de email registrada para la recuperación de tu contraseña. Por favor ingresa el mismo más abajo:</Text>
                     <LoginFormInput errorMSG={errorMSGCodigo} valor={codigo} setValor={setCodigo} tipo={"numero"} title={"Código de recuperación"} placeholder={"Ingrese el código enviado"} />
                 </View>
                 <View style={{height: 45}}></View>

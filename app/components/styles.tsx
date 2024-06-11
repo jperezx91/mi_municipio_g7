@@ -10,7 +10,7 @@ const StyleHeaderComponent = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 15,
         height: 64 + (statusBarHeight ? statusBarHeight - 3  : 0),
-        backgroundColor: '#C7DCFF', // Añadido para que sea visible el fondo
+        backgroundColor: '#4891c7', // Añadido para que sea visible el fondo
         borderBottomWidth: 1,
         borderBottomColor: '#D8D8D8',
 
