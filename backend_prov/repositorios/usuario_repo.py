@@ -69,7 +69,11 @@ class UsuarioRepo:
         usuario.idUsuario = registro[0]
         usuario.nombre = registro[2]
         usuario.rol = rol
-        usuario.ftime = registro[3] == 1
+        try:
+         usuario.ftime = registro[3] == 1
+        except:
+            usuario.ftime = 0
+
         return usuario
     
     @staticmethod
