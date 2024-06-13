@@ -19,7 +19,7 @@ const LoginScreen = () => {
     const handleLogin = () =>
     {
         const regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/; // TODO: ubicar en una función todos los regex
-        const regexNum = /^[0-9]{4,10}$/;
+        const regexNum = /^[0-9]{1,10}$/; // ahora acepta LEGAJOS que tengan un dígito o 2.
 
         if(usuario.length > 0)
         {
@@ -59,6 +59,11 @@ const LoginScreen = () => {
                 })
                     .catch((error) =>
                     {
+                        if(error == undefined)
+                        {
+                            setErrorMSG("Sin conexión.")
+                            return;
+                        }
                         switch(error.response.status)
                         {
                             case 404:
@@ -73,7 +78,7 @@ const LoginScreen = () => {
                             }
                             default:
                             {
-                                setErrorMSG("Desconocido")
+                                setErrorMSG("Desconocido " + error.response.status)
                                 break
                             }
                         }
@@ -146,7 +151,7 @@ const LoginScreen = () => {
                     <LoginFormInput
                         valor={password}
                         setValor={setPassword}
-                        title={"Contraseña"}
+                        title={"Contraseñaa"}
                         placeholder={"Ingrese su contraseña"}
                         tipo={'password'}
                         showPass={[showPassword, setShowPassword]}

@@ -1,4 +1,4 @@
-import {View, Text, SafeAreaView, Pressable, Dimensions, Image, ScrollView} from 'react-native';
+import {View, Text, SafeAreaView, Pressable, Dimensions, Image, ScrollView, Alert} from 'react-native';
 import * as SecureStore from "expo-secure-store";
 import {router, useFocusEffect} from "expo-router";
 import {PrincipalStyle} from "@/app/styles";
@@ -8,7 +8,7 @@ import FormButton from "@/app/components/FormButton";
 import {verPerfil} from "@/app/networking/api";
 
 export default function HomeScreen() {
-    const regexNum = /^[0-9]{4,10}$/;
+    const regexNum = /^[0-9]{1,10}$/;
 
     const [profileInfo, setProfileInfo] = useState({
         'nombre': '',
@@ -17,6 +17,7 @@ export default function HomeScreen() {
         'barrio': '',
         'email': ''
     })
+    const [userRol, setUserRol] = useState('municipal');
     const ItemProfile = ({title="", value=""}) =>
     {
         return(
@@ -57,10 +58,24 @@ export default function HomeScreen() {
                     'email': r.data.email
 
                 })
+                if(regexNum.test(r.data.email))
+                {
+                    setUserRol("municipal")
+                }else{
+                    setUserRol("vecino")
+                }
             })
             .catch((e) =>
             {
-                console.log(e)
+                switch(e.response.status)
+                {
+                    case 404:
+                        Alert.alert("Error", "No se encuentra el usuario.")
+                        break;
+                    default:
+                        Alert.alert("Error", "Error desconocido")
+                        break;
+                }
             })
     }, []);
     return (
@@ -83,10 +98,10 @@ export default function HomeScreen() {
                     </View>
                 </Pressable>
                 {/* Fin botón Mis publicaciones */}
-                <View style={{display: 'flex', flexDirection: 'row', justifyContent:'space-around', marginTop: 25, alignItems: 'center'}}>
-                    <View style={{width: "45%"}}>
-                        <FormButton action={() => {router.push("nueva_pass_perfil")}} title={"Cambiar contraseña"} />
-                    </View>
+                <View style={{display: 'flex', flexDirection: 'row', justifyContent: userRol == "vecino" ? 'space-around' : 'center', marginTop: 25, alignItems: 'center', marginBottom: 25}}>
+                    {userRol == "vecino"&&<View style={{width: "45%"}}>
+                       <FormButton action={() => {router.push("nueva_pass_perfil")}} title={"Cambiar contraseña"} />
+                    </View>}
                     <View style={{width: "45%"}}>
                         <FormButton action={cerrarSesion} title={"Cerrar sesión"} invertStyle={true} />
                     </View>
