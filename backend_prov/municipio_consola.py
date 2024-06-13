@@ -22,39 +22,39 @@ def menu_consola():
 def procesar_solicitudes():
     # Esta query obtiene sólo la última solicitud de registro hecha por el usuario
     solicitud = """
-                SELECT solicitudes.email, solicitudes.documento, solicitudes.codigo
-                FROM solicitudes
+                SELECT solicitudesRegistro.email, solicitudesRegistro.documento, solicitudesRegistro.codigo
+                FROM solicitudesRegistro
                 JOIN(
                     SELECT MAX(idSolicitud) AS idUltimaSolicitud, email, documento
-                    FROM solicitudes
+                    FROM solicitudesRegistro
                     GROUP BY documento, email
                 ) ultimaSolicitud ON
-                    solicitudes.documento  = ultimaSolicitud.documento AND
-                    solicitudes.email = ultimaSolicitud.email AND
-                    solicitudes.idSolicitud  = ultimaSolicitud.idUltimaSolicitud
+                    solicitudesRegistro.documento  = ultimaSolicitud.documento AND
+                    solicitudesRegistro.email = ultimaSolicitud.email AND
+                    solicitudesRegistro.idSolicitud  = ultimaSolicitud.idUltimaSolicitud
                 """
     solicitudes = DbManager.obtener_registros(solicitud)
     if len(solicitudes) == 0:
         print("No hay solicitudes disponibles.")
     else:
         for solicitud in solicitudes:
-            query = "INSERT INTO usuarios (email, documento, password, ftime) VALUES (%s, %s, %s, %s)"
+            query = "INSERT INTO usuariosVecinos (email, documento, password, ftime) VALUES (?, ?, ?, ?)"
             parametros = (solicitud[0], solicitud[1], solicitud[2], "1")
             DbManager.actualizar_bd(query, parametros)
             print(f"Solicitud aprobada: {solicitud[0]} | DNI: {solicitud[1]} | Codigo: {solicitud[2]}")
-    DbManager.actualizar_bd("Truncate solicitudes")
+    DbManager.actualizar_bd("DELETE FROM solicitudesRegistro")
     
 def procesar_recuperos():
     solicitud = """
-                SELECT recupero.documento, recupero.codigo, recupero.status
-                FROM recupero
+                SELECT recuperoPassword.documento, recuperoPassword.codigo, recuperoPassword.status
+                FROM recuperoPassword
                 JOIN(
                     SELECT documento, MAX(idRecupero) as idUltimoRecupero
-                    FROM recupero
+                    FROM recuperoPassword
                     GROUP BY documento
                 ) ultimoRecupero ON
-                    recupero.documento = ultimoRecupero.documento AND
-                    recupero.idRecupero = ultimoRecupero.idUltimoRecupero
+                    recuperoPassword.documento = ultimoRecupero.documento AND
+                    recuperoPassword.idRecupero = ultimoRecupero.idUltimoRecupero
                 WHERE status = 1
                 """
     recuperos = DbManager.obtener_registros(solicitud)
@@ -63,6 +63,5 @@ def procesar_recuperos():
     else:
         for recupero in recuperos:
             print(f"Codigo: {recupero[1]} | Documento: {recupero[0]}")
-    DbManager.actualizar_bd("Truncate recupero")
 
 menu_consola()

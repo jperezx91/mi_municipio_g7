@@ -41,7 +41,7 @@ def pedir_cambio_pass():
         ucontroller = UserController()
         datos = request.json
         email = datos.get("email")
-        dni = datos.get("documento")
+        dni = "DNI" + datos.get("documento")
         valido = ucontroller.solicitar_cambio_pass(email, dni)
         print(valido, email, dni)
         if valido:
