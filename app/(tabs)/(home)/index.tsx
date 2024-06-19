@@ -1,6 +1,5 @@
 import {Alert, SafeAreaView, FlatList, View} from 'react-native';
-import {useCallback, useEffect, useState} from "react";
-
+import React, {useCallback, useEffect, useState} from "react";
 import {router, useFocusEffect} from "expo-router";
 import {useAlert} from "@/app/alertProvider";
 import {PrincipalStyle} from "@/app/styles";
@@ -9,54 +8,38 @@ import StyleHome from "@/app/(tabs)/(home)/styles";
 import FormButton from "@/app/components/FormButton";
 import * as SecureStore from 'expo-secure-store';
 import {jwtDecode} from "jwt-decode";
+import { obtenerPublicaciones } from '@/app/networking/api';
 
 const Home = () => {
     const { showAlert, setShowAlert } = useAlert();
     const [isLogged, setIsLogged] = useState(false);
     const [esVecino, setEsVecino] = useState<boolean>(true);
-    const mockup_data_publicacion =
-        [
+    
+    // Código para hacer la solicitud al backend, reemplaza los datos de mockup
+    const [publicaciones, setPublicaciones] = useState([]);
+    useEffect(() => {
+        obtenerPublicaciones()
+            .then((respuesta) =>
             {
-                id: "1",
-                title: 'Pizzería Los hornos',
-                imgUrl: require('../../../assets/images/horno.jpg'),
-                desc: '¡Promo imperdible!'
+                setPublicaciones(respuesta.data);
+            })
+            .catch((e) =>
+            {
+                console.log(e)
+            })
+    }, []);
+    
 
-            },
-            {
-                id: "2",
-                title: 'Escribanía Flores Hnos.',
-                imgUrl: require('../../../assets/images/escribania.jpg'),
-                desc: 'Servicios de escribanía de la mejor calidad.'
-            },
-            {
-                id: "3",
-                title: 'Ferretería Juanse',
-                imgUrl: require('../../../assets/images/ferreteria.jpg'),
-                desc: '¡Esta semana 10% de descuento!'
-            },
-            {
-                id: "4",
-                title: 'Kary Nails',
-                imgUrl: require('../../../assets/images/manicura.jpg'),
-                desc: 'No te pierdas esta promo!!'
-            },
 
-            {
-                id: "5",
-                title: 'Servicios de Plomería',
-                imgUrl: require('../../../assets/images/plomeria.jpg'),
-                desc: 'Arreglos en el día'
-            }
 
-        ]
     // @ts-ignore
-    const renderItemPublicaion = ({item}) => (
-        <PublicacionComponente title={item.title} desc={item.desc} imgUrl={item.imgUrl} goToPublicacion={() => {
+    const renderItemPublicacion = ({item}) => (
+        <PublicacionComponente title={item.titulo} desc={item.descripcion} imgUrl={item.imgBase64} goToPublicacion={() => {
             const idItem : string = item.id
             router.push(`publicacion/${idItem}`)
         }} />
-    )
+    );
+
     useEffect(() => {
         if (showAlert) {
             Alert.alert('Sesión', "Inicia sesión como vecino para ver esta sección.",
@@ -93,18 +76,20 @@ const Home = () => {
             const rol = payload["rol"]
             setEsVecino(rol == "vecino")
             setIsLogged(true)
-        }else{
+        } else {
             setIsLogged(false)
         }
     }, []))
+
+    
     return (
         <SafeAreaView style={PrincipalStyle.principalContainer}>{/* <SafeAreaView style={{flex: 1, width: "93%", margin: 'auto', justifyContent: 'center', alignItems: 'center'}}> */}
                 <FlatList
                     numColumns={2}
                     ListFooterComponent={<View style={{height: 150}}></View>}
                     style={StyleHome.flatListContainer}
-                    data={mockup_data_publicacion}
-                    renderItem={renderItemPublicaion}
+                    data={publicaciones}
+                    renderItem={renderItemPublicacion}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={item => item.id}
                     columnWrapperStyle={{justifyContent: 'space-between'}}>

@@ -8,3 +8,4 @@ export const changePasswordProfile = (oldpassword: string, password: string) => 
 export const solicitarRecupero = (email: string, documento: string) => clientHandler.client.post("perfil?solicitud_pass", {email, documento})
 export const verificarCodigo = (codigo: string) => clientHandler.client.post("perfil?verificar_codigo", {codigo})
 export const verPerfil = () => clientHandler.client_auth.get("perfil")
+export const obtenerPublicaciones = () => clientHandler.client.get("publicaciones")
