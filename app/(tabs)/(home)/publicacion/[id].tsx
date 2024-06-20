@@ -1,11 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, SafeAreaView, Image, FlatList, TouchableOpacity, Linking, Dimensions, ImageSourcePropType, ScrollView} from "react-native";
 import {router, useGlobalSearchParams} from "expo-router";
-import { ExpoRoot } from 'expo-router';
-import {PrincipalStyle} from "@/app/styles";
-import {string} from "prop-types";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-
+import {obtenerPublicacion} from '@/app/networking/api';
 
 
 // Mockup data, esto se reemplaza por llamadas a la API
@@ -74,17 +71,35 @@ const mockUpData: Record<string, any> =
 const Id = () => {
     const irAtras = () =>
     {
-        router.back()
-    }
-    const { id }  = useGlobalSearchParams()
-    interface dicIndex
-    {
-        index: string
-    }
-
+        router.back();
+    };
+    const { id }  = useGlobalSearchParams();
     const index: string = id ? "" + id : "0"
+    
+    const [publicacion, setPublicacion] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
 
-    const actionBtns=[
+    useEffect(() => {
+        obtenerPublicacion(index)
+            .then((respuesta) => {
+                setPublicacion(respuesta.data);
+                setLoading(false);
+            })
+            .catch((e) => {
+                console.log(e);
+                setLoading(false);
+            });
+    }, [index]);
+
+    if (loading) {
+        return <Text>Loading...</Text>;
+    }
+
+    if (!publicacion) {
+        return <Text>Publicación no encontrada</Text>;
+    }
+    
+    const actionBtns= [
         {
             btn:1,
             name:'Llamar',
@@ -110,17 +125,15 @@ const Id = () => {
             url:'tel:'+mockUpData?.phone
         }
     ]
+
     const OnPressHandle=(item: { btn?: number; name: any; icon?: any; url: any; })=>{
         if (item.name=='share'){
             return;
         }
         Linking.openURL(item.url);
     }
-    const mockupImages = [
-        {sd:1, image:require('../../../../assets/images/porcion.jpg')},
-        {sd:2, image:require('../../../../assets/images/horno.jpg')},
-        {sd:3, image:require('../../../../assets/images/mediapizza.jpg')}
-    ]
+
+    const fotosPublicacion = publicacion.imagenes.map((img: string, index: number) => ({ sd: index, image: { uri: `data:image/jpeg;base64,${img}` } }));
 
     const _renderItem = (item: { sd?: number; image?: any;}) => {
         return (
@@ -148,7 +161,7 @@ const Id = () => {
 
             </Carousel>*/}
                 <View style={{backgroundColor:'white'}}>
-                    <FlatList data={mockupImages} horizontal renderItem={({item,index})=>(
+                    <FlatList data={fotosPublicacion} horizontal renderItem={({item,index})=>(
                         <View key={index}>
                             <Image source={item.image} style={{height: 300, width:Dimensions.get('window').width}}/>
                         </View>

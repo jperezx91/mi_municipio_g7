@@ -38,6 +38,29 @@ CREATE TABLE solicitudesRegistro (
     CONSTRAINT fk_vecinos FOREIGN KEY (documento) REFERENCES vecinos (documento)
 );
 
+CREATE TABLE publicaciones(
+	idPublicacion INTEGER,
+	idUsuario INTEGER NOT NULL,
+	comercio TEXT NOT NULL,
+	direccion TEXT NOT NULL,
+	horario TEXT NOT NULL,
+	telefono TEXT NOT NULL,
+	titulo TEXT NOT NULL,
+	descripcion TEXT,
+	thumbnail TEXT,
+	creada TEXT DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT pk_publicaciones PRIMARY KEY (idPublicacion AUTOINCREMENT),
+	CONSTRAINT fk_publicaciones_usuariosVecinos FOREIGN KEY (idUsuario) REFERENCES usuariosVecinos(idUsuario)
+);
+
+CREATE TABLE publicacionesImagenes(
+	idImagen INTEGER,
+	idPublicacion INTEGER,
+	imagen TEXT NOT NULL,
+	CONSTRAINT pk_publicacionesImagenes PRIMARY KEY (idImagen AUTOINCREMENT),
+	CONSTRAINT fk_publicacionesImagenes_publicaciones FOREIGN KEY (idPublicacion) REFERENCES publicaciones(idPublicacion) 
+);
+
 INSERT INTO usuariosPersonal (legajo, password, documento, fechaIngreso)
 SELECT p.legajo, p.password, p.documento, p.fechaIngreso
 FROM personal as p

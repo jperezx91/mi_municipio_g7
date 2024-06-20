@@ -9,3 +9,4 @@ export const solicitarRecupero = (email: string, documento: string) => clientHan
 export const verificarCodigo = (codigo: string) => clientHandler.client.post("perfil?verificar_codigo", {codigo})
 export const verPerfil = () => clientHandler.client_auth.get("perfil")
 export const obtenerPublicaciones = () => clientHandler.client.get("publicaciones")
+export const obtenerPublicacion = (id: string) => clientHandler.client.get(`publicaciones/${id}`)
