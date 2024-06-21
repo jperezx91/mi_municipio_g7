@@ -10,3 +10,4 @@ export const verificarCodigo = (codigo: string) => clientHandler.client.post("pe
 export const verPerfil = () => clientHandler.client_auth.get("perfil")
 export const obtenerPublicaciones = () => clientHandler.client.get("publicaciones")
 export const obtenerPublicacion = (id: string) => clientHandler.client.get(`publicaciones/${id}`)
+export const crearSolicitudNuevaPublicacion = (datosPublicacion: { [key: string]: any }) => clientHandler.client_auth.post("publicaciones", datosPublicacion);

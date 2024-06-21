@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from utils.dbmanager import DbManager
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt, get_jwt_identity
 
 publicaciones_app = Blueprint('publicaciones', __name__)
 
@@ -31,9 +32,8 @@ def obtener_publicaciones():
 
 @publicaciones_app.route('/publicaciones/<int:id>', methods=['GET'])
 def obtener_publicacion(id):
-    print("Obteniendo publicacion con id",id)
     solicitud_publicacion = """
-        SELECT titulo, direccion, horario, telefono, descripcion, thumbnail
+        SELECT comercio, rubro, direccion, horario, telefono, titulo, descripcion, thumbnail
         FROM publicaciones
         WHERE idPublicacion = ?
     """
@@ -50,13 +50,15 @@ def obtener_publicacion(id):
     if publicacion:
         respuesta = jsonify(
             {
-                'titulo': publicacion[0],
-                'direccion': publicacion[1],
-                'horario': publicacion[2],
-                'telefono': publicacion[3],
-                'descripcion': publicacion[4],
-                'thumbnail': publicacion[5] if publicacion[5] else None,
-                'imagenes': [img[0] for img in imagenes] if imagenes else []  # List of images
+                'comercio': publicacion[0],
+                'rubro': publicacion[1],
+                'direccion': publicacion[2],
+                'horario': publicacion[3],
+                'telefono': publicacion[4],
+                'titulo': publicacion[5],
+                'descripcion': publicacion[6],
+                'thumbnail': publicacion[7] if publicacion[7] else None,
+                'imagenes': [img[0] for img in imagenes] if imagenes else []
             }
         )
     
@@ -64,3 +66,39 @@ def obtener_publicacion(id):
         respuesta = jsonify({'error': 'Publicación no encontrada'}), 404
 
     return respuesta
+
+@publicaciones_app.route('/publicaciones', methods=['POST'])
+@jwt_required()
+def crear_solicitud_nueva_publicacion():
+    id_usuario = get_jwt_identity() # Esto es el ID del usuario en la base de datos
+    datos = request.json
+    solicitud = """
+        INSERT INTO solicitudesPublicacion (
+            idUsuario, comercio, rubro, direccion, horario, telefono, titulo, descripcion, thumbnail
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """
+    parametros = (
+        id_usuario,
+        datos.get('comercio'),
+        datos.get('rubro'),
+        datos.get('direccion'),
+        datos.get('horario'),
+        datos.get('telefono'),
+        datos.get('titulo'),
+        datos.get('descripcion'),
+        datos.get('thumbnail')
+    )
+
+    DbManager.actualizar_bd(solicitud, parametros)
+    
+    imagenes = datos.get('imagenes')
+    if(imagenes):
+        id_solicitud = DbManager.obtener_registro("SELECT MAX(idSolicitudPublicacion) FROM solicitudesPublicacion",)[0] # Esto devuelve una tupla (id, )
+        for imagen in imagenes:
+            solicitud = "INSERT INTO solicitudesPublicacionImagenes (idSolicitudPublicacion, imagen) VALUES (?, ?)"
+            parametros = (id_solicitud, imagen)
+            with open("output.txt", 'a') as f:
+                print(parametros, file=f)
+            DbManager.actualizar_bd(solicitud, parametros)
+
+    return jsonify({'status': 'Solicitud creada correctamente'}), 200
