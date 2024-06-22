@@ -153,7 +153,6 @@ function NuevaPublicacion() {
           { valor: horario, nombre: 'Horario de Atención' },
           { valor: telefono, nombre: 'Teléfono' },
           { valor: titulo, nombre: 'Título' },
-          { valor: descripcion, nombre: 'Descripción' },
         ];
     
         for (let campo of camposObligatorios) {
@@ -273,7 +272,7 @@ function NuevaPublicacion() {
                     placeholder={"Título"}
                     value={titulo}
                     onChangeText={setTitulo}
-                    largoMaximo={50}
+                    largoMaximo={25}
                     multiLinea={true}
                     />
                 <FormPublicacionTextInput

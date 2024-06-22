@@ -54,14 +54,6 @@ CREATE TABLE publicaciones(
 	CONSTRAINT fk_publicaciones_usuariosVecinos FOREIGN KEY (idUsuario) REFERENCES usuariosVecinos(idUsuario)
 );
 
-CREATE TABLE publicacionesImagenes(
-	idImagen INTEGER,
-	idPublicacion INTEGER,
-	imagen TEXT NOT NULL,
-	CONSTRAINT pk_publicacionesImagenes PRIMARY KEY (idImagen AUTOINCREMENT),
-	CONSTRAINT fk_publicacionesImagenes_publicaciones FOREIGN KEY (idPublicacion) REFERENCES publicaciones(idPublicacion) 
-);
-
 CREATE TABLE solicitudesPublicacion(
 	idSolicitudPublicacion INTEGER,
 	idUsuario INTEGER NOT NULL,
@@ -75,14 +67,6 @@ CREATE TABLE solicitudesPublicacion(
 	thumbnail TEXT,
 	CONSTRAINT pk_solicitudesPublicaciones PRIMARY KEY (idSolicitudPublicacion AUTOINCREMENT),
 	CONSTRAINT fk_publicaciones_usuariosVecinos FOREIGN KEY (idUsuario) REFERENCES usuariosVecinos(idUsuario)
-);
-
-CREATE TABLE solicitudesPublicacionImagenes(
-	idImagen INTEGER,
-	idSolicitudPublicacion INTEGER,
-	imagen TEXT NOT NULL,
-	CONSTRAINT pk_solicitudesPublicacionImagenes PRIMARY KEY (idImagen AUTOINCREMENT),
-	CONSTRAINT fk_soliitudesPublicacionesImagenes_solicitudesPublicacion FOREIGN KEY (idSolicitudPublicacion) REFERENCES solicitudesPublicacion(idSolicitudPublicacion) 
 );
 
 INSERT INTO usuariosPersonal (legajo, password, documento, fechaIngreso)

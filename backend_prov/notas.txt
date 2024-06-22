@@ -1,3 +1,0 @@
-Agregar tabla
-recupero
-idRecupero | codigo | documento | status (1 activo)
