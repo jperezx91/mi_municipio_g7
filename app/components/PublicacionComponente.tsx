@@ -2,7 +2,7 @@ import {Image, View, Text, Pressable} from "react-native";
 import {router} from "expo-router";
 
 const PublicacionComponente = ({ title, desc, imgUrl, goToPublicacion }: { title: string; desc: string, imgUrl: string, goToPublicacion: any}) => {
-    const imageSource = { uri: `data:image/jpeg;base64,${imgUrl}` };
+    const imageSource = imgUrl ? { uri: `data:image/jpeg;base64,${imgUrl}` } : require('../../assets/images/placeholder.jpg');
     return (
         <Pressable onPress={goToPublicacion} style={{ margin: 4, borderWidth: 1, borderColor: '#DDE1E6', marginTop: 8, backgroundColor: 'white', borderRadius:25}}>
             <Image style={{height: 190, width: 175, borderTopLeftRadius:25, borderTopRightRadius:25}} source={imageSource} />
