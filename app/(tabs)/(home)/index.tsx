@@ -17,7 +17,7 @@ const Home = () => {
     
     // Código para hacer la solicitud al backend, reemplaza los datos de mockup
     const [publicaciones, setPublicaciones] = useState([]);
-    useEffect(() => {
+    const cargarPublicaciones = () => {
         obtenerPublicaciones()
             .then((respuesta) =>
             {
@@ -27,17 +27,33 @@ const Home = () => {
             {
                 console.log(e)
             })
+    }
+
+    useEffect(() => {
+        cargarPublicaciones();
     }, []);
     
+    useFocusEffect(useCallback(()=>{
+        cargarPublicaciones();
+    }, []))
 
 
 
     // @ts-ignore
     const renderItemPublicacion = ({item}) => (
-        <PublicacionComponente title={item.titulo} desc={item.descripcion} imgUrl={item.imgBase64} goToPublicacion={() => {
-            const idItem : string = item.id
-            router.push(`publicacion/${idItem}`)
-        }} />
+        <PublicacionComponente
+            title={item.titulo}
+            desc={item.descripcion}
+            imgUrl={item.imgBase64}
+            activarPublicacion={() => {
+                const idItem : string = item.id
+                router.push(`publicacion/${idItem}`)
+                }}
+            // Variables para eliminación de publicaciones, sólo disponible desde "Mis Publicaciones"
+            modoEliminar = {false}
+            seleccionada = {false}
+            onSeleccionar= {null}
+            />
     );
 
     useEffect(() => {
