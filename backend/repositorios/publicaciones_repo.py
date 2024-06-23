@@ -112,7 +112,18 @@ class PublicacionesRepo:
     def eliminar_imagenes(id_publicacion):
         # Elimina la carpeta que contiene las imagenes de la publicacion
         directorio_imagenes = PublicacionesRepo.obtener_directorio_relativo(id_publicacion)
-        for archivo in os.listdir(directorio_imagenes):
-            ruta_al_archivo = os.path.join(directorio_imagenes, archivo)
-            os.remove(ruta_al_archivo)
-        os.rmdir(directorio_imagenes)
+        if(os.path.exists(directorio_imagenes)):
+            for archivo in os.listdir(directorio_imagenes):
+                ruta_al_archivo = os.path.join(directorio_imagenes, archivo)
+                os.remove(ruta_al_archivo)
+            os.rmdir(directorio_imagenes)
+    
+    @staticmethod
+    def eliminar_publicacion(id_publicacion):
+        solicitud = """
+            DELETE FROM publicaciones
+            WHERE idpublicacion = ?
+            """
+        parametros = (id_publicacion,)
+        DbManager.actualizar_bd(solicitud, parametros)
+        PublicacionesRepo.eliminar_imagenes(id_publicacion)

@@ -48,10 +48,10 @@ def obtener_publicaciones_propias():
     
     return respuesta
 
-@publicaciones_app.route('/publicaciones/<int:id>', methods=['GET'])
-def obtener_publicacion(id):
-    publicacion = PublicacionesRepo.obtener_publicacion(id)
-    imagenes = PublicacionesRepo.obtener_imagenes_publicacion(id)
+@publicaciones_app.route('/publicaciones/<int:id_publicacion>', methods=['GET'])
+def obtener_publicacion(id_publicacion):
+    publicacion = PublicacionesRepo.obtener_publicacion(id_publicacion)
+    imagenes = PublicacionesRepo.obtener_imagenes_publicacion(id_publicacion)
     
     if publicacion:
         respuesta = jsonify(
@@ -85,3 +85,10 @@ def crear_solicitud_nueva_publicacion():
         PublicacionesRepo.almacenar_imagenes(imagenes, id_solicitud)
 
     return jsonify({'status': 'Solicitud creada correctamente'}), 200
+
+@publicaciones_app.route('/publicaciones/<int:id_publicacion>', methods=['DELETE'])
+@jwt_required()
+def eliminar_publicacion(id_publicacion):
+    PublicacionesRepo.eliminar_publicacion(id_publicacion)
+
+    return jsonify({'status': 'Publicacion eliminada correctamente'}), 200
