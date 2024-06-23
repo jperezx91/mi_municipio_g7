@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+import json
 from utils.dbmanager import DbManager
 from repositorios.publicaciones_repo import PublicacionesRepo
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt, get_jwt_identity
@@ -21,9 +22,12 @@ def obtener_publicaciones():
             }
             for publicacion in publicaciones
         ])
+        # response_data = json.dumps(respuesta)
+        # respuesta.content_length = ""
+        # print(respuesta.content_length)
     else:
         respuesta = jsonify({'error': 'No existen publicaciones'}), 204
-    
+
     return respuesta
 
 @publicaciones_app.route('/publicaciones/propias', methods=['GET'])
@@ -70,7 +74,7 @@ def obtener_publicacion(id_publicacion):
     
     else:
         respuesta = jsonify({'error': 'Publicación no encontrada'}), 404
-
+    # respuesta.content_length = ""
     return respuesta
 
 @publicaciones_app.route('/publicaciones', methods=['POST'])

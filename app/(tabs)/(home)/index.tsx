@@ -14,7 +14,7 @@ const Home = () => {
     const { showAlert, setShowAlert } = useAlert();
     const [isLogged, setIsLogged] = useState(false);
     const [esVecino, setEsVecino] = useState<boolean>(true);
-    
+
     // Código para hacer la solicitud al backend, reemplaza los datos de mockup
     const [publicaciones, setPublicaciones] = useState([]);
     const cargarPublicaciones = () => {
@@ -22,6 +22,7 @@ const Home = () => {
             .then((respuesta) =>
             {
                 setPublicaciones(respuesta.data);
+                //console.log(respuesta.data)
             })
             .catch((e) =>
             {
@@ -32,7 +33,7 @@ const Home = () => {
     useEffect(() => {
         cargarPublicaciones();
     }, []);
-    
+
     useFocusEffect(useCallback(()=>{
         cargarPublicaciones();
     }, []))
@@ -97,7 +98,7 @@ const Home = () => {
         }
     }, []))
 
-    
+
     return (
         <SafeAreaView style={PrincipalStyle.principalContainer}>{/* <SafeAreaView style={{flex: 1, width: "93%", margin: 'auto', justifyContent: 'center', alignItems: 'center'}}> */}
                 <FlatList
