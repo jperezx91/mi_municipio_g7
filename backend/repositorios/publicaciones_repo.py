@@ -8,17 +8,27 @@ class PublicacionesRepo:
     def obtener_publicaciones():
         # Obtiene todas las publicaciones, ordenadas de la más nueva a la más antigua
         solicitud = """
-            SELECT idPublicacion as id, titulo, descripcion, thumbnail
+            SELECT idPublicacion as id, titulo, descripcion
             FROM publicaciones
             ORDER BY creada DESC
             """
         return DbManager.obtener_registros(solicitud)
     
     @staticmethod
+    def obtener_thumbnail(id_publicacion):
+        # Obtiene el thumbnail de la publicación indicada
+        ruta_thumb = os.path.join(PublicacionesRepo.obtener_directorio_relativo(id_publicacion), "thumbnail.jpg")
+        if os.path.isfile(ruta_thumb):
+            thumbnail_base64 = PublicacionesRepo.jpg_a_base64(ruta_thumb)
+        else:
+            thumbnail_base64 = None
+        return thumbnail_base64
+    
+    @staticmethod
     def obtener_publicaciones_propias(id_usuario):
         # Obtiene todas las publicaciones, ordenadas de la más nueva a la más antigua
         solicitud = """
-            SELECT idPublicacion as id, titulo, descripcion, thumbnail
+            SELECT idPublicacion as id, titulo, descripcion
             FROM publicaciones
             WHERE idUsuario = ?
             ORDER BY creada DESC
@@ -30,7 +40,7 @@ class PublicacionesRepo:
     def obtener_publicacion(id_publicacion):
         # Obtiene la información relativa a una publicación única
         solicitud = """
-            SELECT comercio, rubro, direccion, horario, telefono, titulo, descripcion, thumbnail
+            SELECT comercio, rubro, direccion, horario, telefono, titulo, descripcion
             FROM publicaciones
             WHERE idPublicacion = ?
             """
@@ -66,16 +76,14 @@ class PublicacionesRepo:
 
 
     @staticmethod
-    def obtener_imagenes_publicacion(id_publicacion):
-        # Obtiene los archivos de imagen asociados a una publicacion en base64
-        directorio_imagenes = PublicacionesRepo.obtener_directorio_relativo(id_publicacion)
-        if os.path.exists(directorio_imagenes):
-            nombres_archivo = [archivo for archivo in os.listdir(directorio_imagenes) if os.path.isfile(os.path.join(directorio_imagenes, archivo))]
-            imagenes_base64 = [PublicacionesRepo.jpg_a_base64(os.path.join(directorio_imagenes, nombre_archivo)) for nombre_archivo in nombres_archivo]
+    def obtener_imagen(id_publicacion, id_imagen):
+        # Obtiene el archivo de imagen indicado asociado a una publicacion en base64
+        directorio_imagen = os.path.join(PublicacionesRepo.obtener_directorio_relativo(id_publicacion), f"image_{id_imagen}.jpg")
+        if os.path.isfile(directorio_imagen):
+            imagen_base64 = PublicacionesRepo.jpg_a_base64(directorio_imagen)
         else:
-            imagenes_base64 = None
-        
-        return imagenes_base64
+            imagen_base64 = None
+        return imagen_base64
 
     @staticmethod
     def crear_solicitud_nueva_publicacion(id_usuario_solicitante, datos_nueva_publicacion):

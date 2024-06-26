@@ -1,4 +1,4 @@
-import {Alert, SafeAreaView, FlatList, View} from 'react-native';
+import {Alert, SafeAreaView, FlatList, View, Text} from 'react-native';
 import React, {useCallback, useEffect, useState} from "react";
 import {router, useFocusEffect} from "expo-router";
 import {useAlert} from "@/app/alertProvider";
@@ -8,7 +8,7 @@ import StyleHome from "@/app/(tabs)/(home)/styles";
 import FormButton from "@/app/components/FormButton";
 import * as SecureStore from 'expo-secure-store';
 import {jwtDecode} from "jwt-decode";
-import { obtenerPublicaciones } from '@/app/networking/api';
+import { obtenerPublicaciones, obtenerThumbnail } from '@/app/networking/api';
 
 const Home = () => {
     const { showAlert, setShowAlert } = useAlert();
@@ -16,19 +16,28 @@ const Home = () => {
     const [esVecino, setEsVecino] = useState<boolean>(true);
 
     // Código para hacer la solicitud al backend, reemplaza los datos de mockup
-    const [publicaciones, setPublicaciones] = useState([]);
-    const cargarPublicaciones = () => {
-        obtenerPublicaciones()
-            .then((respuesta) =>
-            {
-                setPublicaciones(respuesta.data);
-                //console.log(respuesta.data)
-            })
-            .catch((e) =>
-            {
-                console.log(e)
-            })
-    }
+    interface Publicacion {
+        id: string;
+        titulo: string;
+        descripcion: string;
+        thumbnail: string;
+        }
+
+    const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
+
+    const cargarPublicaciones = async () => {
+        try {
+            const respuesta = await obtenerPublicaciones();
+            const publicacionesConThumbnails = await Promise.all(respuesta.data.map(async (publicacion: Publicacion) => {
+                const thumbnailRespuesta = await obtenerThumbnail(publicacion.id);
+                publicacion.thumbnail = thumbnailRespuesta.data;
+                return publicacion;
+            }));
+            setPublicaciones(publicacionesConThumbnails);
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
     useEffect(() => {
         cargarPublicaciones();
@@ -37,15 +46,12 @@ const Home = () => {
     useFocusEffect(useCallback(()=>{
         cargarPublicaciones();
     }, []))
-
-
-
-    // @ts-ignore
-    const renderItemPublicacion = ({item}) => (
+    
+    const renderItemPublicacion = ({item} : {item: Publicacion}) => (
         <PublicacionComponente
             title={item.titulo}
             desc={item.descripcion}
-            imgUrl={item.imgBase64}
+            imgUrl={item.thumbnail}
             activarPublicacion={() => {
                 const idItem : string = item.id
                 router.push(`publicacion/${idItem}`)
@@ -97,7 +103,6 @@ const Home = () => {
             setIsLogged(false)
         }
     }, []))
-
 
     return (
         <SafeAreaView style={PrincipalStyle.principalContainer}>{/* <SafeAreaView style={{flex: 1, width: "93%", margin: 'auto', justifyContent: 'center', alignItems: 'center'}}> */}

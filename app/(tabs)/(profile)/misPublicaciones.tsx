@@ -4,25 +4,35 @@ import FormButton from "@/app/components/FormButton";
 import {PrincipalStyle} from "@/app/styles";
 import StyleHome from "@/app/(tabs)/(home)/styles";
 import PublicacionComponente from '@/app/components/PublicacionComponente';
-import { obtenerMisPublicaciones, eliminarPublicacion } from '@/app/networking/api';
+import { obtenerMisPublicaciones, obtenerThumbnail, eliminarPublicacion } from '@/app/networking/api';
 import {router, useFocusEffect } from "expo-router";
-import { withDecay } from 'react-native-reanimated';
 
 function MisPublicaciones() {
 
     // Código para hacer la solicitud al backend, reemplaza los datos de mockup
-    const [publicaciones, setPublicaciones] = useState([]);
+    interface Publicacion {
+        id: string;
+        titulo: string;
+        descripcion: string;
+        thumbnail: string;
+        }
 
-    const cargarPublicaciones = () => {
-        obtenerMisPublicaciones()
-            .then((respuesta) => {
-            setPublicaciones(respuesta.data);
-        })
-            .catch((e) =>{
-            console.log(e)
-        })
-    }
+    const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
 
+    const cargarPublicaciones = async () => {
+        try {
+            const respuesta = await obtenerMisPublicaciones();
+            const publicacionesConThumbnails = await Promise.all(respuesta.data.map(async (publicacion: Publicacion) => {
+                const thumbnailRespuesta = await obtenerThumbnail(publicacion.id);
+                publicacion.thumbnail = thumbnailRespuesta.data;
+                return publicacion;
+            }));
+            setPublicaciones(publicacionesConThumbnails);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    
     useEffect(() => {
         cargarPublicaciones();
     }, []);
@@ -56,7 +66,11 @@ function MisPublicaciones() {
             [
                 {
                     text: 'Confirmar',
-                    onPress: enviarSolicitudDeEliminacion
+                    onPress: () => {
+                        enviarSolicitudDeEliminacion();
+                        toggleModoEliminacion();
+                        cargarPublicaciones();
+                    }
                 },
                     {
                         text: 'Cancelar',
@@ -76,34 +90,36 @@ function MisPublicaciones() {
                 .filter(key => publicacionesSeleccionadas[Number(key)]);
         var errores = false;
 
-        publicacionesParaEliminar.forEach(async idPublicacion => {
-            try {
-                const response = await eliminarPublicacion(idPublicacion);
-                errores = response.status != 200
-            }
-            catch (error) {
-                console.error(error);
-                Alert.alert("Error", "Error al intentar eliminar publicación");
-            }
-        })
+        if(publicacionesParaEliminar.length == 0){
+            Alert.alert("Error", "Seleccione al menos una publicación para eliminar.");
+        } else {
+            publicacionesParaEliminar.forEach(async idPublicacion => {
+                try {
+                    const response = await eliminarPublicacion(idPublicacion);
+                    errores = response.status != 200
+                }
+                catch (error) {
+                    console.error(error);
+                    Alert.alert("Error", "Error al intentar eliminar publicación");
+                }
+            })
+        }
+        
         if (errores){
             Alert.alert("Error", "Error al intentar eliminar publicación");
         } else {
             Alert.alert("Eliminación exitosa", "Éxito al eliminar las publicaciones seleccionadas.");
-            toggleModoEliminacion();
-            cargarPublicaciones();
         };
     }
 
-    // @ts-ignore
-    const renderItemPublicacion = ({item}) => (
+    const renderItemPublicacion = ({item} : {item: Publicacion}) => (
         <PublicacionComponente
             title={item.titulo}
             desc={item.descripcion}
-            imgUrl={item.imgBase64}
+            imgUrl={item.thumbnail}
             activarPublicacion={() => {
                 if(modoEliminar){
-                    manejarSeleccion(item.id);
+                    manejarSeleccion(Number(item.id));
                 } else {
                     toggleModoEliminacion;
                     const idItem : string = item.id
@@ -112,8 +128,8 @@ function MisPublicaciones() {
                 }
             }
             modoEliminar={modoEliminar}
-            seleccionada={publicacionesSeleccionadas[item.id]}
-            onSeleccionar={() => manejarSeleccion(item.id)}
+            seleccionada={publicacionesSeleccionadas[Number(item.id)]}
+            onSeleccionar={() => manejarSeleccion(Number(item.id))}
         />
     );
 

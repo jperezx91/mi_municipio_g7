@@ -3,7 +3,7 @@ import {View, Text, SafeAreaView, Image, FlatList, TouchableOpacity, Linking, Di
 import {router, useGlobalSearchParams} from "expo-router";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {PrincipalStyle} from "@/app/styles";
-import {obtenerPublicacion} from '@/app/networking/api';
+import {obtenerPublicacion, obtenerThumbnail, obtenerImagen} from '@/app/networking/api';
 
 const Id = () => {
     const irAtras = () =>
@@ -12,30 +12,53 @@ const Id = () => {
     };
     const { id }  = useGlobalSearchParams();
     const index: string = id ? "" + id : "0"
-    
+        
+    // Código para hacer la solicitud al backend, reemplaza los datos de mockup
+    interface Publicacion {
+        id: string;
+        titulo: string;
+        descripcion: string;
+        thumbnail: string;
+        imagenes: string[];
+    }
+
     const [publicacion, setPublicacion] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+
+    const cargarPublicacion = async (idPublicacion: string) => {
+        try {
+            const respuestaPublicacion = await obtenerPublicacion(idPublicacion);
+            const nuevaPublicacion: Publicacion = {
+                ...respuestaPublicacion.data,
+                thumbnail: '',
+                imagenes: []
+            };
+            const thumbnailRespuesta = await obtenerThumbnail(idPublicacion);
+            nuevaPublicacion.thumbnail = thumbnailRespuesta.data;
+            
+            let idImagen = 1;
+            let terminado = false;
+
+            while(!terminado){
+                try {
+                    const imagenRespuesta = await obtenerImagen(idPublicacion, String(idImagen));
+                    nuevaPublicacion.imagenes.push(imagenRespuesta.data);
+                    idImagen++;
+                } catch(e: any){
+                    terminado = e.response && e.response.status === 404;
+                    console.log(e);
+                }
+            }
+        
+            setPublicacion(nuevaPublicacion);   
+
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
     useEffect(() => {
-        obtenerPublicacion(index)
-            .then((respuesta) => {
-                setPublicacion(respuesta.data);
-                setLoading(false);
-            })
-            .catch((e) => {
-                console.log(e);
-                setLoading(false);
-            });
+        cargarPublicacion(index);
     }, [index]);
-
-    if (loading) {
-        return
-            <View style={[PrincipalStyle.principalContainer, {display: 'flex', alignContent: 'center'}]}>
-                <Text style={{fontFamily:'outfit-bold', fontSize: 26, textAlign: 'center'}}>
-                    Cargando publicación...
-                </Text>
-            </View>;
-    }
 
     if (!publicacion) {
         return
@@ -96,7 +119,7 @@ const Id = () => {
     *  */
     return (
         <SafeAreaView>
-            <FlatList showsVerticalScrollIndicator={false} ListHeaderComponent={<View>
+            <FlatList style={{backgroundColor: '#fff'}} showsVerticalScrollIndicator={false} ListHeaderComponent={<View>
                 { /* Carrousel*/}
 
                 {/*<Carousel
@@ -107,16 +130,16 @@ const Id = () => {
             >
 
             </Carousel>*/}
-                <View style={{backgroundColor:'white'}}>
-                    <FlatList data={fotosPublicacion} horizontal renderItem={({item,index})=>(
-                        <View key={index}>
-                            <Image source={item.image} style={{height: 300, width:Dimensions.get('window').width}}/>
-                        </View>
-                    )}>
-
-                    </FlatList>
+                <View>
+                    <Image
+                        source={{uri:`data:image/jpeg;base64,${publicacion.thumbnail}`}}
+                        style={{
+                            width: '100%',
+                            height: 350, 
+                            resizeMode: 'cover'
+                            }}
+                        />
                 </View>
-
                 {/* Datos del Comercio */}
 
                 <View style={{padding:20, marginTop:-20, backgroundColor:'white', borderTopLeftRadius:25, borderTopRightRadius:25}}>
@@ -146,7 +169,7 @@ const Id = () => {
                 </View>
 
                 {/* Botones de Contacto */}
-                <View style={{backgroundColor:'white', paddingLeft:20, paddingRight:20}}>
+                <View style={{backgroundColor:'white', padding:20}}>
                     <FlatList data={actionBtns} numColumns={4} columnWrapperStyle={{justifyContent:'space-between'}} renderItem={({item,index})=>(
                         <TouchableOpacity key={index} onPress={()=>OnPressHandle(item)} style={{display: 'flex', alignSelf:'center', alignItems:'center'}}>
                             {/*<Image source={item.icon} style={{width:50, height:50}}/>*/}
@@ -162,10 +185,43 @@ const Id = () => {
                 </View>
 
                 { /* Cuerpo de la publicación */ }
-                <View style={{backgroundColor:'white', padding:20, height:'100%'}}>
-                    <Text style={{fontFamily:'outfit-bold', fontSize:20, textAlign:'center', marginTop: 5, marginBottom: 10}}>{publicacion.titulo}</Text>
-                    <Text style={{fontFamily:'outfit', lineHeight:25, minHeight:200}}>{publicacion.descripcion}</Text>
+                <View style={{
+                    borderBottomLeftRadius: 25,
+                    borderBottomRightRadius: 25,
+                    backgroundColor: 'white',
+                    zIndex: 1
+                }}>
+                    <View style={{
+                        padding: 20,
+                        margin: 20,
+                        borderWidth: 2,
+                        borderColor: '#4891c7',
+                        borderRadius: 15
+                    }}>
+                        <Text style={{fontFamily:'outfit-bold', fontSize:20, textAlign:'center', marginTop: 5, marginBottom: 10}}>{publicacion.titulo}</Text>
+                        <Text style={{fontFamily:'outfit', lineHeight:25}}>{publicacion.descripcion}</Text>
+                        { /* Galería de fotos */ }
+                <View style={{marginTop: 25}}>
+                    <FlatList data={fotosPublicacion} horizontal renderItem={({item,index})=>(
+                        <View key={index}>
+                            <Image
+                                source={item.image}
+                                style={{
+                                    height: 250,
+                                    width: 250,
+                                    marginRight: 10,
+                                    borderBottomLeftRadius: 25,
+                                    borderBottomRightRadius: 25
+                                    }}
+                                />
+                        </View>
+                    )}>
+                    </FlatList>
                 </View>
+                    </View>
+                </View>
+
+                
             </View>}  data={[]} renderItem={()=> (<></>)} >
             </FlatList>
 
