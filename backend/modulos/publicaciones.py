@@ -94,6 +94,10 @@ def crear_solicitud_nueva_publicacion():
     id_usuario = get_jwt_identity() # Esto es el ID del usuario en la base de datos
     datos = request.json
     id_solicitud = PublicacionesRepo.crear_solicitud_nueva_publicacion(id_usuario, datos)
+
+    thumbnail = datos.get('thumbnail')
+    if(thumbnail):
+        PublicacionesRepo.almacenar_thumbnail(thumbnail, id_solicitud)
     
     imagenes = datos.get('imagenes')
     if(imagenes):

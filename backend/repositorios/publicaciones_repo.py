@@ -90,8 +90,8 @@ class PublicacionesRepo:
         # Crea una solicitud de nueva pubicacion para su aprobación por parte del municipio
         solicitud = """
             INSERT INTO solicitudesPublicacion (
-                idUsuario, comercio, rubro, direccion, horario, telefono, titulo, descripcion, thumbnail
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                idUsuario, comercio, rubro, direccion, horario, telefono, titulo, descripcion
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """
         parametros = (
             id_usuario_solicitante,
@@ -102,7 +102,6 @@ class PublicacionesRepo:
             datos_nueva_publicacion.get('telefono'),
             datos_nueva_publicacion.get('titulo'),
             datos_nueva_publicacion.get('descripcion'),
-            datos_nueva_publicacion.get('thumbnail')
         )
 
         return DbManager.actualizar_bd(solicitud, parametros)
@@ -115,6 +114,14 @@ class PublicacionesRepo:
         for idx, imagen_base64 in enumerate(imagenes_base64):
             directorio_salida = os.path.join(directorio_imagenes, f'image_{idx + 1}.jpg')
             PublicacionesRepo.base64_a_jpeg(imagen_base64, directorio_salida)
+    
+    @staticmethod
+    def almacenar_thumbnail(thumbnail_base64, id_publicacion):
+        # Almacena el thumbnail en la carpeta correspondiente a la publicacion
+        directorio_imagenes = PublicacionesRepo.obtener_directorio_relativo(id_publicacion)
+        directorio_salida = os.path.join(directorio_imagenes, 'thumbnail.jpg')
+        PublicacionesRepo.base64_a_jpeg(imagen_base64, directorio_salida)
+            
     
     @staticmethod
     def eliminar_imagenes(id_publicacion):
