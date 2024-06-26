@@ -9,6 +9,8 @@ export const solicitarRecupero = (email: string, documento: string) => clientHan
 export const verificarCodigo = (codigo: string) => clientHandler.client.post("perfil?verificar_codigo", {codigo})
 export const verPerfil = () => clientHandler.client_auth.get("perfil")
 export const obtenerPublicaciones = () => clientHandler.client.get("publicaciones")
+export const obtenerThumbnail = (id: string) => clientHandler.client.get(`publicaciones/${id}/thumb`)
+export const obtenerImagen = (idPublicacion: string, idImagen: string) => clientHandler.client.get(`publicaciones/${idPublicacion}/image/${idImagen}`)
 export const obtenerMisPublicaciones = () => clientHandler.client_auth.get("publicaciones/propias")
 export const obtenerPublicacion = (id: string) => clientHandler.client.get(`publicaciones/${id}`)
 export const eliminarPublicacion = (id: string) => clientHandler.client_auth.delete(`publicaciones/${id}`)

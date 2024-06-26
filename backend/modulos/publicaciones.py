@@ -17,18 +17,23 @@ def obtener_publicaciones():
                 'id': str(publicacion[0]),
                 'titulo': publicacion[1],
                 'descripcion': publicacion[2],
-                # Me aseguro de incluir None si no hay thumbnail para que se active el placeholder
-                'imgBase64': publicacion[3] if publicacion[3] else None
             }
             for publicacion in publicaciones
         ])
-        # response_data = json.dumps(respuesta)
-        # respuesta.content_length = ""
-        # print(respuesta.content_length)
     else:
         respuesta = jsonify({'error': 'No existen publicaciones'}), 204
 
     return respuesta
+
+@publicaciones_app.route('/publicaciones/<id_publicacion>/thumb', methods=['GET'])
+def obtener_thumbnail(id_publicacion):
+
+    thumbnail = PublicacionesRepo.obtener_thumbnail(id_publicacion)
+
+    if not thumbnail: 
+        thumbnail = jsonify({'error': 'Thumbnail no encontrado'}), 404
+
+    return thumbnail
 
 @publicaciones_app.route('/publicaciones/propias', methods=['GET'])
 @jwt_required()
@@ -42,8 +47,6 @@ def obtener_publicaciones_propias():
                 'id': str(publicacion[0]),
                 'titulo': publicacion[1],
                 'descripcion': publicacion[2],
-                # Me aseguro de incluir None si no hay thumbnail para que se active el placeholder
-                'imgBase64': publicacion[3] if publicacion[3] else None
             }
             for publicacion in publicaciones
         ])
@@ -55,7 +58,7 @@ def obtener_publicaciones_propias():
 @publicaciones_app.route('/publicaciones/<int:id_publicacion>', methods=['GET'])
 def obtener_publicacion(id_publicacion):
     publicacion = PublicacionesRepo.obtener_publicacion(id_publicacion)
-    imagenes = PublicacionesRepo.obtener_imagenes_publicacion(id_publicacion)
+    # imagenes = PublicacionesRepo.obtener_imagenes_publicacion(id_publicacion)
     
     if publicacion:
         respuesta = jsonify(
@@ -67,15 +70,23 @@ def obtener_publicacion(id_publicacion):
                 'telefono': publicacion[4],
                 'titulo': publicacion[5],
                 'descripcion': publicacion[6],
-                'thumbnail': publicacion[7] if publicacion[7] else None,
-                'imagenes': [img for img in imagenes] if imagenes else []
+                #'thumbnail': publicacion[7] if publicacion[7] else None,
+                #'imagenes': [img for img in imagenes] if imagenes else []
             }
         )
     
     else:
         respuesta = jsonify({'error': 'Publicación no encontrada'}), 404
-    # respuesta.content_length = ""
     return respuesta
+
+@publicaciones_app.route('/publicaciones/<int:id_publicacion>/image/<int:id_imagen>', methods=['GET'])
+def obtener_imagen(id_publicacion, id_imagen):
+    imagen = PublicacionesRepo.obtener_imagen(id_publicacion, id_imagen)
+    
+    if not imagen: 
+        imagen = jsonify({'error': 'Imagen no encontrada'}), 404
+
+    return imagen
 
 @publicaciones_app.route('/publicaciones', methods=['POST'])
 @jwt_required()
@@ -83,6 +94,10 @@ def crear_solicitud_nueva_publicacion():
     id_usuario = get_jwt_identity() # Esto es el ID del usuario en la base de datos
     datos = request.json
     id_solicitud = PublicacionesRepo.crear_solicitud_nueva_publicacion(id_usuario, datos)
+
+    thumbnail = datos.get('thumbnail')
+    if(thumbnail):
+        PublicacionesRepo.almacenar_thumbnail(thumbnail, id_solicitud)
     
     imagenes = datos.get('imagenes')
     if(imagenes):
