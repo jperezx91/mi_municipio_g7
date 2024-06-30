@@ -15,33 +15,33 @@ export default function HomeScreen() {
     [
         {
             id: "1",
-            numero: '445566',
+            numero_reclamo: '445566',
             categoria: 'Parques',
             estado: 'En revisión'
 
         },
         {
             id: "2",
-            numero: '449966',
+            numero_reclamo: '449966',
             categoria: 'Iluminación',
             estado: 'Unificado'
         },
         {
             id: "3",
-            numero: '445677',
+            numero_reclamo: '445677',
             categoria: 'Parques',
             estado: 'Cerrado'
         },
         {
             id: "4",
-            numero: '447896',
+            numero_reclamo: '447896',
             categoria: 'Parques',
             estado: 'Unificado'
         },
 
         {
             id: "5",
-            numero: '446677',
+            numero_reclamo: '446677',
             categoria: 'Escuelas',
             estado: 'En revisión'
         }
@@ -50,14 +50,14 @@ export default function HomeScreen() {
     interface itemType
     {
         id: number
-        numero: string
+        numero_reclamo: string
         categoria: string
         estado: string
     }
 
     // @ts-ignore
     const renderItemPublicaion = ({item}) => (
-        <ReclamoComponente numero={item.numero} categoria={item.categoria} estado={item.estado} goToPublicacion={() => {
+        <ReclamoComponente numero_reclamo={item.numero_reclamo} categoria={item.categoria} estado={item.estado} goToPublicacion={() => {
             const idItem : string = item.id
             router.push(`reclamo/${idItem}`)
         }} />

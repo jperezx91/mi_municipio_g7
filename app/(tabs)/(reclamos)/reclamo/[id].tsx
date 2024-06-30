@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, SafeAreaView, Image, FlatList, TouchableOpacity, Linking, Dimensions, ImageSourcePropType, ScrollView, ViewBase, Pressable} from "react-native";
-import {router, useGlobalSearchParams} from "expo-router";
+import {router, useGlobalSearchParams, useLocalSearchParams} from "expo-router";
 import { ExpoRoot } from 'expo-router';
 import {PrincipalStyle} from "@/app/styles";
 import {string} from "prop-types";
@@ -18,12 +18,13 @@ const mockUpData: Record<string, any> =
             title: '---',
             location: '---',
             phone: '---',
-            desc: "---"
+            desc: "---",
+            numero_reclamo: '0'
         },
         "1":
         {
             categoria: 'Parques',
-            numero: '445566',
+            numero_reclamo: '445566',
             desc: 'Hay un árbol caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún. ',
             ubicacion: 'Av Congreso 2223',
             estado: 'En revisión'
@@ -31,7 +32,7 @@ const mockUpData: Record<string, any> =
         "2":
         {
             categoria: 'Iluminación',
-            numero: '449966',
+            numero_reclamo: '449966',
 
             desc: 'Hay un poste caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún.',
             ubicacion: 'Av Congreso 2223',
@@ -40,7 +41,7 @@ const mockUpData: Record<string, any> =
         "3":
         {
             categoria: 'Parques',
-            numero: '445677',
+            numero_reclamo: '445677',
 
             desc: 'Hay un árbol caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún. ',
             ubicacion: 'Av Congreso 2223',
@@ -49,7 +50,7 @@ const mockUpData: Record<string, any> =
         "4":
         {
             categoria: 'Parques',
-            numero: '447896',
+            numero_reclamo: '447896',
 
             desc: 'Hay un árbol caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún. ',
             ubicacion: 'Av Congreso 2223',
@@ -58,7 +59,7 @@ const mockUpData: Record<string, any> =
         "5":
         {
             categoria: 'Escuelas',
-            numero: '446677',
+            numero_reclamo: '446677',
 
             desc: 'Hay un árbol caído en el parque Sarmiento desde hace ya unos días y nadie fue a sacarlo aún. ',
             ubicacion: 'Av Congreso 2223',
@@ -67,16 +68,12 @@ const mockUpData: Record<string, any> =
     }
 
 
-
-
-
-
 const Id = () => {
     const irAtras = () =>
     {
         router.back()
     }
-    const { id }  = useGlobalSearchParams()
+    const { id }  = useLocalSearchParams()
     interface dicIndex
     {
         index: string
@@ -140,8 +137,8 @@ const Id = () => {
                     {/*Por alguna razon no funciona esto para scrollear */}
                     <FlatList showsVerticalScrollIndicator={false} ListHeaderComponent={
                 <View style={{marginTop: 15, padding: 20, paddingTop: 0, backgroundColor: '#F2F4F8', height: Dimensions.get('window').height * 0.80}}>
-                    <Text style={{fontSize: 22, fontFamily:'outfit-bold', textAlign: 'center', marginTop: 10}}>Reclamo #{mockUpData[index].numero}</Text>
-                    
+                    <Text style={{fontSize: 22, fontFamily:'outfit-bold', textAlign: 'center', marginTop: 10}}>Reclamo #{mockUpData[index].numero_reclamo}</Text>
+
                     { /* Caja de datos de perfil */}
                     <View style={{marginTop: 10}}>
                     <View>
@@ -186,8 +183,8 @@ const Id = () => {
                     <View>
                     <Text style={{marginTop: 20, fontFamily:'outfit', fontSize:17}}>Imagenes del reclamo:</Text>
 
-                    <FlatList 
-                        data={mockupImages}    
+                    <FlatList
+                        data={mockupImages}
                         numColumns={3}
                         style={{marginTop:10, }}
                         renderItem={({item,index})=>(
@@ -215,7 +212,7 @@ const Id = () => {
                                 <Entypo name="chevron-thin-right" size={15} color="black"/>
                             </View>
                         </Pressable>
-                    </View>    
+                    </View>
                     </View>
                 </View>
                 }  data={[]} renderItem={()=> (<></>)} >

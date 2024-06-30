@@ -12,7 +12,7 @@ const Id = () => {
     };
     const { id }  = useGlobalSearchParams();
     const index: string = id ? "" + id : "0"
-        
+
     // Código para hacer la solicitud al backend, reemplaza los datos de mockup
     interface Publicacion {
         id: string;
@@ -34,7 +34,7 @@ const Id = () => {
             };
             const thumbnailRespuesta = await obtenerThumbnail(idPublicacion);
             nuevaPublicacion.thumbnail = thumbnailRespuesta.data;
-            
+
             let idImagen = 1;
             let terminado = false;
 
@@ -48,8 +48,8 @@ const Id = () => {
                     console.log(e);
                 }
             }
-        
-            setPublicacion(nuevaPublicacion);   
+
+            setPublicacion(nuevaPublicacion);
 
         } catch (e) {
             console.log(e);
@@ -68,7 +68,7 @@ const Id = () => {
             </Text>;
         </View>
     }
-    
+
     const actionBtns= [
         {
             btn:1,
@@ -135,7 +135,7 @@ const Id = () => {
                         source={{uri:`data:image/jpeg;base64,${publicacion.thumbnail}`}}
                         style={{
                             width: '100%',
-                            height: 350, 
+                            height: 350,
                             resizeMode: 'cover'
                             }}
                         />
@@ -143,11 +143,11 @@ const Id = () => {
                 {/* Datos del Comercio */}
 
                 <View style={{padding:20, marginTop:-20, backgroundColor:'white', borderTopLeftRadius:25, borderTopRightRadius:25}}>
-                    
+
                     <View>
                         <Text style={{fontFamily:'outfit-bold', fontSize: 26}}>{publicacion.comercio}</Text>
                     </View>
-                    
+
                     <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
                         <Text style={{fontFamily:'outfit', textDecorationLine:'underline'}}>Rubro:</Text><Text> {publicacion.rubro}</Text>
                     </View>
@@ -157,7 +157,7 @@ const Id = () => {
                         <Text style={{fontFamily:'outfit', textDecorationLine:'underline'}}>Dirección:</Text><Text> {publicacion.direccion}</Text>
                         </View>
                     )}
-                    
+
                     <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
                         <Text style={{fontFamily:'outfit', textDecorationLine:'underline'}}>Horario:</Text><Text> {publicacion.horario}</Text>
                     </View>
@@ -221,7 +221,7 @@ const Id = () => {
                     </View>
                 </View>
 
-                
+
             </View>}  data={[]} renderItem={()=> (<></>)} >
             </FlatList>
 
@@ -232,23 +232,4 @@ const Id = () => {
 export default Id;
 
 
-/*
-        <SafeAreaView style={PrincipalStyle.principalContainer}>
-            <View style={{marginTop: 15}}>
-                <Image style={{height: 300, width: '100%'}} source={require('../../../../assets/images/publicacion_place_holder.png')} />
-            </View>
-            { /* Datos seccion*//*}
-            <View style={{paddingVertical: 5, gap: 4}}>
-                <Text style={{fontSize: 26, fontWeight: 'bold'}}>{mockUpData[index].title}</Text>
-                <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
-                    <Text style={{fontWeight: 'bold'}}>Dirección: </Text><Text>{mockUpData[index].location}</Text>
-                </View>
-                <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
-                    <Text style={{fontWeight: 'bold'}}>Horario: </Text><Text>12 a 15 hs</Text>
-                </View>
-                <View style={{display: 'flex', flexDirection: 'row', padding: 3}}>
-                    <Text style={{fontWeight: 'bold'}}>Teléfono: </Text><Text>{mockUpData[index].phone}</Text>
-                </View>
-            </View>
-        </SafeAreaView>
-*/
+

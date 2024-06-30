@@ -4,7 +4,7 @@ from repositorios.publicaciones_repo import PublicacionesRepo
 def menu_consola():
     print("[Mi Municipio consola]")
     print("Comandos disponibles: ")
-    comandos = ["Salir", "Solicitudes de Registro", "Recuperos", "Solicitudes de Publicacion"]
+    comandos = ["Salir", "Solicitudes de Registro", "Recuperos", "Solicitudes de Publicacion", "Ligar denuncia a vecino"]
     numero_de_opcion = 0
     for comando in comandos:
         print(str(numero_de_opcion) + ". " + comando)
@@ -22,13 +22,27 @@ def menu_consola():
                 procesar_recuperos()
             case 3:
                 procesar_solicitudes_publicacion()
+            case 4:
+                ligar_denuncia_vecino()
+
         for comando in comandos:
             print(str(numero_de_opcion) + ". " + comando)
             numero_de_opcion += 1
         numero_de_opcion = 0
         print("")
 
+def ligar_denuncia_vecino():
+    denuncia = input("Ingrese el numero de la denuncia: ")
+    denuncia = denuncia.strip()
+    dni_usuario = input("Ingrese el dni de la usuario: ")
+    dni_usuario = dni_usuario.strip()
 
+    solicitud = """
+        UPDATE denuncias SET documentoDenunciado = ? WHERE idDenuncias = ?;
+    """
+    params = (dni_usuario, denuncia)
+    DbManager.actualizar_bd(solicitud, params)
+    print("Actualizado !")
 def procesar_solicitudes_registro():
     # Esta query obtiene sólo la última solicitud de registro hecha por el usuario
     solicitud = """

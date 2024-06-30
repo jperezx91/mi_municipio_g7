@@ -120,7 +120,7 @@ class PublicacionesRepo:
         # Almacena el thumbnail en la carpeta correspondiente a la publicacion
         directorio_imagenes = PublicacionesRepo.obtener_directorio_relativo(id_publicacion)
         directorio_salida = os.path.join(directorio_imagenes, 'thumbnail.jpg')
-        PublicacionesRepo.base64_a_jpeg(imagen_base64, directorio_salida)
+        PublicacionesRepo.base64_a_jpeg(thumbnail_base64, directorio_salida)
             
     
     @staticmethod
