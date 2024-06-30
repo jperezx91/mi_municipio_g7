@@ -33,16 +33,18 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin, dataUser 
                             </Pressable>
                         </>:
                         <>
-                            <Pressable style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', position: 'relative' }} onPress={() => {router.navigate("profile")}}>
-
-                                <FontAwesome5 style={{marginRight: 10}} name="bell" size={24} color="white" />
-                                <View style={{position: 'absolute', bottom: 10, left: 10}}>
-                                    <View style={{backgroundColor: 'red', width: 23, height: 23, borderRadius: 100, display: 'flex', justifyContent: 'center', alignItems: 'center'}}><Text style={{color: 'white'}}>5</Text></View>
-                                </View>
-                                <Text style={{fontFamily:'outfit-bold', fontSize:18, color: 'white'}}>{dataUser}</Text>
-                                <FontAwesome5 name="user-circle" size={24} color="white" />
-                            </Pressable>
-                        </>
+                        <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', position: 'relative' }}>
+                        <Pressable style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', position: 'relative' }} onPress={() => {router.navigate("notificaciones")}}>
+                            <FontAwesome5 style={{marginRight: 10}} name="bell" size={24} color="white" />
+                            <View style={{position: 'absolute', bottom: 10, left: 10}}>
+                                <View style={{backgroundColor: 'red', width: 23, height: 23, borderRadius: 100, display: 'flex', justifyContent: 'center', alignItems: 'center'}}><Text style={{color: 'white'}}>5</Text></View>
+                            </View>
+                        </Pressable>
+                        <Pressable style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', position: 'relative' }} onPress={() => {router.navigate("profile")}}>
+                            <Text style={{fontFamily:'outfit-bold', fontSize:18, color: 'white'}}>{dataUser}</Text>
+                            <FontAwesome5 name="user-circle" size={24} color="white" />
+                        </Pressable></View>
+                    </>
                     }
 
 
