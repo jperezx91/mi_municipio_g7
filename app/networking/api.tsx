@@ -15,8 +15,10 @@ export const obtenerImagen = (idPublicacion: string, idImagen: string) => client
 export const obtenerMisPublicaciones = () => clientHandler.client_auth.get("publicaciones/propias")
 export const obtenerPublicacion = (id: string) => clientHandler.client.get(`publicaciones/${id}`)
 export const eliminarPublicacion = (id: string) => clientHandler.client_auth.delete(`publicaciones/${id}`)
-
 export const crearSolicitudNuevaPublicacion = (datosPublicacion: { [key: string]: any }) => clientHandler.client_auth.post("publicaciones", datosPublicacion);
+
+export const obtenerReclamos = () => clientHandler.client_auth.get("reclamos?all=true");
+
 export const obtenerDenuncias =  () => clientHandler.client_auth.get("denuncias")
 export const obtenerDenunciasRecibidas =  () => clientHandler.client_auth.get("denuncias/recibidas")
 export const crearDenuncia = (datosDenuncia: {[key: string]: any}) => clientHandler.client_auth.post("denuncias", datosDenuncia)

@@ -29,9 +29,14 @@ const Home = () => {
         try {
             const respuesta = await obtenerPublicaciones();
             const publicacionesConThumbnails = await Promise.all(respuesta.data.map(async (publicacion: Publicacion) => {
-                const thumbnailRespuesta = await obtenerThumbnail(publicacion.id);
-                publicacion.thumbnail = thumbnailRespuesta.data;
-                return publicacion;
+                try {
+                    const thumbnailRespuesta = await obtenerThumbnail(publicacion.id);
+                    publicacion.thumbnail = thumbnailRespuesta.data;
+                    return publicacion;
+                } catch (e) {
+                    publicacion.thumbnail = "";
+                    return publicacion
+                }
             }));
             setPublicaciones(publicacionesConThumbnails);
         } catch (e) {

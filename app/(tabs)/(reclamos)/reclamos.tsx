@@ -1,64 +1,49 @@
 import {View, Text, SafeAreaView, Pressable, Dimensions, Image, TextInput, FlatList} from 'react-native';
 import {PrincipalStyle} from "@/app/styles";
-import {router, useFocusEffect} from "expo-router";
+import {router, useFocusEffect } from "expo-router";
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import StyleHome from "@/app/(tabs)/(home)/styles";
 import ReclamoComponente from "@/app/components/reclamoComponente";
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { obtenerReclamos } from '@/app/networking/api';
 
 
 
 
 export default function HomeScreen() {
-    const mockup_data_publicacion =
-    [
-        {
-            id: "1",
-            numero_reclamo: '445566',
-            categoria: 'Parques',
-            estado: 'En revisión'
-
-        },
-        {
-            id: "2",
-            numero_reclamo: '449966',
-            categoria: 'Iluminación',
-            estado: 'Unificado'
-        },
-        {
-            id: "3",
-            numero_reclamo: '445677',
-            categoria: 'Parques',
-            estado: 'Cerrado'
-        },
-        {
-            id: "4",
-            numero_reclamo: '447896',
-            categoria: 'Parques',
-            estado: 'Unificado'
-        },
-
-        {
-            id: "5",
-            numero_reclamo: '446677',
-            categoria: 'Escuelas',
-            estado: 'En revisión'
-        }
-
-    ]
-    interface itemType
-    {
+    
+    // Código para hacer la solicitud al backend, reemplaza los datos de mockup
+    interface Reclamo {
         id: number
         numero_reclamo: string
         categoria: string
         estado: string
-    }
+        }
+
+    const [reclamos, setReclamos] = useState<Reclamo[]>([]);
+
+    const cargarReclamos = async () => {
+        try {
+            const respuesta = await obtenerReclamos();
+            setReclamos(respuesta.data);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    useEffect(() => {
+        cargarReclamos();
+    }, []);
+
+    useFocusEffect(useCallback(()=>{
+        cargarReclamos();
+    }, []))
 
     // @ts-ignore
-    const renderItemPublicaion = ({item}) => (
+    const renderItemPublicaion = ({item} : {item:Reclamo}) => (
         <ReclamoComponente numero_reclamo={item.numero_reclamo} categoria={item.categoria} estado={item.estado} goToPublicacion={() => {
-            const idItem : string = item.id
+            const idItem : string = String(item.id)
             router.push(`reclamo/${idItem}`)
         }} />
     )
@@ -112,10 +97,10 @@ export default function HomeScreen() {
                 <FlatList
                     ListFooterComponent={<View style={{width:Dimensions.get('window').width}}></View>}
                     style={StyleHome.flatListContainer}
-                    data={mockup_data_publicacion}
+                    data={reclamos}
                     renderItem={renderItemPublicaion}
                     showsVerticalScrollIndicator={false}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => String(item.id)}
                     >
                 </FlatList>
         </View>
