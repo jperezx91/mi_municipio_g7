@@ -170,7 +170,7 @@ function NuevaDenuncia() {
         try {
             const response = await crearDenuncia(datosDenuncia);
             if (response.status === 200) {
-                Alert.alert("Envío de solicitud exitoso", "Solicitud de nueva publicación creada exitosamente. Le informaremos cuando sea aprobada.");
+                Alert.alert("Denuncia creada", "Su denuncia fue registrada correctamente.");
                 // Reiniciar los campos después de una solicitud exitosa
                 setDireccion('');
                 setDescripcion('');
