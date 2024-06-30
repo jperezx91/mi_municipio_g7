@@ -1,9 +1,8 @@
-import requests
-
 from repositorios.usuario_repo import UsuarioRepo
 from utils.dbmanager import DbManager
 import os
 from utils.image_creator import ImageCreator
+from flask import request
 import requests
 class DenunciasRepo:
 
