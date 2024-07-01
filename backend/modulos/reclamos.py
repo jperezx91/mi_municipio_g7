@@ -104,6 +104,23 @@ def obtener_rubros():
     
     return respuesta
 
+@reclamos_app.route('/reclamos/<id_rubro>/desperfectos', methods=['GET'])
+@jwt_required()
+def obtener_desperfectos(id_rubro):
+    desperfectos = ReclamosRepo.obtener_desperfectos(id_rubro)
+    if desperfectos:
+        respuesta = jsonify([
+            {
+                'id': desperfecto[0],
+                'descripcion': desperfecto[1]
+            }
+            for desperfecto in desperfectos
+        ])
+    else:
+        respuesta = jsonify({'error': 'No existen desperfectos'}), 204
+    
+    return respuesta
+
 @reclamos_app.route('/reclamos/sitios', methods=['GET'])
 @jwt_required()
 def obtener_sitios():
@@ -143,7 +160,7 @@ def crear_solicitud_nuevo_reclamo():
     if(imagenes):
         ReclamosRepo.almacenar_imagenes(imagenes, id_solicitud)
 
-    return jsonify({'status': 'Solicitud creada correctamente'}), 200
+    return jsonify({'status': 'Solicitud creada correctamente', 'idSolicitud': str(id_solicitud)}), 200
 
 @reclamos_app.route('/reclamos/<int:id_reclamo>/imagen', methods=['POST'])
 @jwt_required()

@@ -19,7 +19,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { AntDesign } from '@expo/vector-icons';
 import {crearDenuncia, crearSolicitudNuevaPublicacion} from '@/app/networking/api';
 import {router, useFocusEffect, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
-import {useCoordState} from "@/app/(tabs)/(denuncias)/context";
+import {useCoordState} from "@/app/networking/context";
 import {Checkbox} from "expo-checkbox";
 import * as Network from 'expo-network';
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
@@ -305,7 +305,7 @@ function NuevaDenuncia() {
                         </View>
                     ))}
                 </View>
-                <TouchableOpacity onPress={()=> { router.push("cargar_mapa")}}>
+                <TouchableOpacity onPress={()=> { router.push("denuncia/cargar_mapa")}}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop:10}}>
                         <Text style={{fontFamily:'outfit', fontSize:15}}>Cargar ubicación de la denuncia</Text>
                         <AntDesign style={{height: '100%'}} name="enviromento" size={24} color="black" />

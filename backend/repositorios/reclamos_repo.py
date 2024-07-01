@@ -49,7 +49,7 @@ class ReclamosRepo:
         solicitud = """
             SELECT
                 rub.descripcion AS categoria,
-                rec.idReclamo AS numero_reclamo,
+                COALESCE(rec.idReclamoUnificado, rec.idReclamo) AS numero_reclamo,
                 rec.descripcion,
                 (sit.calle || ' ' || sit.numero) as ubicacion,
                 rec.estado
@@ -124,6 +124,7 @@ class ReclamosRepo:
         solicitud = "SELECT idRubro, descripcion FROM rubros"
         return DbManager.obtener_registros(solicitud)
     
+    @staticmethod
     def obtener_desperfectos(id_rubro):
         # Obtiene la lista de desperfectos asociados al rubro
         solicitud = "SELECT idDesperfecto, descripcion FROM desperfectos WHERE idRubro = ?"
@@ -135,13 +136,12 @@ class ReclamosRepo:
         # Obtiene la lista de rubros definidos
         # Esta solicitud devuelve sitios que se encuentren aproximadamente a 50 metros de las coordenadas provistas
         solicitud = """
-            SELECT idSitio, calle || ' ' || numero as direccion, descripcion
+            SELECT idSitio, calle || ' ' || numero as direccion, descripcion, latitud, longitud
             FROM sitios
-            WHERE latitud BETWEEN ? - 0.00045 AND ? + 0.00045
-                AND longitud BETWEEN ? - 0.0007 AND ? + 0.0007
-                AND (latitud - ?) * (latitud - ?) + (longitud - ?) * (longitud - ?) <= 0.00045 * 0.00045
+            WHERE latitud BETWEEN ? - 0.0045 AND ? + 0.0045
+                AND longitud BETWEEN ? - 0.007 AND ? + 0.007
             """
-        parametros = (latitud, latitud, longitud, longitud, latitud, latitud, longitud, longitud)
+        parametros = (latitud, latitud, longitud, longitud)
         return DbManager.obtener_registros(solicitud, parametros)
 
     @staticmethod
@@ -216,7 +216,7 @@ class ReclamosRepo:
             dni_legajo_usuario_solicitante['legajo'],
             id_sitio,
             datos_nuevo_reclamo.get('idDesperfecto'),
-            datos_nuevo_reclamo.get('descripcion'),
+            datos_nuevo_reclamo.get('descripcionReclamo'),
         )
 
         return DbManager.actualizar_bd(solicitud, parametros)

@@ -19,10 +19,13 @@ export const crearSolicitudNuevaPublicacion = (datosPublicacion: { [key: string]
 
 export const obtenerReclamos = (categoria: string = '') => clientHandler.client_auth.get(`reclamos?all=true&categoria=${categoria}`);
 export const obtenerCategorias = () => clientHandler.client_auth.get("reclamos/rubros");
+export const obtenerDesperfectos = (categoria: string = '') => clientHandler.client_auth.get(`reclamos/${categoria}/desperfectos`);
+export const obtenerSitios = (longitud: string, latitud: string) => clientHandler.client_auth.get(`reclamos/sitios?lat=${latitud}&lon=${longitud}`)
 export const obtenerReclamosPropios = (categoria: string = '') => clientHandler.client_auth.get(`reclamos?from=user&categoria=${categoria}`);
 export const obtenerReclamo = (id: string) => clientHandler.client_auth.get(`reclamos/${id}`);
 export const obtenerImagenReclamo = (idReclamo: string, idImagen: string) => clientHandler.client_auth.get(`reclamos/${idReclamo}/imagen/${idImagen}`);
 export const obtenerSeguimientoReclamo = (idReclamo: string) => clientHandler.client_auth.get(`reclamos/${idReclamo}/seguimiento`);
+export const crearReclamo = (datosReclamo: {[key: string]: any}) => clientHandler.client_auth.post(`reclamos`, datosReclamo);
 
 export const obtenerDenuncias =  () => clientHandler.client_auth.get("denuncias")
 export const obtenerDenunciasRecibidas =  () => clientHandler.client_auth.get("denuncias/recibidas")
