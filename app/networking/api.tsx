@@ -24,3 +24,6 @@ export const obtenerDenunciasRecibidas =  () => clientHandler.client_auth.get("d
 export const crearDenuncia = (datosDenuncia: {[key: string]: any}) => clientHandler.client_auth.post("denuncias", datosDenuncia)
 export const obtenerDenuncia = (id: string) => clientHandler.client_auth.get(`denuncias/${id}`)
 export const obtenerImagenDenuncia = (idDenuncia: string, idImagen: string) => clientHandler.client_auth.get(`denuncias/${idDenuncia}/image/${idImagen}`)
+
+export const obtenerCantidadNotificaciones = () => clientHandler.client_auth.get("notificaciones/cantidad")
+export const obtenerNotificaciones = () => clientHandler.client_auth.get("notificaciones/")

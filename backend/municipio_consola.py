@@ -1,10 +1,11 @@
 from utils.dbmanager import DbManager
 from repositorios.publicaciones_repo import PublicacionesRepo
-
+from repositorios.notificaciones_repo import NotificacionesRepo
+from repositorios.usuario_repo import  UsuarioRepo
 def menu_consola():
     print("[Mi Municipio consola]")
     print("Comandos disponibles: ")
-    comandos = ["Salir", "Solicitudes de Registro", "Recuperos", "Solicitudes de Publicacion", "Ligar denuncia a vecino"]
+    comandos = ["Salir", "Solicitudes de Registro", "Recuperos", "Solicitudes de Publicacion", "Ligar denuncia a vecino", "Cambiar estado denuncia"]
     numero_de_opcion = 0
     for comando in comandos:
         print(str(numero_de_opcion) + ". " + comando)
@@ -24,6 +25,8 @@ def menu_consola():
                 procesar_solicitudes_publicacion()
             case 4:
                 ligar_denuncia_vecino()
+            case 5:
+                cambiar_denuncia()
 
         for comando in comandos:
             print(str(numero_de_opcion) + ". " + comando)
@@ -41,8 +44,30 @@ def ligar_denuncia_vecino():
         UPDATE denuncias SET documentoDenunciado = ? WHERE idDenuncias = ?;
     """
     params = (dni_usuario, denuncia)
+    id_user = UsuarioRepo.get_vecino_id_by_documento(dni_usuario)
+    NotificacionesRepo.crear_notificacion(id_user, "vecino", "denuncia", "Denuncia", "Haz recibido una denuncia")
+
     DbManager.actualizar_bd(solicitud, params)
     print("Actualizado !")
+def cambiar_denuncia():
+    denuncia = input("Ingrese el numero de la denuncia: ")
+    denuncia = denuncia.strip()
+    estado = input("Ingrese el estado actual de la denuncia")
+    estado = estado.strip()
+    solicitud = """
+        UPDATE denuncias SET estado = ? WHERE idDenuncias = ?;
+    """
+    params = (estado, denuncia)
+    DbManager.actualizar_bd(solicitud, params)
+
+    solicitud_2 = """
+        SELECT documento FROM denuncias WHERE idDenuncias = ?;
+    """
+    params2 = (denuncia,)
+    dato = DbManager.obtener_registro(solicitud_2, params2)
+    id_user = UsuarioRepo.get_vecino_id_by_documento(dato[0]) # con el documento obtengo el id del usuario
+    NotificacionesRepo.crear_notificacion(id_user, "vecino", "denuncia", "Denuncia", f"Tu denuncia #{denuncia} ha cambiado de estado a: {estado}")
+    print("Denuncia actualizada !")
 def procesar_solicitudes_registro():
     # Esta query obtiene sólo la última solicitud de registro hecha por el usuario
     solicitud = """
@@ -107,6 +132,7 @@ def procesar_solicitudes_publicacion():
                 aprobacion = input("Error. ingrese 'y' para aprobar, 'n' para rechazar")
             
             if (aprobacion == 'y'):
+                NotificacionesRepo.crear_notificacion(solicitud[3], "vecino", "publicacion", "Publicacion", f"Se ha aprobado la solicitud {solicitud[1]}.")
                 query = """
                     INSERT INTO publicaciones (
                         idPublicacion,
@@ -121,6 +147,7 @@ def procesar_solicitudes_publicacion():
                         thumbnail
                     ) SELECT * FROM solicitudesPublicacion WHERE idSolicitudPublicacion = ?;
                     """
+
                 parametros = (solicitud[0],)
                 DbManager.actualizar_bd(query, parametros)
 

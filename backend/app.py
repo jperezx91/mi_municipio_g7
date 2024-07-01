@@ -7,6 +7,7 @@ from modulos.perfil import  perfil_app
 from modulos.publicaciones import publicaciones_app
 from modulos.reclamos import reclamos_app
 from modulos.denuncias import denuncias_app
+from modulos.notificaciones import notificaciones_app
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = 'clavesecretaparalaapi'
@@ -17,7 +18,7 @@ app.register_blueprint(perfil_app, url_prefix='/api')
 app.register_blueprint(publicaciones_app, url_prefix='/api')
 app.register_blueprint(reclamos_app, url_prefix='/api')
 app.register_blueprint(denuncias_app, url_prefix='/api')
-
+app.register_blueprint(notificaciones_app, url_prefix='/api')
 @app.route("/api/logout")
 @jwt_required()
 def test_jwt():
