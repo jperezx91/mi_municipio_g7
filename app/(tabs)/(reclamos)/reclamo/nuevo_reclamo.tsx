@@ -267,9 +267,12 @@ function NuevoReclamo() {
         }
     }
     
-    const cambioDeDesperfectoSeleccionado = (desperfectoLabel: string, id: string) => {
-        setDesperfectoSeleccionado(desperfectoLabel);
-        setIdDesperfecto(id);
+    const cambioDeDesperfectoSeleccionado = (idDesperfectoSeleccionado: string, index: string) => {
+        setDesperfectoSeleccionado(idDesperfectoSeleccionado);
+        console.log("Desperfecto seleccionado es: " + desperfectoSeleccionado);
+        
+        setIdDesperfecto(idDesperfectoSeleccionado);
+        console.log("idDesperfecto es: " + String(idDesperfectoSeleccionado));
     }
 
     useEffect(() => {
