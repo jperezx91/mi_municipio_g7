@@ -6,7 +6,7 @@ import {PrincipalStyle} from "@/app/styles";
 import {
     obtenerPublicacion,
     obtenerThumbnail,
-    obtenerImagen,
+    obtenerImagenPublicacion,
     obtenerDenuncia,
     obtenerImagenDenuncia
 } from '@/app/networking/api';

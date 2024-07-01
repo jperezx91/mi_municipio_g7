@@ -11,13 +11,18 @@ export const verPerfil = () => clientHandler.client_auth.get("perfil")
 
 export const obtenerPublicaciones = () => clientHandler.client.get("publicaciones")
 export const obtenerThumbnail = (id: string) => clientHandler.client.get(`publicaciones/${id}/thumb`)
-export const obtenerImagen = (idPublicacion: string, idImagen: string) => clientHandler.client.get(`publicaciones/${idPublicacion}/image/${idImagen}`)
+export const obtenerImagenPublicacion = (idPublicacion: string, idImagen: string) => clientHandler.client.get(`publicaciones/${idPublicacion}/image/${idImagen}`)
 export const obtenerMisPublicaciones = () => clientHandler.client_auth.get("publicaciones/propias")
 export const obtenerPublicacion = (id: string) => clientHandler.client.get(`publicaciones/${id}`)
 export const eliminarPublicacion = (id: string) => clientHandler.client_auth.delete(`publicaciones/${id}`)
 export const crearSolicitudNuevaPublicacion = (datosPublicacion: { [key: string]: any }) => clientHandler.client_auth.post("publicaciones", datosPublicacion);
 
-export const obtenerReclamos = () => clientHandler.client_auth.get("reclamos?all=true");
+export const obtenerReclamos = (categoria: string = '') => clientHandler.client_auth.get(`reclamos?all=true&categoria=${categoria}`);
+export const obtenerCategorias = () => clientHandler.client_auth.get("reclamos/rubros");
+export const obtenerReclamosPropios = (categoria: string = '') => clientHandler.client_auth.get(`reclamos?from=user&categoria=${categoria}`);
+export const obtenerReclamo = (id: string) => clientHandler.client_auth.get(`reclamos/${id}`);
+export const obtenerImagenReclamo = (idReclamo: string, idImagen: string) => clientHandler.client_auth.get(`reclamos/${idReclamo}/imagen/${idImagen}`);
+export const obtenerSeguimientoReclamo = (idReclamo: string) => clientHandler.client_auth.get(`reclamos/${idReclamo}/seguimiento`);
 
 export const obtenerDenuncias =  () => clientHandler.client_auth.get("denuncias")
 export const obtenerDenunciasRecibidas =  () => clientHandler.client_auth.get("denuncias/recibidas")
