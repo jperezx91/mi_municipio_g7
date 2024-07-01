@@ -12,7 +12,7 @@ def obtener_reclamos():
     todos_los_reclamos = request.args.get('all', 'false').lower() == 'true'
     categoria = request.args.get('categoria', None)
     id_usuario = get_jwt_identity() if request.args.get('from', None) else None
-    
+
 
     if todos_los_reclamos:
         reclamos = ReclamosRepo.obtener_todos_reclamos(categoria)
@@ -30,7 +30,7 @@ def obtener_reclamos():
         ]), 200
     else:
         respuesta = jsonify({'error': 'No existen reclamos'}), 204
-    
+
     return respuesta
 
 @reclamos_app.route('/reclamos/<int:id_reclamo>', methods=['GET'])
@@ -51,7 +51,7 @@ def obtener_reclamo(id_reclamo):
         ), 200
     else:
         respuesta = jsonify({'error': 'No existe el reclamo'}), 404
-    
+
     return respuesta
 
 @reclamos_app.route('/reclamos/<int:id_reclamo>/seguimiento', methods=['GET'])
@@ -73,7 +73,7 @@ def obtener_seguimiento_reclamo(id_reclamo):
         ]), 200
     else:
         respuesta = jsonify({'error': 'No existe el reclamo'}), 404
-    
+
     return respuesta
 
 @reclamos_app.route('/reclamos/<int:id_reclamo>/imagen/<id_imagen>', methods=['GET'])
@@ -82,7 +82,7 @@ def obtener_imagen_reclamo(id_reclamo, id_imagen):
 
     imagen = ReclamosRepo.obtener_imagen(id_reclamo, id_imagen)
 
-    if not imagen: 
+    if not imagen:
         imagen = jsonify({'error': 'Imagen no encontrada'}), 404
 
     return imagen
@@ -101,7 +101,7 @@ def obtener_rubros():
         ])
     else:
         respuesta = jsonify({'error': 'No existen rubros'}), 204
-    
+
     return respuesta
 
 @reclamos_app.route('/reclamos/<id_rubro>/desperfectos', methods=['GET'])
@@ -126,10 +126,10 @@ def obtener_desperfectos(id_rubro):
 def obtener_sitios():
     longitud = request.args.get('lon', None)
     latitud = request.args.get('lat', None)
-    
+
     if longitud is None or latitud is None:
         respuesta = jsonify({'error': 'Latitud o longitud no provistas'}), 204
-    
+
     else:
         sitios = ReclamosRepo.obtener_sitios(longitud, latitud)
         if sitios:
@@ -143,7 +143,7 @@ def obtener_sitios():
             ])
         else:
             respuesta = jsonify({'error': 'No existen sitios'}), 204
-    
+
     return respuesta
 
 @reclamos_app.route('/reclamos', methods=['POST'])
@@ -152,7 +152,7 @@ def crear_solicitud_nuevo_reclamo():
     id_usuario = get_jwt_identity()
     rol = get_jwt().get('rol')
     dni_legajo = ReclamosRepo.obtener_dni_legajo(id_usuario, rol) # Reclamos identifica por DNI o legajo, no por id
-    
+
     datos = request.json
     id_solicitud = ReclamosRepo.crear_solicitud_nuevo_reclamo(dni_legajo, datos)
 

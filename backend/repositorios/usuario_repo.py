@@ -55,6 +55,12 @@ class UsuarioRepo:
         return DbManager.obtener_registro(solicitud, parametros) is not None
 
     @staticmethod
+    def get_vecino_id_by_documento(documento):
+        solicitud = "SELECT idUsuario FROM usuariosVecinos WHERE documento = ?"
+        parametros = (documento, )
+        usuario = DbManager.obtener_registro(solicitud, parametros)
+        return usuario[0]
+    @staticmethod
     def registrar_solicitud(usuarioInp: Usuario):
     # Crea una solicitud de creación de usuario para un vecino válido
         codigo = str(random.randint(1000, 9999))
@@ -102,7 +108,7 @@ class UsuarioRepo:
         solicitud = """SELECT idUsuario, us.password as password, ps.nombre as nombre 
                        FROM usuariosPersonal us LEFT JOIN personal ps ON ps.legajo = us.legajo 
                        WHERE us.legajo = ?"""
-        parametros = usuarioInp.legajo
+        parametros = (usuarioInp.legajo, )
         registro = DbManager.obtener_registro(solicitud, parametros)
         return UsuarioRepo.obtener_resultado_login(registro, usuarioInp.password, "municipal")
 
@@ -167,3 +173,22 @@ class UsuarioRepo:
             usuario.barrio = resultado[5]
             resultado = usuario     
         return resultado
+    @staticmethod
+    def get_documento_by_id(id_user, rol="vecino"):
+        if rol == "vecino":
+            solicitud = """SELECT dd.documento 
+                           FROM usuariosVecinos us 
+                           LEFT JOIN vecinos as dd 
+                           ON dd.documento = us.documento 
+                           LEFT JOIN barrios as br 
+                           ON br.idBarrio = dd.codigoBarrio 
+                           WHERE idUsuario = ?"""
+        else:
+            solicitud = """SELECT dd.legajo 
+                           FROM usuariosPersonal us 
+                           LEFT JOIN personal as dd 
+                           ON dd.legajo = us.legajo 
+                           WHERE idUsuario = ?"""
+        parametros = (id_user,)
+        resultado = DbManager.obtener_registro(solicitud, parametros)
+        return resultado[0]

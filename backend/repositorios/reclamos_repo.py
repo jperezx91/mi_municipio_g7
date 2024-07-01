@@ -7,11 +7,11 @@ class ReclamosRepo:
     @staticmethod
     def obtener_todos_reclamos(categoria):
         solicitud = """
-            SELECT 
+            SELECT
                 idReclamo AS numero_reclamo,
                 rub.descripcion AS categoria,
                 estado
-            FROM 
+            FROM
 	            reclamos rec
                 LEFT JOIN desperfectos des ON rec.idDesperfecto = des.idDesperfecto
 	            LEFT JOIN rubros rub ON des.idRubro = rub.idRubro
@@ -23,15 +23,15 @@ class ReclamosRepo:
             solicitud += f" AND categoria = '{categoria}'"
 
         return DbManager.obtener_registros(solicitud)
-    
+
     @staticmethod
     def obtener_reclamos_propios(categoria, id_usuario):
         solicitud = """
-            SELECT 
+            SELECT
                 rec.idReclamo AS numero_reclamo,
                 rub.descripcion AS categoria,
                 rec.estado
-            FROM 
+            FROM
 	            reclamos rec
                 LEFT JOIN desperfectos des ON rec.idDesperfecto = des.idDesperfecto
 	            LEFT JOIN rubros rub ON des.idRubro = rub.idRubro
@@ -43,7 +43,7 @@ class ReclamosRepo:
             solicitud += f" AND categoria = '{categoria}'"
         parametros = (id_usuario,)
         return DbManager.obtener_registros(solicitud, parametros)
-    
+
     @staticmethod
     def obtener_reclamo(id_reclamo):
         solicitud = """
@@ -63,7 +63,7 @@ class ReclamosRepo:
             """
         parametros = (id_reclamo,)
         return DbManager.obtener_registro(solicitud, parametros)
-    
+
     @staticmethod
     def obtener_seguimiento_reclamo(id_reclamo):
         solicitud = """
@@ -72,9 +72,9 @@ class ReclamosRepo:
                 mr.sectorNuevo,
                 mr.causa,
                 mr.responsable,
-                DATE(mr.fecha) AS fecha 
+                DATE(mr.fecha) AS fecha
             FROM
-	            movimientosReclamo mr 
+	            movimientosReclamo mr
             WHERE idReclamo = ?
             ORDER BY mr.fecha DESC
             """
@@ -88,7 +88,7 @@ class ReclamosRepo:
         directorio_reclamos_repo = os.path.dirname(__file__)
         directorio_base_backend = os.path.abspath(os.path.join(directorio_reclamos_repo, '..'))
         return os.path.join(directorio_base_backend, directorio_objetivo)
-    
+
     @staticmethod
     def jpg_a_base64(ruta_al_archivo):
         # Lee el archivo de imagen y lo convierte a base64
@@ -101,10 +101,10 @@ class ReclamosRepo:
         # Crea un archivo en base a un string base64
         if imagen_base64.startswith('data:image'):
             imagen_base64 = imagen_base64.split(',')[1]
-    
+
         datos_imagen = base64.b64decode(imagen_base64)
         os.makedirs(os.path.dirname(ruta_al_archivo), exist_ok=True) # Asegurarse que existe el directorio
-  
+
         with open(ruta_al_archivo, 'wb') as archivo_salida:
             archivo_salida.write(datos_imagen)
 
@@ -117,7 +117,7 @@ class ReclamosRepo:
         else:
             imagen_base64 = None
         return imagen_base64
-    
+
     @staticmethod
     def obtener_rubros():
         # Obtiene la lista de rubros definidos
@@ -130,7 +130,7 @@ class ReclamosRepo:
         solicitud = "SELECT idDesperfecto, descripcion FROM desperfectos WHERE idRubro = ?"
         parametros = (id_rubro,)
         return DbManager.obtener_registros(solicitud, parametros)
-    
+
     @staticmethod
     def obtener_sitios(latitud, longitud):
         # Obtiene la lista de rubros definidos
@@ -152,18 +152,18 @@ class ReclamosRepo:
         else:
             tabla = "usuariosPersonal"
             columnas = "documento, legajo"
-        
+
         solicitud = f"SELECT {columnas} FROM {tabla} WHERE idUsuario = ?"
         parametros = (id_usuario,)
-        
+
         registro = DbManager.obtener_registro(solicitud, parametros)
-        
+
         if len(registro) == 1:
             respuesta = {'documento': registro[0], 'legajo': None}
         else:
             respuesta = {'documento': registro[0], 'legajo': registro[1]}
         return respuesta
-    
+
     @staticmethod
     def crear_sitio(datos_sitio):
         solicitud = """
@@ -197,7 +197,7 @@ class ReclamosRepo:
             datos_sitio.get('comentarios')
         )
         return DbManager.actualizar_bd(solicitud, parametros)
-    
+
     @staticmethod
     def crear_solicitud_nuevo_reclamo(dni_legajo_usuario_solicitante, datos_nuevo_reclamo):
         # Crea una solicitud de nuevo reclamo para su aprobación por parte del municipio
@@ -205,7 +205,7 @@ class ReclamosRepo:
         if not id_sitio:
             datos_sitio = datos_nuevo_reclamo.get('datosSitio')
             id_sitio = ReclamosRepo.crear_sitio(datos_sitio)
-        
+
         solicitud = """
             INSERT INTO solicitudesReclamo (
                 documento, legajo, idSitio, idDesperfecto, descripcion
@@ -220,16 +220,16 @@ class ReclamosRepo:
         )
 
         return DbManager.actualizar_bd(solicitud, parametros)
-    
+
     @staticmethod
     def almacenar_imagenes(imagenes_base64, id_reclamo):
         # Almacena las imagenes en la carpeta correspondiente al reclamo
         directorio_imagenes = ReclamosRepo.obtener_directorio_relativo(id_reclamo)
-        
+
         for idx, imagen_base64 in enumerate(imagenes_base64):
             directorio_salida = os.path.join(directorio_imagenes, f'image_{idx + 1}.jpg')
             ReclamosRepo.base64_a_jpeg(imagen_base64, directorio_salida)
-    
+
     @staticmethod
     def eliminar_imagenes(id_reclamo):
         # Elimina la carpeta que contiene las imagenes del reclamo

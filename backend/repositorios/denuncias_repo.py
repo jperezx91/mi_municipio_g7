@@ -3,6 +3,7 @@ from utils.dbmanager import DbManager
 import os
 from utils.image_creator import ImageCreator
 from flask import request
+import requests
 class DenunciasRepo:
 
     @staticmethod

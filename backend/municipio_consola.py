@@ -1,3 +1,5 @@
+from repositorios.notificaciones_repo import NotificacionesRepo
+from repositorios.usuario_repo import UsuarioRepo
 from utils.dbmanager import DbManager
 from repositorios.publicaciones_repo import PublicacionesRepo
 from repositorios.reclamos_repo import ReclamosRepo
@@ -11,7 +13,8 @@ def menu_consola():
         "Recuperos de contraseña",
         "Solicitudes de Publicacion",
         "Ligar denuncia a vecino",
-        "Solicitudes de Reclamo"]
+        "Solicitudes de Reclamo",
+        "Modificar Denuncia"]
     numero_de_opcion = 0
     for comando in comandos:
         print(str(numero_de_opcion) + ". " + comando)
@@ -33,6 +36,8 @@ def menu_consola():
                 ligar_denuncia_vecino()
             case 5:
                 procesar_solicitudes_reclamo()
+            case 6:
+                cambiar_denuncia()
 
         for comando in comandos:
             print(str(numero_de_opcion) + ". " + comando)
@@ -77,7 +82,7 @@ def procesar_solicitudes_registro():
             DbManager.actualizar_bd(query, parametros)
             print(f"Solicitud aprobada: {solicitud[0]} | DNI: {solicitud[1]} | Codigo: {solicitud[2]}")
     DbManager.actualizar_bd("DELETE FROM solicitudesRegistro")
-    
+
 def procesar_recuperos():
     solicitud = """
                 SELECT recuperoPassword.documento, recuperoPassword.codigo, recuperoPassword.status
@@ -108,14 +113,14 @@ def procesar_solicitudes_publicacion():
     if len(solicitudes) == 0:
         print("\nNo hay solicitudes disponibles.\n")
     else:
-        
+
         for solicitud in solicitudes:
             print(f"\nDatos de la solicitud #{solicitud[0]}:\n- Titulo: {solicitud[1]}\n- Comercio: {solicitud[2]}\n- ID de Usuario creador: {solicitud[3]}")
-            
+
             aprobacion = input("\nAprobar? (y/n) ")
             while aprobacion not in ("yn"):
                 aprobacion = input("Error. ingrese 'y' para aprobar, 'n' para rechazar")
-            
+
             if (aprobacion == 'y'):
                 query = """
                     INSERT INTO publicaciones (
@@ -141,6 +146,25 @@ def procesar_solicitudes_publicacion():
 
     DbManager.actualizar_bd("DELETE FROM solicitudesPublicacion")
 
+def cambiar_denuncia():
+    denuncia = input("Ingrese el numero de la denuncia: ")
+    denuncia = denuncia.strip()
+    estado = input("Ingrese el estado actual de la denuncia")
+    estado = estado.strip()
+    solicitud = """
+        UPDATE denuncias SET estado = ? WHERE idDenuncias = ?;
+    """
+    params = (estado, denuncia)
+    DbManager.actualizar_bd(solicitud, params)
+
+    solicitud_2 = """
+        SELECT documento FROM denuncias WHERE idDenuncias = ?;
+    """
+    params2 = (denuncia,)
+    dato = DbManager.obtener_registro(solicitud_2, params2)
+    id_user = UsuarioRepo.get_vecino_id_by_documento(dato[0]) # con el documento obtengo el id del usuario
+    NotificacionesRepo.crear_notificacion(id_user, "vecino", "denuncia", "Denuncia", f"Tu denuncia #{denuncia} ha cambiado de estado a: {estado}")
+    print("Denuncia actualizada !")
 def procesar_solicitudes_reclamo():
     solicitud = """
                 SELECT idSolicitudReclamo, documento, legajo, idSitio, idDesperfecto, descripcion
@@ -151,7 +175,7 @@ def procesar_solicitudes_reclamo():
     if len(solicitudes) == 0:
         print("\nNo hay solicitudes disponibles.\n")
     else:
-        
+
         for solicitud in solicitudes:
             documento_legajo = f"legajo #{solicitud[2]}" if solicitud[2] else solicitud[1]
             print(
@@ -160,11 +184,11 @@ def procesar_solicitudes_reclamo():
             f"- idSitio: {solicitud[3]}\n"
             f"- idDesperfecto: {solicitud[4]}\n"
             f"- Descripcion: {solicitud[5]}\n")
-            
+
             aprobacion = input("Aprobar? (y/n) ")
             while aprobacion not in ("yn"):
                 aprobacion = input("Error. ingrese 'y' para aprobar, 'n' para rechazar")
-            
+
             if (aprobacion == 'y'):
                 query = """
                     INSERT INTO reclamos (

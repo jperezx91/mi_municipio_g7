@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import {Pressable, SafeAreaView, Text, TextInput, View, KeyboardAvoidingView, Platform, Image} from "react-native";
+import {
+    Pressable,
+    SafeAreaView,
+    Text,
+    TextInput,
+    View,
+    KeyboardAvoidingView,
+    Platform,
+    Image,
+    ScrollView
+} from "react-native";
 import { PrincipalStyle } from "@/app/styles";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
@@ -131,7 +141,7 @@ const LoginScreen = () => {
 
     }
     return (
-            <SafeAreaView style={[PrincipalStyle.principalContainer, { width: '80%' }]}>
+            <ScrollView showsVerticalScrollIndicator={false} style={[PrincipalStyle.principalContainer, { width: '80%' }]}>
                 {/* Logo */}
                 <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 25, gap: 15 }}>
                     <Image source={require('@/assets/images/logo.png')} />
@@ -169,7 +179,7 @@ const LoginScreen = () => {
                         <FormButton title={"Soy un invitado"} invertStyle={true} action={() => { router.navigate("(home)") }} />
                     </View>
                 </View>
-            </SafeAreaView>
+            </ScrollView>
     );
 };
 
