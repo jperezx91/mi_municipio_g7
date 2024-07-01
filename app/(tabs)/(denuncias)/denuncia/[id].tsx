@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, SafeAreaView, Image, FlatList, TouchableOpacity, Linking, Dimensions, ImageSourcePropType, ScrollView} from "react-native";
+import {View, Text, SafeAreaView, Image, FlatList, TouchableOpacity, Linking, Dimensions, ImageSourcePropType, ScrollView, StyleSheet} from "react-native";
 import {router, useGlobalSearchParams, useLocalSearchParams} from "expo-router";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {PrincipalStyle} from "@/app/styles";
@@ -12,6 +12,7 @@ import {
 } from '@/app/networking/api';
 import {AntDesign, FontAwesome} from "@expo/vector-icons";
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
+import StyleDenuncia from "@/app/(tabs)/(denuncias)/denuncia/styles";
 
 const Id = () => {
     const irAtras = () =>
@@ -93,24 +94,16 @@ const Id = () => {
     return (
         <SafeAreaView style={[PrincipalStyle.principalContainer, {backgroundColor: "#F2F4F8"}]} >
             {/* @ts-ignore} */}
-            <FlatList style={{backgroundColor: '#fff'}} showsVerticalScrollIndicator={false} ListHeaderComponent={
-                <View>
-                    <Text style={{textAlign: 'center', fontSize: 40, fontWeight: 'bold', fontFamily: 'outfit'}}>Denuncia #{index}</Text>
+            <FlatList showsVerticalScrollIndicator={false} ListHeaderComponent={
+                <View style={{marginTop: 15, padding: 20, paddingTop: 0, backgroundColor: '#F2F4F8', height: Dimensions.get('window').height * 0.80}}>
+                    <Text style={{fontSize: 22, fontFamily:'outfit-bold', textAlign: 'center', marginTop: 10}}>Denuncia #{index}</Text>
+                    <View style={{marginTop: 10}}>
                     <View>
-                        <Text style={{marginTop: 20, fontFamily:'outfit', fontSize:17}}>Descripción:</Text>
-                        <Text style={{
-                            padding:10,
-                            borderWidth:1,
-                            borderRadius:5,
-                            backgroundColor:'white',
-                            borderColor:'gray',
-                            fontFamily:'outfit',
-                            fontSize:14,
-                            marginTop:5
-                        }}>{denuncia["descripcion"]}</Text>
+                        <Text style={StyleDenuncia.titulo}>Descripción:</Text>
+                        <Text style={StyleDenuncia.campo}>{denuncia["descripcion"]}</Text>
                     </View>
                     <View>
-                        <Text style={{marginTop: 20, fontFamily:'outfit', fontSize:17}}>Ubicación:</Text>
+                        <Text style={StyleDenuncia.titulo}>Ubicación:</Text>
                         <View style={{
                             padding:10,
                             borderWidth:1,
@@ -120,20 +113,26 @@ const Id = () => {
                             marginTop:5,
                             display: 'flex',
                             flexDirection:'row',
+                            alignItems:'center',
                             justifyContent: 'space-between'
-                        }}><Text style={{fontFamily:'outfit', fontSize: 14}}>{denuncia["direccion"]}</Text><AntDesign size={24} name={"enviromento"} /></View>
+                        }}>
+                            <Text style={{fontFamily:'outfit', fontSize: 14}}>{denuncia["direccion"]}</Text>
+                            <AntDesign size={24} name={"enviromento"} />
+                        </View>
                     </View>
                     {/* lista de imágenes */}
 
                     <View>
-                        <Text style={{marginTop: 20, fontFamily:'outfit', fontSize:17}}>Archivos adjuntos:</Text>
-                        <FlatList showsHorizontalScrollIndicator={false}  data={fotosDenuncia} horizontal renderItem={({item,index})=>(
-                            <View key={index} style={{padding: 10}}>
+                        <Text style={StyleDenuncia.titulo}>Archivos adjuntos:</Text>
+                        <FlatList data={fotosDenuncia} numColumns={3} style={{marginTop:10, }} renderItem={({item,index})=>(
+                            <View key={index} style={{padding: 5}}>
                                 <Image
                                     source={item.image}
                                     style={{
                                         height: 100,
                                         width: 100,
+                                        borderWidth: 1,
+                                        borderColor: 'black'
                                     }}
                                 />
                             </View>
@@ -141,19 +140,10 @@ const Id = () => {
                     </View>
 
                     <View>
-                        <Text style={{marginTop: 20, fontFamily:'outfit', fontSize:17}}>Estado:</Text>
-                        <Text style={{
-                            padding:10,
-                            borderWidth:1,
-                            borderRadius:5,
-                            backgroundColor:'white',
-                            borderColor:'gray',
-                            fontFamily:'outfit',
-                            fontSize:14,
-                            marginTop:5
-                        }}>{denuncia["estado"]}</Text>
+                        <Text style={StyleDenuncia.titulo}>Estado:</Text>
+                        <Text style={StyleDenuncia.campo}>{denuncia["estado"]}</Text>
                     </View>
-                </View>
+                </View></View>
             }>
             </FlatList>
 
@@ -162,6 +152,3 @@ const Id = () => {
 };
 
 export default Id;
-
-
-

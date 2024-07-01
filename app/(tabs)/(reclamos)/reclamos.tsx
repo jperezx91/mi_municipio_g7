@@ -5,8 +5,9 @@ import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import StyleHome from "@/app/(tabs)/(home)/styles";
 import ReclamoComponente from "@/app/components/reclamoComponente";
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, SetStateAction } from 'react';
 import { obtenerReclamos } from '@/app/networking/api';
+import { getItem } from 'expo-secure-store';
 
 
 
@@ -22,11 +23,14 @@ export default function HomeScreen() {
         }
 
     const [reclamos, setReclamos] = useState<Reclamo[]>([]);
+    const [search, setSearch] = useState('');
+    const [filteredReclamos, setFileterdReclamos] = useState<Reclamo[]>([]);
 
     const cargarReclamos = async () => {
         try {
             const respuesta = await obtenerReclamos();
             setReclamos(respuesta.data);
+            setFileterdReclamos(respuesta.data);
         } catch (e) {
             console.log(e);
         }
@@ -47,6 +51,27 @@ export default function HomeScreen() {
             router.push(`reclamo/${idItem}`)
         }} />
     )
+/*
+    const searchFilter = (text: string) => {
+        if (text) {
+            const newData = reclamos.filter((item) =>{
+                const itemData = item.numero_reclamo ? item.numero_reclamo.toUpperCase() : ''.toUpperCase();
+                const textData = text.toUpperCase();
+                return itemData.indexOf(textData) > -1;
+            });
+            setFileterdReclamos(newData);
+            
+        }
+    }
+*/
+    function handleChange(query:string){
+        setSearch(query);
+        const filtered = reclamos.filter(user => 
+            user.numero_reclamo.toUpperCase().includes(query.toUpperCase()) ||
+            user.categoria.toUpperCase().includes(query.toUpperCase())
+        )
+        setFileterdReclamos(filtered)
+    }
 
     return (
         <SafeAreaView style={[PrincipalStyle.principalContainer, {backgroundColor: "#F2F4F8"}]}>
@@ -87,6 +112,8 @@ export default function HomeScreen() {
                     placeholder='Busque un reclamo...'
                     style={{fontFamily:'outfit'}}
                     clearButtonMode='always'
+                    value={search}
+                    onChangeText={handleChange} /*handleChange ------ (text)=>searchFilter(text) */
                 >
                 </TextInput>
             </View>
@@ -97,7 +124,7 @@ export default function HomeScreen() {
                 <FlatList
                     ListFooterComponent={<View style={{width:Dimensions.get('window').width}}></View>}
                     style={StyleHome.flatListContainer}
-                    data={reclamos}
+                    data={search.length > 0 ? filteredReclamos : reclamos}  /*search.lenght > 0 ? filteredReclamos : reclamos  ----- filteredReclamos*/
                     renderItem={renderItemPublicaion}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={item => String(item.id)}
