@@ -8,7 +8,7 @@ class ReclamosRepo:
     def obtener_todos_reclamos(categoria):
         solicitud = """
             SELECT 
-                COALESCE(idReclamoUnificado, idReclamo) AS numero_reclamo,
+                idReclamo AS numero_reclamo,
                 rub.descripcion AS categoria,
                 estado
             FROM 
@@ -28,18 +28,16 @@ class ReclamosRepo:
     def obtener_reclamos_propios(categoria, id_usuario):
         solicitud = """
             SELECT 
-                COALESCE(idReclamoUnificado, idReclamo) AS numero_reclamo,
+                rec.idReclamo AS numero_reclamo,
                 rub.descripcion AS categoria,
                 rec.estado
             FROM 
 	            reclamos rec
                 LEFT JOIN desperfectos des ON rec.idDesperfecto = des.idDesperfecto
 	            LEFT JOIN rubros rub ON des.idRubro = rub.idRubro
-                LEFT JOIN usuariosVecinos usv on rec.documento = usv.documento
                 LEFT JOIN usuariosVecinos uv ON rec.documento = uv.documento
             WHERE
-                rec.estado IS NOT 'Unificado'
-                AND uv.idUsuario = ?
+                uv.idUsuario = ?
             """
         if categoria:
             solicitud += f" AND categoria = '{categoria}'"
@@ -51,7 +49,7 @@ class ReclamosRepo:
         solicitud = """
             SELECT
                 rub.descripcion AS categoria,
-                COALESCE(rec.idReclamoUnificado, rec.idReclamo) AS numero_reclamo,
+                rec.idReclamo AS numero_reclamo,
                 rec.descripcion,
                 (sit.calle || ' ' || sit.numero) as ubicacion,
                 rec.estado

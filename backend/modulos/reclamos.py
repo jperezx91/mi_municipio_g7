@@ -16,7 +16,7 @@ def obtener_reclamos():
 
     if todos_los_reclamos:
         reclamos = ReclamosRepo.obtener_todos_reclamos(categoria)
-    else:
+    elif id_usuario:
         reclamos = ReclamosRepo.obtener_reclamos_propios(categoria, id_usuario)
 
     if reclamos:
