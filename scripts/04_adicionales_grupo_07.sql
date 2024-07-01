@@ -69,6 +69,20 @@ CREATE TABLE solicitudesPublicacion(
 	CONSTRAINT fk_publicaciones_usuariosVecinos FOREIGN KEY (idUsuario) REFERENCES usuariosVecinos(idUsuario)
 );
 
+CREATE TABLE solicitudesReclamo(
+    idSolicitudReclamo INTEGER,
+	documento TEXT NULL,
+	legajo INTEGER NULL,
+	idSitio INTEGER NOT NULL,
+	idDesperfecto INTEGER NULL,
+	descripcion TEXT NULL,
+	CONSTRAINT pk_solicitudesReclamo PRIMARY KEY (idSolicitudReclamo AUTOINCREMENT),
+	CONSTRAINT fk_solicitudesReclamo_vecinos FOREIGN KEY (documento) REFERENCES vecinos (documento),
+	CONSTRAINT fk_solicitudesReclamo_personal FOREIGN KEY (legajo) REFERENCES personal (legajo),
+	CONSTRAINT fk_solicitudesReclamos_sitios FOREIGN KEY (idSitio) REFERENCES sitios (idSitio),
+	CONSTRAINT fk_solicitudesReclamo_desperfectos FOREIGN KEY (idDesperfecto) REFERENCES desperfectos (idDesperfecto)
+);
+
 ALTER TABLE movimientosReclamo ADD COLUMN sectorAnterior TEXT;
 ALTER TABLE movimientosReclamo ADD COLUMN sectorNuevo TEXT;
 ALTER TABLE reclamos ADD COLUMN sectorAsignado TEXT;
@@ -86,6 +100,7 @@ INSERT INTO rubros (descripcion) VALUES ("Seguridad");
 INSERT INTO rubros (descripcion) VALUES ("Escuelas");
 INSERT INTO rubros (descripcion) VALUES ("Edificios Publicos y Oficinas");
 INSERT INTO rubros (descripcion) VALUES ("Semaforos y Señaletica");
+INSERT INTO rubros (descripcion) VALUES ("Otro");
 
 INSERT INTO desperfectos (descripcion, idRubro) VALUES ("Bache en calle", 1);
 INSERT INTO desperfectos (descripcion, idRubro) VALUES ("Bache en vereda", 1);
