@@ -1,10 +1,17 @@
 from utils.dbmanager import DbManager
 from repositorios.publicaciones_repo import PublicacionesRepo
+from repositorios.reclamos_repo import ReclamosRepo
 
 def menu_consola():
     print("[Mi Municipio consola]")
     print("Comandos disponibles: ")
-    comandos = ["Salir", "Solicitudes de Registro", "Recuperos", "Solicitudes de Publicacion", "Ligar denuncia a vecino"]
+    comandos = [
+        "Salir",
+        "Solicitudes de Registro",
+        "Recuperos de contraseña",
+        "Solicitudes de Publicacion",
+        "Ligar denuncia a vecino",
+        "Solicitudes de Reclamo"]
     numero_de_opcion = 0
     for comando in comandos:
         print(str(numero_de_opcion) + ". " + comando)
@@ -24,6 +31,8 @@ def menu_consola():
                 procesar_solicitudes_publicacion()
             case 4:
                 ligar_denuncia_vecino()
+            case 5:
+                procesar_solicitudes_reclamo()
 
         for comando in comandos:
             print(str(numero_de_opcion) + ". " + comando)
@@ -43,6 +52,7 @@ def ligar_denuncia_vecino():
     params = (dni_usuario, denuncia)
     DbManager.actualizar_bd(solicitud, params)
     print("Actualizado !")
+
 def procesar_solicitudes_registro():
     # Esta query obtiene sólo la última solicitud de registro hecha por el usuario
     solicitud = """
@@ -130,5 +140,62 @@ def procesar_solicitudes_publicacion():
                 print(f"\nSolicitud rechazada, archivos asociados eliminados.")
 
     DbManager.actualizar_bd("DELETE FROM solicitudesPublicacion")
+
+def procesar_solicitudes_reclamo():
+    solicitud = """
+                SELECT idSolicitudReclamo, documento, legajo, idSitio, idDesperfecto, descripcion
+                FROM solicitudesReclamo
+                """
+    solicitudes = DbManager.obtener_registros(solicitud)
+
+    if len(solicitudes) == 0:
+        print("\nNo hay solicitudes disponibles.\n")
+    else:
+        
+        for solicitud in solicitudes:
+            documento_legajo = f"legajo #{solicitud[2]}" if solicitud[2] else solicitud[1]
+            print(
+            f"Datos de la solicitud #{solicitud[0]}:\n"
+            f"- Creada por: {documento_legajo}\n"
+            f"- idSitio: {solicitud[3]}\n"
+            f"- idDesperfecto: {solicitud[4]}\n"
+            f"- Descripcion: {solicitud[5]}\n")
+            
+            aprobacion = input("Aprobar? (y/n) ")
+            while aprobacion not in ("yn"):
+                aprobacion = input("Error. ingrese 'y' para aprobar, 'n' para rechazar")
+            
+            if (aprobacion == 'y'):
+                query = """
+                    INSERT INTO reclamos (
+                        idReclamo,
+                        documento,
+                        legajo,
+                        idSitio,
+                        idDesperfecto,
+                        descripcion,
+                        estado,
+                        sectorAsignado
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """
+                parametros = (
+                    solicitud[0],
+                    solicitud[1],
+                    solicitud[2],
+                    solicitud[3],
+                    solicitud[4],
+                    solicitud[5],
+                    "En revisión",
+                    "Mesa de Entrada")
+                DbManager.actualizar_bd(query, parametros)
+
+                print("\nSolicitud aprobada!")
+            else:
+                PublicacionesRepo.eliminar_imagenes(solicitud[0])
+                print("\nSolicitud rechazada, archivos asociados eliminados.\n")
+
+        print("\nNo quedan solicitudes pendientes de aprobación\n")
+
+    DbManager.actualizar_bd("DELETE FROM solicitudesReclamo")
 
 menu_consola()

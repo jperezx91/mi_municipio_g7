@@ -205,9 +205,19 @@ class ReclamosRepo:
     
     @staticmethod
     def almacenar_imagenes(imagenes_base64, id_reclamo):
-        # Almacena las imagenes en la carpeta correspondiente a la publicacion
+        # Almacena las imagenes en la carpeta correspondiente al reclamo
         directorio_imagenes = ReclamosRepo.obtener_directorio_relativo(id_reclamo)
         
         for idx, imagen_base64 in enumerate(imagenes_base64):
             directorio_salida = os.path.join(directorio_imagenes, f'image_{idx + 1}.jpg')
             ReclamosRepo.base64_a_jpeg(imagen_base64, directorio_salida)
+    
+    @staticmethod
+    def eliminar_imagenes(id_reclamo):
+        # Elimina la carpeta que contiene las imagenes del reclamo
+        directorio_imagenes = ReclamosRepo.obtener_directorio_relativo(id_reclamo)
+        if(os.path.exists(directorio_imagenes)):
+            for archivo in os.listdir(directorio_imagenes):
+                ruta_al_archivo = os.path.join(directorio_imagenes, archivo)
+                os.remove(ruta_al_archivo)
+            os.rmdir(directorio_imagenes)
