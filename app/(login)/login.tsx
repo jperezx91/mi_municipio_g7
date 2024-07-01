@@ -161,7 +161,7 @@ const LoginScreen = () => {
                     <LoginFormInput
                         valor={password}
                         setValor={setPassword}
-                        title={"Contraseñaa"}
+                        title={"Contraseña"}
                         placeholder={"Ingrese su contraseña"}
                         tipo={'password'}
                         showPass={[showPassword, setShowPassword]}

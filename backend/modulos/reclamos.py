@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 import json
 from repositorios.reclamos_repo import ReclamosRepo
+import jwt
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, get_jwt
 
 reclamos_app = Blueprint('reclamos', __name__)
@@ -12,12 +13,13 @@ def obtener_reclamos():
     todos_los_reclamos = request.args.get('all', 'false').lower() == 'true'
     categoria = request.args.get('categoria', None)
     id_usuario = get_jwt_identity() if request.args.get('from', None) else None
-
+    jwt_payload = get_jwt()
+    rol_usuario = jwt_payload.get('rol', None)
 
     if todos_los_reclamos:
         reclamos = ReclamosRepo.obtener_todos_reclamos(categoria)
     elif id_usuario:
-        reclamos = ReclamosRepo.obtener_reclamos_propios(categoria, id_usuario)
+        reclamos = ReclamosRepo.obtener_reclamos_propios(categoria, id_usuario, rol_usuario)
 
     if reclamos:
         respuesta = jsonify([
@@ -90,7 +92,15 @@ def obtener_imagen_reclamo(id_reclamo, id_imagen):
 @reclamos_app.route('/reclamos/rubros', methods=['GET'])
 @jwt_required()
 def obtener_rubros():
-    rubros = ReclamosRepo.obtener_rubros()
+    es_inspector = request.args.get('esInspector', None) == True
+    if es_inspector:
+        id_usuario = get_jwt_identity()
+        rubros = ReclamosRepo.obtener_rubros_inspector(id_usuario)
+
+    else:
+        rubros = ReclamosRepo.obtener_rubros()
+    
+    print(rubros)
     if rubros:
         respuesta = jsonify([
             {
@@ -101,7 +111,6 @@ def obtener_rubros():
         ])
     else:
         respuesta = jsonify({'error': 'No existen rubros'}), 204
-
     return respuesta
 
 @reclamos_app.route('/reclamos/<id_rubro>/desperfectos', methods=['GET'])

@@ -9,11 +9,40 @@ import { useState, useEffect, useCallback } from 'react';
 import { obtenerCategorias, obtenerReclamo, obtenerReclamos } from '@/app/networking/api';
 import FormButton from '@/app/components/FormButton';
 import BusquedaFiltroComponente from '@/app/components/BusquedaFiltroComponente';
-
+import { jwtDecode } from 'jwt-decode';
+import * as SecureStore from 'expo-secure-store';
+import { AxiosResponse } from 'axios';
 
 
 
 export default function HomeScreen() {
+
+    // Código para determinar si el usuario es vecino o inspector
+
+    const [esInspector, setEsInspector] = useState<boolean>(false)
+    const [categoriaInspector, setCategoriaInspector] = useState('')
+
+    const obtenerRol = () => {
+        const token = SecureStore.getItem("bearerToken")
+        if(token){
+            const payload = jwtDecode(token)
+            // @ts-ignore
+            const rol = payload["rol"]
+            setEsInspector(rol != "vecino")
+            
+        }
+    }
+
+    const obtenerCategoriaInspector = async () => {
+        try{
+            const respuesta = await obtenerCategorias(true)
+            const descripciones = respuesta.data.map((categoria: { id: string, descripcion: string }) => categoria.descripcion);
+            setCategoriaInspector(descripciones);
+            
+        }catch(e) {
+            console.log(e);
+        }
+    }
     
     // Código para hacer la solicitud al backend, reemplaza los datos de mockup
     interface Reclamo {
@@ -26,6 +55,10 @@ export default function HomeScreen() {
 
     const cargarReclamos = async (categoria: string) => {
         try {
+            
+            if(esInspector){
+                categoria = categoriaInspector;
+            }
             const respuesta = await obtenerReclamos(categoria);
             setReclamos(respuesta.data);
         } catch (e) {
@@ -49,8 +82,18 @@ export default function HomeScreen() {
     };
 
     useEffect(() => {
+        obtenerRol();
+    }, []);
+
+    useEffect(() => {
+        if (esInspector) {
+            obtenerCategoriaInspector();
+        }
+    }, [esInspector]);
+
+    useEffect(() => {
         cargarReclamos(filtroSeleccionado);
-    }, [filtroSeleccionado]);
+    }, [filtroSeleccionado, categoriaInspector]);
 
     // @ts-ignore
     const renderItemReclamo = ({item} : {item:Reclamo}) => (
@@ -82,6 +125,10 @@ export default function HomeScreen() {
                 {/* lista reclamos */}
                 {reclamos.length != 0 &&(
                 <FlatList
+                    refreshing={false}
+                    onRefresh={() => {
+                        cargarReclamos(filtroSeleccionado)
+                    }}
                     ListFooterComponent={<View style={{width:Dimensions.get('window').width}}></View>}
                     style={StyleHome.flatListContainer}
                     data={reclamos}

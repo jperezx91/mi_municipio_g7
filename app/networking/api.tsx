@@ -18,7 +18,7 @@ export const eliminarPublicacion = (id: string) => clientHandler.client_auth.del
 export const crearSolicitudNuevaPublicacion = (datosPublicacion: { [key: string]: any }) => clientHandler.client_auth.post("publicaciones", datosPublicacion);
 
 export const obtenerReclamos = (categoria: string = '') => clientHandler.client_auth.get(`reclamos?all=true&categoria=${categoria}`);
-export const obtenerCategorias = () => clientHandler.client_auth.get("reclamos/rubros");
+export const obtenerCategorias = (esInspector: boolean = false) => clientHandler.client_auth.get(`reclamos/rubros?esInspector=${esInspector}`);
 export const obtenerDesperfectos = (categoria: string = '') => clientHandler.client_auth.get(`reclamos/${categoria}/desperfectos`);
 export const obtenerSitios = (longitud: string, latitud: string) => clientHandler.client_auth.get(`reclamos/sitios?lat=${latitud}&lon=${longitud}`)
 export const obtenerReclamosPropios = (categoria: string = '') => clientHandler.client_auth.get(`reclamos?from=user&categoria=${categoria}`);

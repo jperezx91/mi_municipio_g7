@@ -25,8 +25,15 @@ class ReclamosRepo:
         return DbManager.obtener_registros(solicitud)
 
     @staticmethod
-    def obtener_reclamos_propios(categoria, id_usuario):
-        solicitud = """
+    def obtener_reclamos_propios(categoria, id_usuario, rol_usuario):
+        if(rol_usuario) == 'vecino':
+            tabla = "usuariosVecinos usuarios"
+            join = "rec.documento = usuarios.documento"
+        else:
+            tabla = "usuariosPersonal usuarios"
+            join = "rec.legajo = usuarios.legajo"
+
+        solicitud = f"""
             SELECT
                 rec.idReclamo AS numero_reclamo,
                 rub.descripcion AS categoria,
@@ -35,9 +42,9 @@ class ReclamosRepo:
 	            reclamos rec
                 LEFT JOIN desperfectos des ON rec.idDesperfecto = des.idDesperfecto
 	            LEFT JOIN rubros rub ON des.idRubro = rub.idRubro
-                LEFT JOIN usuariosVecinos uv ON rec.documento = uv.documento
+                LEFT JOIN {tabla} ON {join}
             WHERE
-                uv.idUsuario = ?
+                usuarios.idUsuario = ?
             """
         if categoria:
             solicitud += f" AND categoria = '{categoria}'"
@@ -123,6 +130,19 @@ class ReclamosRepo:
         # Obtiene la lista de rubros definidos
         solicitud = "SELECT idRubro, descripcion FROM rubros"
         return DbManager.obtener_registros(solicitud)
+    
+    @staticmethod
+    def obtener_rubros_inspector(id_usuario):
+        # Obtiene la lista de rubros definidos para un inspector específico
+        solicitud = """
+            SELECT idRubro as id, descripcion as rubro
+            FROM usuariosPersonal up
+	        LEFT JOIN personal p on up.legajo = p.legajo
+            LEFT JOIN rubros r on REPLACE(p.sector, char(10), '') = r.descripcion
+            WHERE up.idUsuario = ?
+        """
+        parametros = (id_usuario,)
+        return DbManager.obtener_registros(solicitud, parametros)
     
     @staticmethod
     def obtener_desperfectos(id_rubro):

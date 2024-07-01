@@ -240,7 +240,7 @@ function NuevoReclamo() {
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Seleccionar categoría")
     const cargarCategorias = async () => {
         try{
-            const respuesta = await obtenerCategorias();
+            const respuesta = await obtenerCategorias(esInspector);
             setCategorias(respuesta.data);
             setCategoriaSeleccionada("Seleccionar categoría")
         } catch (e) {
@@ -278,6 +278,7 @@ function NuevoReclamo() {
     }, []);
 
     // Obtener sitio en base a las coordenadas obtenidas del mapa
+    // Pendiente de hacerlo funcionar, no se pueden obtener buenas coordenadas desde el emulador
     const [sitios, setSitios] = useState([]);
     const [sitioSeleccionado, setSitioSeleccionado] = useState('')
     const cargarSitios = async () => {

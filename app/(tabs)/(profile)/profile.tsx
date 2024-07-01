@@ -91,13 +91,16 @@ export default function HomeScreen() {
                 </View>
                 { /* Fin Caja de datos de perfil */}
                 {/* Botón Mis publicaciones */}
+                {userRol === 'vecino' && (
                 <Pressable style={{backgroundColor: '#C1C7CD', padding: 14, marginTop: 25, borderRadius:5, borderColor:'#747375',borderWidth:1}} onPress={()=> {router.push("misPublicaciones")}}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                         <Text style={{fontFamily:'outfit', fontSize:15}}>Mis publicaciones</Text>
                         <Image source={require('@/assets/images/arrow.png')} />
                     </View>
                 </Pressable>
+                )}
                 {/* Fin botón Mis publicaciones */}
+                
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: userRol == "vecino" ? 'space-around' : 'center', marginTop: 25, alignItems: 'center', marginBottom: 25}}>
                     {userRol == "vecino"&&<View style={{width: "45%"}}>
                        <FormButton action={() => {router.push("nueva_pass_perfil")}} title={"Cambiar contraseña"} />
