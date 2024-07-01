@@ -7,6 +7,7 @@ import StyleHome from "@/app/(tabs)/(home)/styles";
 import ReclamoComponente from "@/app/components/reclamoComponente";
 import { useState, useEffect, useCallback } from 'react';
 import { obtenerReclamos } from '@/app/networking/api';
+import FormButton from '@/app/components/FormButton';
 
 
 
@@ -15,7 +16,6 @@ export default function HomeScreen() {
     
     // Código para hacer la solicitud al backend, reemplaza los datos de mockup
     interface Reclamo {
-        id: number
         numero_reclamo: string
         categoria: string
         estado: string
@@ -41,9 +41,9 @@ export default function HomeScreen() {
     }, []))
 
     // @ts-ignore
-    const renderItemPublicaion = ({item} : {item:Reclamo}) => (
+    const renderItemReclamo = ({item} : {item:Reclamo}) => (
         <ReclamoComponente numero_reclamo={item.numero_reclamo} categoria={item.categoria} estado={item.estado} goToPublicacion={() => {
-            const idItem : string = String(item.id)
+            const idItem : string = String(item.numero_reclamo)
             router.push(`reclamo/${idItem}`)
         }} />
     )
@@ -53,7 +53,7 @@ export default function HomeScreen() {
         <View style={{marginTop: 15, padding: 20, paddingTop: 0, backgroundColor: '#F2F4F8', height: Dimensions.get('window').height * 0.80}}>
 
             {/* Botón Mis reclamos */}
-            <Pressable style={{paddingTop: 14, paddingBottom:14}} onPress={()=> {router.push("misPublicaciones")}}>
+            <Pressable style={{paddingTop: 14, paddingBottom:14}} onPress={()=> {router.push("misReclamos")}}>
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Text style={{fontFamily:'outfit', fontSize:18}}>Mis reclamos</Text>
                     <Entypo name="chevron-thin-right" size={20} color="black" />
@@ -94,16 +94,28 @@ export default function HomeScreen() {
             </View>
 
             {/* lista reclamos */}
-                <FlatList
-                    ListFooterComponent={<View style={{width:Dimensions.get('window').width}}></View>}
-                    style={StyleHome.flatListContainer}
-                    data={reclamos}
-                    renderItem={renderItemPublicaion}
-                    showsVerticalScrollIndicator={false}
-                    keyExtractor={item => String(item.id)}
-                    >
-                </FlatList>
+            <FlatList
+                ListFooterComponent={<View style={{width:Dimensions.get('window').width}}></View>}
+                style={StyleHome.flatListContainer}
+                data={reclamos}
+                renderItem={renderItemReclamo}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={item => String(item.numero_reclamo)}
+                >
+            </FlatList>
         </View>
+        {/* Botón de carga de reclamo */}
+        <View style={{
+                display: 'flex',
+                justifyContent: 'center',
+                backgroundColor: 'none',
+                marginBottom: 25,
+                position: 'absolute',
+                bottom: 0,
+                left: '5%',
+                width: '90%' }}>
+                <FormButton action={()=> {router.push("reclamo/nuevo_reclamo")}} title={'Cargar reclamo'} />
+            </View>
     </SafeAreaView>
     );
 }

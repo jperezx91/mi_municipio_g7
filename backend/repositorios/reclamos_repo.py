@@ -5,7 +5,7 @@ import base64
 class ReclamosRepo:
 
     @staticmethod
-    def obtener_todos_los_reclamos(categoria, id_usuario):
+    def obtener_todos_reclamos(categoria):
         solicitud = """
             SELECT 
                 COALESCE(idReclamoUnificado, idReclamo) AS numero_reclamo,
@@ -15,17 +15,36 @@ class ReclamosRepo:
 	            reclamos rec
                 LEFT JOIN desperfectos des ON rec.idDesperfecto = des.idDesperfecto
 	            LEFT JOIN rubros rub ON des.idRubro = rub.idRubro
+            WHERE
+                rec.estado IS NOT 'Unificado'
             """
-        if id_usuario: solicitud += " LEFT JOIN usuariosVecinos uv ON rec.documento = uv.documento"
-        
-        solicitud += " WHERE rec.estado IS NOT 'Unificado'"
 
         if categoria:
             solicitud += f" AND categoria = '{categoria}'"
-        if id_usuario:
-            solicitud += f" AND uv.idUsuario = {id_usuario}"
 
         return DbManager.obtener_registros(solicitud)
+    
+    @staticmethod
+    def obtener_reclamos_propios(categoria, id_usuario):
+        solicitud = """
+            SELECT 
+                COALESCE(idReclamoUnificado, idReclamo) AS numero_reclamo,
+                rub.descripcion AS categoria,
+                rec.estado
+            FROM 
+	            reclamos rec
+                LEFT JOIN desperfectos des ON rec.idDesperfecto = des.idDesperfecto
+	            LEFT JOIN rubros rub ON des.idRubro = rub.idRubro
+                LEFT JOIN usuariosVecinos usv on rec.documento = usv.documento
+                LEFT JOIN usuariosVecinos uv ON rec.documento = uv.documento
+            WHERE
+                rec.estado IS NOT 'Unificado'
+                AND uv.idUsuario = ?
+            """
+        if categoria:
+            solicitud += f" AND categoria = '{categoria}'"
+        parametros = (id_usuario,)
+        return DbManager.obtener_registros(solicitud, parametros)
     
     @staticmethod
     def obtener_reclamo(id_reclamo):
@@ -51,14 +70,15 @@ class ReclamosRepo:
     def obtener_seguimiento_reclamo(id_reclamo):
         solicitud = """
             SELECT
-                mr.sectorAnterior,
+                mr.estadoNuevo,
                 mr.sectorNuevo,
                 mr.causa,
                 mr.responsable,
                 DATE(mr.fecha) AS fecha 
             FROM
 	            movimientosReclamo mr 
-            WHERE idReclamo = ?;
+            WHERE idReclamo = ?
+            ORDER BY mr.fecha DESC
             """
         parametros = (id_reclamo,)
         return DbManager.obtener_registros(solicitud, parametros)

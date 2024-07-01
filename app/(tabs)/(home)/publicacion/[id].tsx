@@ -1,16 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, SafeAreaView, Image, FlatList, TouchableOpacity, Linking, Dimensions, ImageSourcePropType, ScrollView} from "react-native";
-import {router, useGlobalSearchParams} from "expo-router";
+import {router, useLocalSearchParams} from "expo-router";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {PrincipalStyle} from "@/app/styles";
-import {obtenerPublicacion, obtenerThumbnail, obtenerImagen} from '@/app/networking/api';
+import {obtenerPublicacion, obtenerThumbnail, obtenerImagenPublicacion} from '@/app/networking/api';
 
 const Id = () => {
     const irAtras = () =>
     {
         router.back();
     };
-    const { id }  = useGlobalSearchParams();
+    const { id }  = useLocalSearchParams();
     const index: string = id ? "" + id : "0"
 
     // Código para hacer la solicitud al backend, reemplaza los datos de mockup
@@ -40,7 +40,7 @@ const Id = () => {
 
             while(!terminado){
                 try {
-                    const imagenRespuesta = await obtenerImagen(idPublicacion, String(idImagen));
+                    const imagenRespuesta = await obtenerImagenPublicacion(idPublicacion, String(idImagen));
                     nuevaPublicacion.imagenes.push(imagenRespuesta.data);
                     idImagen++;
                 } catch(e: any){

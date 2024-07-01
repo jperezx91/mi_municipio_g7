@@ -187,6 +187,13 @@ def procesar_solicitudes_reclamo():
                     solicitud[5],
                     "En revisión",
                     "Mesa de Entrada")
+                idReclamo = DbManager.actualizar_bd(query, parametros)
+
+                query = """
+                    INSERT INTO movimientosReclamo (idReclamo, responsable, causa, sectorNuevo, estadoNuevo)
+                    VALUES (?, 'Roberto Municipio', 'Preaprobación de Reclamo, pendiente de revisión', 'Mesa de Entrada', 'Preaprobado')
+                    """
+                parametros = (idReclamo,)
                 DbManager.actualizar_bd(query, parametros)
 
                 print("\nSolicitud aprobada!")

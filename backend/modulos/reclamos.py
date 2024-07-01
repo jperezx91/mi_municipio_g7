@@ -15,7 +15,9 @@ def obtener_reclamos():
     
 
     if todos_los_reclamos:
-        reclamos = ReclamosRepo.obtener_todos_los_reclamos(categoria, id_usuario)
+        reclamos = ReclamosRepo.obtener_todos_reclamos(categoria)
+    else:
+        reclamos = ReclamosRepo.obtener_reclamos_propios(categoria, id_usuario)
 
     if reclamos:
         respuesta = jsonify([
@@ -61,8 +63,8 @@ def obtener_seguimiento_reclamo(id_reclamo):
     if info_seguimiento:
         respuesta = jsonify([
             {
-                'sectorAnterior': seguimiento[0],
-                'sectorNuevo': seguimiento[1],
+                'estado': seguimiento[0],
+                'sector': seguimiento[1],
                 'causa': seguimiento[2],
                 'responsable': seguimiento[3],
                 'fecha': seguimiento[4]
