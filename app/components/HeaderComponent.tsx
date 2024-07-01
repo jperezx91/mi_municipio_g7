@@ -14,6 +14,19 @@ interface HeaderComponentProps {
 const HeaderComponent: React.FC<HeaderComponentProps> = ({ pressLogin, dataUser }) => {
     useEffect(() => {
         // Efecto secundario vacío
+        if(dataUser != "")
+        {
+            obtenerCantidadNotificaciones()
+                .then((r)=>
+                {
+                    console.log(r.data)
+                    setNotificaciones(r.data.cantidadNotificaciones)
+                })
+                .catch((e)=>
+                {
+                    console.log(e)
+                })
+        }
     }, []);
     const [notificaciones, setNotificaciones] = useState(0)
     useFocusEffect(useCallback(()=>{

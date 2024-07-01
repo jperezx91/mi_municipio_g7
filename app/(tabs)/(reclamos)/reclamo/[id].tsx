@@ -36,7 +36,7 @@ const Id = () => {
                 ...respuestaReclamo.data,
                 imagenes: []
             };
-            
+
             let idImagen = 1;
             let terminado = false;
 
@@ -82,7 +82,7 @@ const Id = () => {
                     padding: 20,
                     paddingTop: 0,
                     backgroundColor: '#F2F4F8',
-                    height: Dimensions.get('window').height * 0.80
+
                 }}>
                     <Text style={{
                         fontSize: 22,
