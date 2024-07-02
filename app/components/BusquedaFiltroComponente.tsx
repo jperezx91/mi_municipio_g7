@@ -3,13 +3,16 @@ import { useEffect, useState } from "react";
 import { FlatList, Modal, TextInput, TouchableOpacity, View, Text, Alert } from "react-native";
 import { obtenerCategorias, obtenerReclamo } from "../networking/api";
 import { router } from "expo-router";
-import { jwtDecode } from "jwt-decode";
-import * as SecureStore from 'expo-secure-store';
+import * as verificar_rol from "../utils/verificar_rol";
+
+const esInspector = verificar_rol.comprobarSiEsInspector();
 
 const BusquedaFiltroComponente = (
     {filtroVisible, setFiltroVisible, manejarSeleccionDeFiltro} :
     {filtroVisible: boolean, setFiltroVisible: any, manejarSeleccionDeFiltro: any}
 ) => {
+
+
 
     const [textoBusqueda, setTextoBusqueda] = useState('');
     const [categorias, setCategorias] = useState<string[]>([]);
@@ -31,29 +34,8 @@ const BusquedaFiltroComponente = (
         }
     };
 
-    // Código para determinar si el usuario es vecino o inspector
-
-    const [esInspector, setEsInspector] = useState<boolean>(false)
-
-    const obtenerRol = () => {
-        const token = SecureStore.getItem("bearerToken")
-        if(token){
-            const payload = jwtDecode(token)
-            // @ts-ignore
-            const rol = payload["rol"]
-            setEsInspector(rol == "municipal")
-            if(esInspector){
-                console.log("ES INSPECTOR");
-            }else{
-                console.log("NO ES INSPECTOR")};
-            
-        }
-    }
-
     const cargarCategorias = async () => {
-        try{
-            console.log("SOLICITANDO CATEGORIAS CON esInspector en: " + String(esInspector));
-            
+        try{   
             const respuesta = await obtenerCategorias(esInspector);
             const descripciones = respuesta.data.map((categoria: { id: string, descripcion: string }) => categoria.descripcion);
             setCategorias(['Quitar filtro', ...descripciones]);
@@ -61,10 +43,6 @@ const BusquedaFiltroComponente = (
             console.log(e)
         }
     }
-
-    useEffect(() => {
-        obtenerRol();
-    }, []);
 
     useEffect(() => {
         cargarCategorias();

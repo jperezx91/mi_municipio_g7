@@ -16,7 +16,6 @@ import {
 import {PrincipalStyle} from "@/app/styles";
 import FormButton from "@/app/components/FormButton";
 import * as ImagePicker from 'expo-image-picker';
-import * as SecureStore from 'expo-secure-store';
 import { AntDesign } from '@expo/vector-icons';
 import {crearReclamo, obtenerCategorias, obtenerDesperfectos, obtenerSitios} from '@/app/networking/api';
 import {router, useFocusEffect, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
@@ -27,15 +26,14 @@ import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncSto
 import { jwtDecode } from 'jwt-decode';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Picker } from '@react-native-picker/picker';
+import * as verificar_rol from '@/app/utils/verificar_rol';
+import { cargarImagenes, ImagenSeleccionada, eliminarImagen} from '@/app/utils/cargar_fotos'
+
+
+
 
 // Restricciones en contenido de reclamos
 const MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS = 7; // Sólo para vecinos
-
-// Interfaz para crear listado de imagenes cargadas hasta el momento
-interface ImagenSeleccionada {
-    id: number;
-    base64: string;
-}
 var idImagen = 0;
 
 // Configuración de campos para el ingreso de texto
@@ -99,6 +97,8 @@ const FormPublicacionTextInput: React.FC<FormPublicacionTextInputProps>  = ({
 
 function NuevoReclamo() {
 
+    const esInspector = verificar_rol.comprobarSiEsInspector();
+
     const {location, setLocation} = useCoordState();
     const [idSitio, setIdSitio] = useState('');
     const [idDesperfecto, setIdDesperfecto] = useState('');
@@ -114,126 +114,13 @@ function NuevoReclamo() {
     const [descripcionReclamo, setDescripcionReclamo] = useState('');
     const [imagenes, setImagenes] = useState<ImagenSeleccionada[]>([]);
 
-    // Código para determinar si el usuario es vecino o inspector
-
-    const [esInspector, setEsInspector] = useState<boolean>(false)
-
-    const obtenerRol = () => {
-        const token = SecureStore.getItem("bearerToken")
-        if(token){
-            const payload = jwtDecode(token)
-            // @ts-ignore
-            const rol = payload["rol"]
-            setEsInspector(rol == "municipal")
-        }
+    // Funciones de gestión de imágenes
+    const cargarImagenesAdicionales = async () => {
+        setImagenes(await cargarImagenes(imagenes.length, imagenes, MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS, esInspector));
+    };
+    const triggerEliminarImagen = (idImagen: number) => {
+        setImagenes(eliminarImagen(idImagen, imagenes));
     }
-
-    // Funciones para agregar imagenes al reclamo
-    const seleccionarImagenDeGaleria = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-            base64: true,
-            orderedSelection: true
-        });
-    
-        if (!result.canceled) {
-            return result.assets;
-        }
-    };
-    
-    const tomarFoto = async () => {
-        let result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-            base64: true,
-        });
-    
-        if (!result.canceled) {
-            return result.assets;
-        }
-    };
-
-    const manejarSeleccionDeImagen = async () => {
-        let seleccion;
-        await new Promise(resolve => {
-            Alert.alert(
-                'Seleccionar Fuente de Imagen',
-                'Elija una opción para seleccionar una imagen',
-                [
-                    {
-                        text: 'Galería',
-                        onPress: () => {
-                            seleccion = 'galeria';
-                            resolve(undefined);
-                        },
-                    },
-                    {
-                        text: 'Tomar Foto',
-                        onPress: () => {
-                            seleccion = 'camara';
-                            resolve(undefined);
-                        },
-                    },
-                    {
-                        text: 'Cancelar',
-                        style: 'cancel',
-                        onPress: () => resolve(undefined),
-                    },
-                ],
-                { cancelable: false }
-            );
-        });
-    
-        let resultado;
-        if(seleccion === 'galeria'){
-            resultado = await seleccionarImagenDeGaleria();
-        } else if (seleccion === 'camara'){
-            resultado = await tomarFoto();
-        }
-        if(resultado){
-            const imagenesNuevas: ImagenSeleccionada[] = resultado.map((asset: any) => ({
-                id: idImagen + 1,
-                base64: asset.base64 as string,
-            })).filter((imagen) => imagen.base64 !== undefined) as ImagenSeleccionada[];
-            
-            idImagen++;
-    
-            return imagenesNuevas;
-        }
-    };
-    
-    const cargarFotosAdicionales = async () => {
-        const cantidadImagenesCargadas = imagenes.length;
-        const cantidadImagenesRestantesPermitidas = MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS - cantidadImagenesCargadas;
-        if(cantidadImagenesRestantesPermitidas > 0 || esInspector){
-            try {
-                let imagenesNuevas = await manejarSeleccionDeImagen();
-                
-                if (imagenesNuevas) {
-                    if (cantidadImagenesCargadas + imagenesNuevas.length > MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS) {
-                        Alert.alert(`No se permite agregar más de ${MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS} imágenes.`);
-                    } else {
-                        setImagenes([...imagenes, ...imagenesNuevas]);
-                    }
-                }
-            } catch (error) {
-                console.log(error);
-                Alert.alert('Error al seleccionar la imagen', 'Ocurrió un error al seleccionar la imagen.');
-            }
-        } else {
-            Alert.alert(`No se permite agregar más de ${MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS} imágenes adicionales.`);
-        }
-    };
-
-    const eliminarImagen = (id: number) => {
-        const imagenesActualizadas = imagenes.filter((image) => image.id !== id);
-        setImagenes(imagenesActualizadas);
-    };
 
     // Datos de categorías y desperfectos
     const [categorias, setCategorias] = useState([])
@@ -277,7 +164,6 @@ function NuevoReclamo() {
 
     useEffect(() => {
         cargarCategorias();
-        obtenerRol();
     }, []);
 
     // Obtener sitio en base a las coordenadas obtenidas del mapa
@@ -641,7 +527,7 @@ function NuevoReclamo() {
                 />
 
                 {/* Cargar Fotos */}
-                <TouchableOpacity onPress={()=>cargarFotosAdicionales()}>
+                <TouchableOpacity onPress={()=>cargarImagenesAdicionales()}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop:10}}>
                         <Text style={{fontFamily:'outfit', fontSize:15}}>Subir Imágenes del reclamo</Text>
                         <AntDesign style={{height: '100%'}} name="pluscircleo" size={24} color="black" />
@@ -671,7 +557,7 @@ function NuevoReclamo() {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                 }}
-                                onPress={() => eliminarImagen(image.id)}
+                                onPress={() => triggerEliminarImagen(image.id)}
                             >
                                 <AntDesign name="close" size={16} color="white" />
                             </TouchableOpacity>

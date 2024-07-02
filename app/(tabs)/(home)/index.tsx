@@ -112,6 +112,10 @@ const Home = () => {
     return (
         <SafeAreaView style={PrincipalStyle.principalContainer}>{/* <SafeAreaView style={{flex: 1, width: "93%", margin: 'auto', justifyContent: 'center', alignItems: 'center'}}> */}
                 <FlatList
+                    refreshing={false}
+                    onRefresh={() => {
+                        cargarPublicaciones();
+                    }}
                     numColumns={1}
                     ListFooterComponent={<View style={{height: 150}}></View>}
                     style={StyleHome.flatListContainer}

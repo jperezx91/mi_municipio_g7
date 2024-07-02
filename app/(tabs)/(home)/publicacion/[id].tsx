@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, SafeAreaView, Image, FlatList, TouchableOpacity, Linking, Dimensions, ImageSourcePropType, ScrollView} from "react-native";
 import {router, useLocalSearchParams} from "expo-router";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {PrincipalStyle} from "@/app/styles";
 import {obtenerPublicacion, obtenerThumbnail, obtenerImagenPublicacion} from '@/app/networking/api';
+import BotonesDeContacto from '@/app/components/BotonesDeContacto';
 
 const Id = () => {
     const irAtras = () =>
@@ -32,8 +32,15 @@ const Id = () => {
                 thumbnail: '',
                 imagenes: []
             };
-            const thumbnailRespuesta = await obtenerThumbnail(idPublicacion);
-            nuevaPublicacion.thumbnail = thumbnailRespuesta.data;
+            try{
+                const thumbnailRespuesta = await obtenerThumbnail(idPublicacion);
+                nuevaPublicacion.thumbnail = thumbnailRespuesta.data;
+            } catch(e: any){
+                if (e.response && e.response.status === 404){
+                  nuevaPublicacion.thumbnail = '';  
+                };
+                console.log(e);
+            }
 
             let idImagen = 1;
             let terminado = false;
@@ -69,40 +76,6 @@ const Id = () => {
         </View>
     }
 
-    const actionBtns= [
-        {
-            btn:1,
-            name:'Llamar',
-            icon:"phone-alt",
-            url:'tel:'+publicacion?.telefono
-        },
-        {
-            btn:2,
-            name:'Mapa',
-            icon:"map-marked-alt",
-            url:'tel:'+publicacion?.telefono
-        },
-        {
-            btn:3,
-            name:'Web',
-            icon:"globe",
-            url:'tel:'+publicacion?.telefono
-        },
-        {
-            btn:4,
-            name:'Compartir',
-            icon:"share-alt",
-            url:'tel:'+publicacion?.telefono
-        }
-    ]
-
-    const OnPressHandle=(item: { btn?: number; name: any; icon?: any; url: any; })=>{
-        if (item.name=='share'){
-            return;
-        }
-        Linking.openURL(item.url);
-    }
-
     const fotosPublicacion = publicacion.imagenes.map((img: string, index: number) => ({ sd: index, image: { uri: `data:image/jpeg;base64,${img}` } }));
 
     const _renderItem = (item: { sd?: number; image?: any;}) => {
@@ -121,15 +94,6 @@ const Id = () => {
         <SafeAreaView>
             <FlatList style={{backgroundColor: '#fff'}} showsVerticalScrollIndicator={false} ListHeaderComponent={<View>
                 { /* Carrousel*/}
-
-                {/*<Carousel
-                data={mockupImages2}
-                renderItem={_renderItem}
-                sliderWidth={Dimensions.get('window').width}
-                itemWidth={Dimensions.get('window').width}
-            >
-
-            </Carousel>*/}
                 <View>
                     <Image
                         source={{uri:`data:image/jpeg;base64,${publicacion.thumbnail}`}}
@@ -169,20 +133,8 @@ const Id = () => {
                 </View>
 
                 {/* Botones de Contacto */}
-                <View style={{backgroundColor:'white', padding:20}}>
-                    <FlatList data={actionBtns} numColumns={4} columnWrapperStyle={{justifyContent:'space-between'}} renderItem={({item,index})=>(
-                        <TouchableOpacity key={index} onPress={()=>OnPressHandle(item)} style={{display: 'flex', alignSelf:'center', alignItems:'center'}}>
-                            {/*<Image source={item.icon} style={{width:50, height:50}}/>*/}
-                            <View style={{padding:10, borderWidth:2, borderColor:'#50a1c5', borderRadius:50}}>
-                            <FontAwesome5 name={item.icon} size={30} color='#50a1c5'/></View>
-                            <Text style={{fontFamily:'outfit-bold', textAlign:'center', marginTop:5, color:'#50a1c5'}}>
-                                {item.name}
-                            </Text>
-                        </TouchableOpacity>
-                    )}>
-
-                    </FlatList>
-                </View>
+                <BotonesDeContacto data={publicacion} />
+                
 
                 { /* Cuerpo de la publicación */ }
                 <View style={{
@@ -200,7 +152,8 @@ const Id = () => {
                     }}>
                         <Text style={{fontFamily:'outfit-bold', fontSize:20, textAlign:'center', marginTop: 5, marginBottom: 10}}>{publicacion.titulo}</Text>
                         <Text style={{fontFamily:'outfit', lineHeight:25}}>{publicacion.descripcion}</Text>
-                        { /* Galería de fotos */ }
+                
+                { /* Galería de fotos */ }
                 <View style={{marginTop: 25}}>
                     <FlatList data={fotosPublicacion} horizontal renderItem={({item,index})=>(
                         <View key={index}>

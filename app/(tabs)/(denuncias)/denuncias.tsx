@@ -1,10 +1,8 @@
-import {View, Text, SafeAreaView, Pressable, Dimensions, Image, TextInput, FlatList} from 'react-native';
+import {View, Text, SafeAreaView, Pressable, Dimensions, FlatList} from 'react-native';
 import {PrincipalStyle} from "@/app/styles";
-import {router, useFocusEffect} from "expo-router";
+import {router} from "expo-router";
 import Entypo from '@expo/vector-icons/Entypo';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import StyleHome from "@/app/(tabs)/(home)/styles";
-import ReclamoComponente from "@/app/components/reclamoComponente";
 import {useEffect, useState} from 'react';
 import DenunciaComponente from "@/app/components/denunciaComponente";
 import {obtenerDenuncias} from "@/app/networking/api";

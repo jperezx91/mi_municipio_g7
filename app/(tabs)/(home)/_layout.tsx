@@ -1,6 +1,5 @@
 import {router, Stack, useFocusEffect} from 'expo-router'
 import HeaderComponent from "@/app/components/HeaderComponent";
-import {Dimensions} from "react-native";
 import {useCallback, useEffect, useState} from "react";
 import * as SecureStore from "expo-secure-store";
 import {jwtDecode} from "jwt-decode";

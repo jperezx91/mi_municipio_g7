@@ -23,18 +23,13 @@ import {useCoordState} from "@/app/networking/context";
 import {Checkbox} from "expo-checkbox";
 import * as Network from 'expo-network';
 import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
+import { ImagenSeleccionada, cargarImagenes, eliminarImagen } from '@/app/utils/cargar_fotos';
 
 const { height } = Dimensions.get('window');
 
 // Restricciones en contenido de publicaciones
 const MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS = 10;
 
-// Interfaz para crear listado de imagenes cargadas hasta el momento
-interface ImagenSeleccionada {
-    id: number;
-    base64: string;
-}
-var idImagen = 0;
 
 interface FormPublicacionTextInputProps {
     titulo?: string;
@@ -106,48 +101,13 @@ function NuevaDenuncia() {
     const [imagenes, setImagenes] = useState<ImagenSeleccionada[]>([]);
     const [declaracion, setDeclaracion] = useState(false) // si acepta o no la declaración jurada
 
-    const cargarFotosAdicionales = async () => {
-        const cantidadImagenesCargadas = imagenes.length;
-        const cantidadImagenesRestantesPermitidas = MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS - cantidadImagenesCargadas;
-        if(cantidadImagenesRestantesPermitidas > 0){
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
-                base64: true,
-                selectionLimit: cantidadImagenesRestantesPermitidas,
-                orderedSelection: true
-            });
-
-            if (!result.canceled && result.assets) {
-                const newImages: ImagenSeleccionada[] = result.assets
-                    .map((asset, index) => ({
-                        id: idImagen + 1,
-                        base64: asset.base64 as string,
-                    }))
-                    .filter((image) => image.base64 !== undefined) as ImagenSeleccionada[];
-                idImagen++;
-
-                if (cantidadImagenesCargadas + newImages.length > MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS) {
-                    Alert.alert(`No se permite agregar más de ${MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS} imágenes.`);
-                } else {
-                    setImagenes([...imagenes, ...newImages]);
-                }
-            }
-        } else {
-            Alert.alert(`No se permite agregar más de ${MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS} imágenes adicionales.`);
-        }
+    // Funciones de gestión de imágenes
+    const cargarImagenesAdicionales = async () => {
+        setImagenes(await cargarImagenes(imagenes.length, imagenes, MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS, false));
     };
-
-
-
-    const eliminarImagen = (id: number) => {
-        const imagenesActualizadas = imagenes.filter((image) => image.id !== id);
-        setImagenes(imagenesActualizadas);
-    };
-
-
+    const triggerEliminarImagen = (idImagen: number) => {
+        setImagenes(eliminarImagen(idImagen, imagenes));
+    }
 
     const validarCampos = () => {
 
@@ -270,7 +230,7 @@ function NuevaDenuncia() {
                 />
 
 
-                <TouchableOpacity onPress={()=>cargarFotosAdicionales()}>
+                <TouchableOpacity onPress={()=>cargarImagenesAdicionales()}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop:10}}>
                         <Text style={{fontFamily:'outfit', fontSize:15}}>Subir Imágenes de la denuncia</Text>
                         <AntDesign style={{height: '100%'}} name="pluscircleo" size={24} color="black" />
@@ -298,7 +258,7 @@ function NuevaDenuncia() {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                 }}
-                                onPress={() => eliminarImagen(image.id)}
+                                onPress={() => triggerEliminarImagen(image.id)}
                             >
                                 <AntDesign name="close" size={16} color="white" />
                             </TouchableOpacity>

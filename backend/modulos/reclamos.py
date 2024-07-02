@@ -92,8 +92,9 @@ def obtener_imagen_reclamo(id_reclamo, id_imagen):
 @reclamos_app.route('/reclamos/rubros', methods=['GET'])
 @jwt_required()
 def obtener_rubros():
-    es_inspector = request.args.get('esInspector', None) == True
+    es_inspector = request.args.get('esInspector', '').lower() == 'true'
     if es_inspector:
+        print("\n EL BACKEND DICE QUE ES INSPECTOR \n")
         id_usuario = get_jwt_identity()
         rubros = ReclamosRepo.obtener_rubros_inspector(id_usuario)
 

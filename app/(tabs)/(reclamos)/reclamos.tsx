@@ -12,26 +12,15 @@ import BusquedaFiltroComponente from '@/app/components/BusquedaFiltroComponente'
 import { jwtDecode } from 'jwt-decode';
 import * as SecureStore from 'expo-secure-store';
 import { AxiosResponse } from 'axios';
+import * as verificar_rol from '@/app/utils/verificar_rol';
 
 
 
 export default function HomeScreen() {
 
-    // Código para determinar si el usuario es vecino o inspector
+    const esInspector = verificar_rol.comprobarSiEsInspector();
 
-    const [esInspector, setEsInspector] = useState<boolean>(false)
     const [categoriaInspector, setCategoriaInspector] = useState('')
-
-    const obtenerRol = () => {
-        const token = SecureStore.getItem("bearerToken")
-        if(token){
-            const payload = jwtDecode(token)
-            // @ts-ignore
-            const rol = payload["rol"]
-            setEsInspector(rol != "vecino")
-            
-        }
-    }
 
     const obtenerCategoriaInspector = async () => {
         try{
@@ -82,13 +71,7 @@ export default function HomeScreen() {
     };
 
     useEffect(() => {
-        obtenerRol();
-    }, []);
-
-    useEffect(() => {
-        if (esInspector) {
-            obtenerCategoriaInspector();
-        }
+        obtenerCategoriaInspector();
     }, [esInspector]);
 
     useEffect(() => {
@@ -142,6 +125,7 @@ export default function HomeScreen() {
                     <Text style={{textAlign: 'center', marginTop: 15, fontSize: 18}}>No se han encontrado reclamos.</Text>
                 )}
             </View>
+            
             {/* Botón de carga de reclamo */}
             <View style={{
                 display: 'flex',

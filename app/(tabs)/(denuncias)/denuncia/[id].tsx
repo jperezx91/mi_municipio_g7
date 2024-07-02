@@ -1,12 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, SafeAreaView, Image, FlatList, TouchableOpacity, Linking, Dimensions, ImageSourcePropType, ScrollView} from "react-native";
 import {router, useGlobalSearchParams, useLocalSearchParams} from "expo-router";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {PrincipalStyle} from "@/app/styles";
 import {
-    obtenerPublicacion,
-    obtenerThumbnail,
-    obtenerImagenPublicacion,
     obtenerDenuncia,
     obtenerImagenDenuncia
 } from '@/app/networking/api';

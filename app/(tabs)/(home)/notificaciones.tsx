@@ -20,6 +20,7 @@ const Notificaciones = () => {
                 setLoading(false)
             })
     }, []);
+    //@ts-ignore
     const itemNotificacion = ({item}) =>
     {
         let iconoTag = "alert-circle"

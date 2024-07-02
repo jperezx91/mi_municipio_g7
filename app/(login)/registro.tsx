@@ -3,15 +3,11 @@ import {
     Pressable,
     SafeAreaView,
     Text,
-    TextInput,
     View,
-    KeyboardAvoidingView,
-    Platform,
     Image,
     Alert
 } from "react-native";
 import { PrincipalStyle } from "@/app/styles";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import FormButton from "@/app/components/FormButton";
 import LoginFormInput from "@/components/LoginFormInput";

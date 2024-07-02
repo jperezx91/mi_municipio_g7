@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {ScrollView, View, Text, Dimensions, TextInput, TextInputProps, StyleProp, ViewStyle, TouchableOpacity, Image, Alert} from "react-native";
 import {PrincipalStyle} from "@/app/styles";
 import FormButton from "@/app/components/FormButton";
-import * as ImagePicker from 'expo-image-picker';
 import { AntDesign } from '@expo/vector-icons';
 import { crearSolicitudNuevaPublicacion } from '@/app/networking/api'; // Import the API function
+import { cargarImagenes, cargarThumbnail, eliminarImagen } from '@/app/utils/cargar_fotos';
 
 const { height } = Dimensions.get('window');
 
@@ -87,61 +87,19 @@ function NuevaPublicacion() {
     const [thumbnail, setThumbnail] = useState<string | null>(null);
     const [imagenes, setImagenes] = useState<ImagenSeleccionada[]>([]);
 
-    const cargarFotosAdicionales = async () => {
-        const cantidadImagenesCargadas = imagenes.length;
-        const cantidadImagenesRestantesPermitidas = MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS - cantidadImagenesCargadas;
-        if(cantidadImagenesRestantesPermitidas > 0){
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
-                base64: true,
-                selectionLimit: cantidadImagenesRestantesPermitidas,
-                orderedSelection: true
-            });
-        
-            if (!result.canceled && result.assets) {
-                const newImages: ImagenSeleccionada[] = result.assets
-                .map((asset, index) => ({
-                    id: idImagen + 1,
-                    base64: asset.base64 as string,
-                }))
-                .filter((image) => image.base64 !== undefined) as ImagenSeleccionada[];
-                idImagen++;
-        
-                if (cantidadImagenesCargadas + newImages.length > MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS) {
-                    Alert.alert(`No se permite agregar más de ${MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS} imágenes.`);
-                } else {
-                    setImagenes([...imagenes, ...newImages]);
-                }
-            }
-        } else {
-            Alert.alert(`No se permite agregar más de ${MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS} imágenes adicionales.`);
-        }
+    // Funciones de gestión de imágenes
+    const cargarImagenesAdicionales = async () => {
+        setImagenes(await cargarImagenes(imagenes.length, imagenes, MAXIMAS_IMAGENES_ADICIONALES_PERMITIDAS, false));
     };
-
-    const cargarThumbnail = async()=>{
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-            base64: true,
-            selectionLimit: 1
-          });
-          
-          console.log(result);
-
-          if (!result.canceled && result.assets && result.assets[0].base64) {
-            setThumbnail(result.assets[0].base64);
-        }
+    const triggerEliminarImagen = (idImagen: number) => {
+        setImagenes(eliminarImagen(idImagen, imagenes));
     }
 
-    const eliminarImagen = (id: number) => {
-        const imagenesActualizadas = imagenes.filter((image) => image.id !== id);
-        setImagenes(imagenesActualizadas);
-      };
+
+    const triggerCargarThumbnail = async()=>{
+        const nuevoThumbnail = await cargarThumbnail();
+        setThumbnail(nuevoThumbnail);
+    };
 
     const eliminarThumbnail = () => setThumbnail(null);
     
@@ -289,7 +247,7 @@ function NuevaPublicacion() {
                     value={descripcion}
                     onChangeText={setDescripcion}
                     />
-                <TouchableOpacity onPress={()=>cargarThumbnail()}>
+                <TouchableOpacity onPress={()=>triggerCargarThumbnail()}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop:10}}>
                         <Text style={{fontFamily:'outfit', fontSize:15}}>Cargar una imagen de portada</Text>
                         <AntDesign name="pluscircleo" size={24} color="black" />
@@ -323,7 +281,7 @@ function NuevaPublicacion() {
                     </View>
                 )}
                 
-                <TouchableOpacity onPress={()=>cargarFotosAdicionales()}>
+                <TouchableOpacity onPress={()=>cargarImagenesAdicionales()}>
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop:10}}>
                     <Text style={{fontFamily:'outfit', fontSize:15}}>Subir Imágenes adicionales</Text>
                     <AntDesign style={{height: '100%'}} name="pluscircleo" size={24} color="black" />
@@ -351,7 +309,7 @@ function NuevaPublicacion() {
                             justifyContent: 'center',
                             alignItems: 'center',
                             }}
-                            onPress={() => eliminarImagen(image.id)}
+                            onPress={() => triggerEliminarImagen(image.id)}
                         >
                             <AntDesign name="close" size={16} color="white" />
                         </TouchableOpacity>

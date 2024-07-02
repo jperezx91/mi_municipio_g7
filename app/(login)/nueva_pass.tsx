@@ -1,28 +1,19 @@
 import React, { useState } from 'react';
 import {
-    Pressable,
-    SafeAreaView,
     Text,
-    TextInput,
     View,
     KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
     Image
 } from "react-native";
 import { PrincipalStyle } from "@/app/styles";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import FormButton from "@/app/components/FormButton";
 import LoginFormInput from "@/components/LoginFormInput";
-// Generado con IA hacer de nuevo, no está bien
 import * as SecureStore from "expo-secure-store";
 import {jwtDecode} from "jwt-decode";
-import internal from "node:stream";
 import {changePassword} from "@/app/networking/api";
 
 const RecoveryValidateScreen = () => {
-    const [codigo, setCodigo] = useState('');
     const [password, setPassword] = useState('');
     const [repassword, setRePassword] = useState('');
     const [showErrorMSGPassword, setShowErrorMSGPassword] = useState("");

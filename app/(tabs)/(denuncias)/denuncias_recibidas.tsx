@@ -10,8 +10,6 @@ import {obtenerDenunciasRecibidas} from "@/app/networking/api";
 
 
 export default function DenunciasRecibidas() {
-
-    const [showRealizadas, setShowRealizadas] = useState(true);
     const [denuncias, setDenuncias] = useState([])
 
     const cargarDenunciasApi = () =>
